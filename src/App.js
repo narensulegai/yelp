@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import CustomerLogin from './components/CustomerLogin';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Landing from './components/Landing';
 
-function App() {
-  const handleOnLogin = () => {
-
-  };
-  return (
-    <div>
-      <CustomerLogin onLogin={handleOnLogin} />
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="container">
+        <Router>
+          <Route path="/" component={Landing} />
+          {/*<Route path="/customerHome" component={<div>Customer home</div>} />*/}
+          {/*<Route path="/restaurantHome" component={<div>Restaurant home</div>} />*/}
+        </Router>
+      </div>
+    );
+  }
 }
 
+App.propTypes = {};
 export default App;
