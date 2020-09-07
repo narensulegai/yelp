@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { HashRouter, Route } from 'react-router-dom';
 import Landing from './components/Landing';
+import Signup from './components/Signup';
 
 class App extends Component {
   render() {
@@ -18,7 +19,7 @@ class App extends Component {
             <div>Restaurant home</div>
           </Route>
           <Route path="/customerSignup">
-            <div>Customer Signup</div>
+            <Signup />
           </Route>
           <Route path="/restaurantSignup">
             <div>Restaurant Signup</div>
