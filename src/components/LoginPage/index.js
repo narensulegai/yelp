@@ -2,7 +2,7 @@ import React, { createRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { put } from '../../util/fetch';
 
-const CustomerLogin = (props) => {
+const LoginPage = (props) => {
   const email = createRef();
   const password = createRef();
   const [msg, setMsg] = useState(null);
@@ -37,8 +37,9 @@ const CustomerLogin = (props) => {
   );
 };
 
-CustomerLogin.propTypes = {
+LoginPage.propTypes = {
   onLogin: PropTypes.func,
+  type: PropTypes.string,
 };
 
-export default CustomerLogin;
+export default LoginPage;

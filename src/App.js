@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import Landing from './components/Landing';
 
 class App extends Component {
   render() {
     return (
       <div className="container">
-        <Router>
-          <Route path="/" component={Landing} />
-          {/*<Route path="/customerHome" component={<div>Customer home</div>} />*/}
-          {/*<Route path="/restaurantHome" component={<div>Restaurant home</div>} />*/}
-        </Router>
+        <HashRouter>
+          <Route path="/" exact>
+            <Landing />
+          </Route>
+          <Route path="/customerHome">
+            <div>Customer home</div>
+          </Route>
+          <Route path="/restaurantHome">
+            <div>Restaurant home</div>
+          </Route>
+          <Route path="/customerSignup">
+            <div>Customer Signup</div>
+          </Route>
+          <Route path="/restaurantSignup">
+            <div>Restaurant Signup</div>
+          </Route>
+        </HashRouter>
       </div>
     );
   }
