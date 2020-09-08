@@ -18,10 +18,7 @@ const call = (method, api, data = null) => new Promise((res, rej) => {
         });
     });
 });
-const put = (api, data) => call('PUT', api, data);
-const post = (api, data) => call('POST', api, data);
-const get = (api) => call('GET', api);
 
-module.exports = {
-  post, put, get,
-};
+export const put = (api, data) => call('PUT', api, data);
+export const post = (api, data) => call('POST', api, data);
+export const get = (api) => call('GET', api);

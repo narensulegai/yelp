@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { put } from '../../util/fetch';
 
