@@ -7,18 +7,16 @@ const Signup = (props) => {
   const name = useRef();
   const email = useRef();
   const password = useRef();
-  const handleSignUp = async () => {
-    try {
-      await post('signup/customer',
-        {
-          name: name.current.value,
-          email: email.current.value,
-          password: password.current.value,
-        });
+
+  const handleSignUp = () => {
+    post('signup/customer',
+      {
+        name: name.current.value,
+        email: email.current.value,
+        password: password.current.value,
+      }).then(() => {
       props.history.push('/customerHome');
-    } catch (e) {
-      alert(e.err);
-    }
+    });
   };
   return (
     <div>

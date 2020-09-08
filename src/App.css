@@ -1,1 +1,15 @@
 @import "~bootstrap/dist/css/bootstrap.css";
+body{
+    position: relative;
+}
+#err {
+    color: red;
+    width: 300px;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    margin-left: -150px;
+    z-index: 1;
+    background: green;
+    text-align: center;
+}

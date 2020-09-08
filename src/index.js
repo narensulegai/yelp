@@ -6,6 +6,11 @@ import { createStore } from 'redux';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+window.error = (msg) => {
+  const e = window.document.getElementById('err');
+  e.innerText = msg;
+};
+
 function yelpApp(state, action) {
 
 }

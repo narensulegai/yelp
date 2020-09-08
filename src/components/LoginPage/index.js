@@ -5,24 +5,18 @@ import { put } from '../../util/fetch';
 const LoginPage = (props) => {
   const email = createRef();
   const password = createRef();
-  const [msg, setMsg] = useState(null);
-  const handleOnSubmit = async () => {
-    setMsg(null);
-    try {
-      const user = await put('login/customer', {
-        email: email.current.value,
-        password: password.current.value,
-      });
+  const handleOnSubmit = () => {
+    put('login/customer', {
+      email: email.current.value,
+      password: password.current.value,
+    }).then((user) => {
       props.onLogin(user);
-    } catch (e) {
-      setMsg(e.err);
-    }
+    });
   };
 
   return (
     <div className="row">
-      <div className="col-6">
-        <div>{msg}</div>
+      <div className="col-12">
         <div>
           <input type="text" placeholder="Email" ref={email} />
         </div>

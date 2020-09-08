@@ -26,12 +26,7 @@ class Landing extends PureComponent {
 
   async componentDidMount() {
     const currUser = await get('currentUser');
-    if (currUser.scope === 'customer') {
-      this.props.history.push('/customerHome');
-    }
-    if (currUser.scope === 'customer') {
-      this.props.history.push('/restaurantHome');
-    }
+    this.props.history.push(currUser.scope === 'customer' ? '/customerHome' : '/restaurantHome');
   }
 
   render() {

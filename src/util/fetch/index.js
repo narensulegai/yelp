@@ -7,7 +7,15 @@ const call = (method, api, data = null) => new Promise((res, rej) => {
     })
     .then((r) => {
       r.json()
-        .then(r.status === 200 ? res : rej);
+        .then((d) => {
+          if (r.status === 200) {
+            window.error(null);
+            res(d);
+          } else {
+            window.error(d.err);
+            rej(d);
+          }
+        });
     });
 });
 const put = (api, data) => call('PUT', api, data);
