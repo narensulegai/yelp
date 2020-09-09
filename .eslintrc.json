@@ -19,5 +19,9 @@
     "rules": {
         "react/jsx-filename-extension": [1, {
             "extensions": [".js", ".jsx"]}
-        ]}
+        ],
+        "react/no-array-index-key": "off",
+        "arrow-body-style": "off",
+        "react/require-default-props": "off"
+    }
 }
