@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { currentUser } from '../../util/fetch/api';
+import RestaurantProfile from './RestaurantProfile';
 
 class RestaurantHome extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class RestaurantHome extends Component {
   render() {
     return (
       <div>
-        Rest home
+        <RestaurantProfile />
       </div>
     );
   }

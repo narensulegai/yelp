@@ -3,7 +3,7 @@ import './App.css';
 import { HashRouter, Route } from 'react-router-dom';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
-import RestaurantHome from './components/restaurantHome';
+import RestaurantHome from './components/RestaurantHome';
 
 class App extends Component {
   render() {
