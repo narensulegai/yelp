@@ -1,7 +1,9 @@
 @import "~bootstrap/dist/css/bootstrap.css";
-body{
+
+body {
     position: relative;
 }
+
 #err {
     color: red;
     width: 300px;
@@ -12,4 +14,21 @@ body{
     z-index: 1;
     background: green;
     text-align: center;
+}
+
+.disabledTextInput {
+    background: transparent;
+    border: none;
+}
+
+.textInput {
+    display: none;
+}
+
+.edit .disabledTextInput {
+    display: none;
+}
+
+.edit .textInput {
+    display: inline;
 }

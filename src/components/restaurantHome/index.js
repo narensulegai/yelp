@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { addImages, deleteImage, getImages } from '../../util/fetch/api';
+import {
+  addImages, deleteImage, getImages, updateRestaurantProfile,
+} from '../../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
 
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { images: [] };
+    this.state = { images: [], profile: {} };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
+    this.handleOnProfileSave = this.handleOnProfileSave.bind(this);
   }
 
   async componentDidMount() {
@@ -25,12 +28,20 @@ class RestaurantHome extends Component {
     this.setState({ images: await getImages() });
   }
 
+  handleOnProfileSave(profile) {
+    updateRestaurantProfile(profile)
+      .then(() => {
+        this.setState({ profile: this.state.profile });
+      });
+  }
+
   render() {
     const { images } = this.state;
     return (
       <div>
         <RestaurantProfile
           images={images}
+          onSave={this.handleOnProfileSave}
           onProfileImageAdd={this.handleOnProfileImageAdd}
           onProfileImageDelete={this.handleOnProfileImageDelete}
         />

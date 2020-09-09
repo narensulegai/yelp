@@ -13,10 +13,14 @@ const ImageInput = ({
   return (
     <div>
       {images.map((img, i) => (
-        <div key={i}>
-          <div><img src={`/api/file/${img.fileId}`} alt={i} height={20} width={20} /></div>
-          <div onClick={() => { handleOnDelete(img.id); }}>
-            Remove
+        <div key={i} className="d-flex">
+          <div>
+            <div>
+              <img src={`/api/file/${img.fileId}`} alt={i} height={40} width={40} />
+            </div>
+            <div onClick={() => { handleOnDelete(img.id); }}>
+              Remove
+            </div>
           </div>
         </div>
       ))}
