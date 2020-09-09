@@ -1,22 +1,39 @@
 import React, { Component } from 'react';
-import { currentUser } from '../../util/fetch/api';
+import { addImages, deleteImage, getImages } from '../../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
 
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { images: [] };
+    this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
+    this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
   }
 
   async componentDidMount() {
-    const curr = await currentUser();
-    console.log(curr);
+    const images = await getImages();
+    this.setState({ images });
+  }
+
+  async handleOnProfileImageAdd(fileIds) {
+    await addImages({ fileIds: fileIds.files, type: 'profile', typeId: null });
+    this.setState({ images: await getImages() });
+  }
+
+  async handleOnProfileImageDelete(id) {
+    await deleteImage(id);
+    this.setState({ images: await getImages() });
   }
 
   render() {
+    const { images } = this.state;
     return (
       <div>
-        <RestaurantProfile />
+        <RestaurantProfile
+          images={images}
+          onProfileImageAdd={this.handleOnProfileImageAdd}
+          onProfileImageDelete={this.handleOnProfileImageDelete}
+        />
       </div>
     );
   }

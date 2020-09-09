@@ -1,23 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FileUpload from '../../FileUpload';
+import ImageInput from '../../ImageInput';
 
-const RestaurantProfile = ({}) => {
-  const handleOnUpload = (d) => {
-    console.log(d);
-  };
+const RestaurantProfile = ({ images, onProfileImageAdd, onProfileImageDelete }) => {
   return (
     <div>
-      <div>
-        <img src="" alt="Profile" />
-      </div>
-      <FileUpload singleFile onUpload={handleOnUpload} />
+      <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
     </div>
   );
 };
 
 RestaurantProfile.propTypes = {
-
+  images: PropTypes.array,
+  onProfileImageAdd: PropTypes.func,
+  onProfileImageDelete: PropTypes.func,
 };
 
 export default RestaurantProfile;

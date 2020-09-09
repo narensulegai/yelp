@@ -21,4 +21,5 @@ const call = (method, api, data = null) => new Promise((res, rej) => {
 
 export const put = (api, data) => call('PUT', api, data);
 export const post = (api, data) => call('POST', api, data);
+export const destroy = (api, data) => call('DELETE', api, data);
 export const get = (api) => call('GET', api);

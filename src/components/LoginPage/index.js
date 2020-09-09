@@ -2,15 +2,15 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { put } from '../../util/fetch';
 
-const LoginPage = (props) => {
+const LoginPage = ({ onLogin, type }) => {
   const email = createRef();
   const password = createRef();
   const handleOnSubmit = () => {
-    put('login/customer', {
+    put(`login/${type}`, {
       email: email.current.value,
       password: password.current.value,
     }).then((user) => {
-      props.onLogin(user);
+      onLogin(user);
     });
   };
 
