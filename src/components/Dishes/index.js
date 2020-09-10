@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import Dish from '../Dish';
 
 const Dishes = ({
-  dishes, onDishUpdate, onDishAdd, onDishDelete,
+  images, dishes, onDishUpdate, onDishAdd, onDishDelete,
+  onDishImageAdd, onDishImageDelete,
 }) => {
   const [showAdd, setShowAdd] = useState(false);
-
+  console.log(images);
   const onAdd = (dish) => {
     return onDishAdd(dish)
       .then(() => {
@@ -30,7 +31,10 @@ const Dishes = ({
             <Dish
               editMode
               dish={dish}
+              images={images.filter((i) => i.typeId === dish.id)}
               onChange={(d) => onDishUpdate(dish.id, d)}
+              onImageAdd={(fileIds) => onDishImageAdd(fileIds, dish.id)}
+              onImageDelete={onDishImageDelete}
             />
             <div>
               <button onClick={() => handleOnDelete(dish.id)}>Delete dish</button>
@@ -44,9 +48,12 @@ const Dishes = ({
 
 Dishes.propTypes = {
   dishes: PropTypes.array,
+  images: PropTypes.array,
   onDishUpdate: PropTypes.func,
   onDishAdd: PropTypes.func,
   onDishDelete: PropTypes.func,
+  onDishImageAdd: PropTypes.func,
+  onDishImageDelete: PropTypes.func,
 };
 
 export default Dishes;

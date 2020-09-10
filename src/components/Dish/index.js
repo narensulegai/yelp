@@ -4,7 +4,9 @@ import classNames from 'classnames';
 import ImageInput from '../ImageInput';
 import TextInput from '../TextInput';
 
-const Dish = ({ editMode, dish, onChange }) => {
+const Dish = ({
+  editMode, dish, onChange, images, onImageAdd, onImageDelete,
+}) => {
   const name = useRef();
   const ingredients = useRef();
   const price = useRef();
@@ -12,7 +14,6 @@ const Dish = ({ editMode, dish, onChange }) => {
   const description = useRef();
   const [edit, setEdit] = useState(!editMode);
   const categories = ['Appetizer', 'Salads', 'Main course', 'Desserts', 'Beverages'];
-
   const toggleEdit = () => {
     setEdit(!edit);
   };
@@ -34,6 +35,7 @@ const Dish = ({ editMode, dish, onChange }) => {
   };
   return (
     <div className={classNames({ edit })}>
+      <ImageInput images={images} onAdd={onImageAdd} onDelete={onImageDelete} singleFile={false} />
       <div>
         {(editMode && !edit) && <button onClick={toggleEdit}>Edit</button>}
       </div>
@@ -81,6 +83,9 @@ Dish.propTypes = {
   editMode: PropTypes.bool,
   dish: PropTypes.object,
   onChange: PropTypes.func,
+  images: PropTypes.array,
+  onImageAdd: PropTypes.func,
+  onImageDelete: PropTypes.func,
 };
 
 export default Dish;

@@ -17,6 +17,8 @@ class RestaurantHome extends Component {
     this.handleOnDishUpdate = this.handleOnDishUpdate.bind(this);
     this.handleOnDishAdd = this.handleOnDishAdd.bind(this);
     this.handleOnDishDelete = this.handleOnDishDelete.bind(this);
+    this.handleOnDishImageAdd = this.handleOnDishImageAdd.bind(this);
+    this.handleOnDishImageDelete = this.handleOnDishImageDelete.bind(this);
   }
 
   async componentDidMount() {
@@ -32,6 +34,17 @@ class RestaurantHome extends Component {
   }
 
   async handleOnProfileImageDelete(id) {
+    await deleteImage(id);
+    this.setState({ images: await getImages() });
+  }
+
+  async handleOnDishImageAdd(fileIds, typeId) {
+    console.log(fileIds, typeId);
+    await addImages({ fileIds: fileIds.files, type: 'dish', typeId });
+    this.setState({ images: await getImages() });
+  }
+
+  async handleOnDishImageDelete(id) {
     await deleteImage(id);
     this.setState({ images: await getImages() });
   }
@@ -69,18 +82,23 @@ class RestaurantHome extends Component {
     const { images, profile, dishes } = this.state;
     return (
       <div>
-        {/* <RestaurantProfile */}
-        {/*  images={images} */}
-        {/*  profile={profile} */}
-        {/*  onSave={this.handleOnProfileSave} */}
-        {/*  onProfileImageAdd={this.handleOnProfileImageAdd} */}
-        {/*  onProfileImageDelete={this.handleOnProfileImageDelete} */}
-        {/* /> */}
+        <h2>Restaurant</h2>
+        <RestaurantProfile
+          images={images.filter((i) => i.type === 'profile')}
+          profile={profile}
+          onSave={this.handleOnProfileSave}
+          onProfileImageAdd={this.handleOnProfileImageAdd}
+          onProfileImageDelete={this.handleOnProfileImageDelete}
+        />
+        <h2>Dishes</h2>
         <Dishes
+          images={images.filter((i) => i.type === 'dish')}
           dishes={dishes}
           onDishUpdate={this.handleOnDishUpdate}
           onDishAdd={this.handleOnDishAdd}
           onDishDelete={this.handleOnDishDelete}
+          onDishImageAdd={this.handleOnDishImageAdd}
+          onDishImageDelete={this.handleOnDishImageDelete}
         />
       </div>
     );
