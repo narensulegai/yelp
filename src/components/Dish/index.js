@@ -35,7 +35,11 @@ const Dish = ({
   };
   return (
     <div className={classNames({ edit })}>
-      <ImageInput images={images} onAdd={onImageAdd} onDelete={onImageDelete} singleFile={false} />
+      {editMode && (
+      <ImageInput images={images}
+        onAdd={onImageAdd} onDelete={onImageDelete} singleFile={false}
+      />
+      )}
       <div>
         {(editMode && !edit) && <button onClick={toggleEdit}>Edit</button>}
       </div>

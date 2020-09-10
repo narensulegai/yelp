@@ -7,7 +7,7 @@ import RestaurantHome from './components/RestaurantHome';
 
 function App() {
   return (
-    <div className="container">
+    <div>
       <HashRouter>
         <Route path="/" exact>
           <Landing />

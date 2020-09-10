@@ -7,7 +7,6 @@ const Dishes = ({
   onDishImageAdd, onDishImageDelete,
 }) => {
   const [showAdd, setShowAdd] = useState(false);
-  console.log(images);
   const onAdd = (dish) => {
     return onDishAdd(dish)
       .then(() => {
@@ -24,14 +23,15 @@ const Dishes = ({
       <button onClick={() => { setShowAdd(!showAdd); }}>
         {showAdd ? 'Cancel' : 'Add dish'}
       </button>
-      {showAdd && <Dish editMode={false} dish={{}} onChange={onAdd} />}
+      {showAdd && (
+      <Dish editMode={false} dish={{}} images={[]} onChange={onAdd}
+        onImageAdd={() => {}} onImageDelete={() => {}}
+      />
+      )}
       {dishes.map((dish) => {
         return (
           <div key={dish.id}>
-            <Dish
-              editMode
-              dish={dish}
-              images={images.filter((i) => i.typeId === dish.id)}
+            <Dish editMode dish={dish} images={images.filter((i) => i.typeId === dish.id)}
               onChange={(d) => onDishUpdate(dish.id, d)}
               onImageAdd={(fileIds) => onDishImageAdd(fileIds, dish.id)}
               onImageDelete={onDishImageDelete}

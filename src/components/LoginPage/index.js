@@ -5,7 +5,8 @@ import { put } from '../../util/fetch';
 const LoginPage = ({ onLogin, type }) => {
   const email = createRef();
   const password = createRef();
-  const handleOnSubmit = () => {
+
+  const handleOnSignIn = () => {
     put(`login/${type}`, {
       email: email.current.value,
       password: password.current.value,
@@ -15,19 +16,17 @@ const LoginPage = ({ onLogin, type }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-12">
-        <div>
-          <input type="text" placeholder="Email" ref={email} />
-        </div>
-        <div>
-          <input type="text" placeholder="Password" ref={password} />
-        </div>
-        <div>
-          <button onClick={handleOnSubmit}>Sign in</button>
-        </div>
+    <>
+      <div className="form-group mt-5">
+        <input type="email" className="form-control" placeholder="Email" ref={email} />
       </div>
-    </div>
+      <div className="form-group">
+        <input type="text" className="form-control" placeholder="Password" ref={password} />
+      </div>
+      <div className="form-group text-center">
+        <button type="submit" className="btn btn-primary" onClick={handleOnSignIn}>Sign in</button>
+      </div>
+    </>
   );
 };
 

@@ -39,7 +39,6 @@ class RestaurantHome extends Component {
   }
 
   async handleOnDishImageAdd(fileIds, typeId) {
-    console.log(fileIds, typeId);
     await addImages({ fileIds: fileIds.files, type: 'dish', typeId });
     this.setState({ images: await getImages() });
   }

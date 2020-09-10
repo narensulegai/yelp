@@ -7,21 +7,8 @@ class Landing extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { currTab: 'customer' };
-    this.handleOnCustomerLogin = this.handleOnCustomerLogin.bind(this);
-    this.handleOnRestaurantLogin = this.handleOnRestaurantLogin.bind(this);
+    this.handleOnLogin = this.handleOnLogin.bind(this);
     this.toggleLogin = this.toggleLogin.bind(this);
-  }
-
-  handleOnCustomerLogin() {
-    this.props.history.push('/customerHome');
-  }
-
-  handleOnRestaurantLogin() {
-    this.props.history.push('/restaurantHome');
-  }
-
-  toggleLogin(currTab) {
-    this.setState({ currTab });
   }
 
   async componentDidMount() {
@@ -31,31 +18,44 @@ class Landing extends PureComponent {
     }
   }
 
+  handleOnLogin() {
+    this.props.history.push(this.state.currTab === 'customer' ? '/customerHome' : '/restaurantHome');
+  }
+
+  toggleLogin() {
+    if (this.state.currTab === 'customer') {
+      this.setState({ currTab: 'restaurant' });
+    } else {
+      this.setState({ currTab: 'customer' });
+    }
+  }
+
   render() {
     const { currTab } = this.state;
     return (
-      <div>
-        <div>
-          {`Sign in as a ${currTab}`}
-        </div>
-        {currTab === 'customer'
-        && (
-        <div>
-          <LoginPage onLogin={this.handleOnCustomerLogin} type={currTab} />
-          <button onClick={() => { this.toggleLogin('restaurant'); }}>No, login as a restaurant owner</button>
-        </div>
-        )}
-        {currTab === 'restaurant'
-        && (
-        <div>
-          <LoginPage onLogin={this.handleOnRestaurantLogin} type={currTab} />
-          <button onClick={() => { this.toggleLogin('customer'); }}>No, login as a customer</button>
-        </div>
-        )}
-        <div>
-          <NavLink to="/customerSignup">Sign up as a customer</NavLink>
-          &nbsp;|&nbsp;
-          <NavLink to="/restaurantSignup">Sign up as a restaurant</NavLink>
+      <div className="container">
+        <div className="row">
+          <div className="col-3" />
+          <div className="col-6">
+            <div className="h3 text-center">Yelp!</div>
+            <div className="text-center">{`Sign in as a ${currTab}`}</div>
+            <LoginPage onLogin={this.handleOnLogin} type={currTab} />
+
+            <div className="d-flex justify-content-center">
+              <div>Dont have a account ?&nbsp;&nbsp;</div>
+              <NavLink to="/customerSignup">Sign up as a customer</NavLink>
+              <div>&nbsp;or&nbsp;</div>
+              <NavLink to="/restaurantSignup">Sign up as a restaurant</NavLink>
+            </div>
+            <div className="text-center  mt-4">
+              <button className="btn btn-outline-primary" onClick={this.toggleLogin}>
+                {currTab === 'restaurant'
+                  ? 'No, login as customer'
+                  : 'No, login as a restaurant owner'}
+              </button>
+            </div>
+          </div>
+          <div className="col-3" />
         </div>
       </div>
     );
