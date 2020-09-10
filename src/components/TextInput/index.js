@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = forwardRef(({ value }, ref) => {
+const TextInput = forwardRef(({ value, edit }, ref) => {
   return (
     <>
-      <input className="textInput" type="text" ref={ref} defaultValue={value} />
-      <input className="disabledTextInput" type="text" defaultValue={value} disabled />
+      {edit && <input type="text" defaultValue={value} ref={ref} />}
+      {!edit && <span>{value}</span>}
     </>
   );
 });
@@ -13,6 +13,7 @@ const TextInput = forwardRef(({ value }, ref) => {
 TextInput.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
+  edit: PropTypes.bool,
 };
 
 export default TextInput;

@@ -16,19 +16,10 @@ body {
     text-align: center;
 }
 
-.disabledTextInput {
-    background: transparent;
-    border: none;
-}
-
-.textInput {
+.edit .onView, .onEdit {
     display: none;
 }
 
-.edit .disabledTextInput {
-    display: none;
-}
-
-.edit .textInput {
-    display: inline;
+.edit .onEdit {
+    display: initial;
 }

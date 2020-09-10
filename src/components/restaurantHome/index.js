@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
 import {
-  addImages, deleteImage, getImages, getRestaurantProfile, updateRestaurantProfile,
+  addImages, deleteImage, getDishes, getImages,
+  getRestaurantProfile, updateDish, updateRestaurantProfile,
 } from '../../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
+import Dish from '../Dish';
 
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { images: [], profile: {} };
+    this.state = { images: [], profile: {}, dishes: [] };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
     this.handleOnProfileSave = this.handleOnProfileSave.bind(this);
+    this.handleOnDishUpdate = this.handleOnDishUpdate.bind(this);
   }
 
   async componentDidMount() {
     const images = await getImages();
     const profile = await getRestaurantProfile();
-    this.setState({ images, profile });
+    const dishes = await getDishes();
+    this.setState({ images, profile, dishes });
   }
 
   async handleOnProfileImageAdd(fileIds) {
@@ -32,21 +36,41 @@ class RestaurantHome extends Component {
   async handleOnProfileSave(p) {
     updateRestaurantProfile(p)
       .then(async () => {
-        this.setState({ profile: await getRestaurantProfile() });
+        const profile = await getRestaurantProfile();
+        this.setState({ profile });
+      });
+  }
+
+  async handleOnDishUpdate(id, dish) {
+    updateDish(id, dish)
+      .then(() => {
+        getDishes()
+          .then((dishes) => {
+            this.setState({ dishes: [...dishes] });
+          });
       });
   }
 
   render() {
-    const { images, profile } = this.state;
+    const { images, profile, dishes } = this.state;
     return (
       <div>
-        <RestaurantProfile
+         <RestaurantProfile
           images={images}
           profile={profile}
           onSave={this.handleOnProfileSave}
           onProfileImageAdd={this.handleOnProfileImageAdd}
           onProfileImageDelete={this.handleOnProfileImageDelete}
-        />
+         />
+        {
+          dishes.map((dish) => {
+            return (
+              <div key={dish.id}>
+                <Dish dish={dish} onChange={(d) => this.handleOnDishUpdate(dish.id, d)} />
+              </div>
+            );
+          })
+        }
       </div>
     );
   }

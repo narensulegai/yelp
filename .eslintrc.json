@@ -22,6 +22,7 @@
         ],
         "react/no-array-index-key": "off",
         "arrow-body-style": "off",
-        "react/require-default-props": "off"
+        "react/require-default-props": "off",
+        "radix": "off"
     }
 }

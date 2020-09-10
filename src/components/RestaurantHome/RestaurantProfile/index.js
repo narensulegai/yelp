@@ -30,28 +30,28 @@ const RestaurantProfile = ({
   };
 
   return (
-    <div className={classNames({ edit })}>
+    <div>
       <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
       {!edit && <button onClick={toggleEdit}>Edit</button>}
       <div>
         <span>Name</span>
-        <TextInput value={profile.name} ref={name} />
+        <TextInput edit={edit} value={profile.name} ref={name} />
       </div>
       <div>
         <span>Location</span>
-        <TextInput value={profile.location} ref={location} />
+        <TextInput edit={edit} value={profile.location} ref={location} />
       </div>
       <div>
         <span>Description</span>
-        <TextInput value={profile.description} ref={description} />
+        <TextInput edit={edit} value={profile.description} ref={description} />
       </div>
       <div>
         <span>Contact information</span>
-        <TextInput value={profile.contactInformation} ref={contactInformation} />
+        <TextInput edit={edit} value={profile.contactInformation} ref={contactInformation} />
       </div>
       <div>
         <span>Timings</span>
-        <TextInput value={profile.timings} ref={timings} />
+        <TextInput edit={edit} value={profile.timings} ref={timings} />
       </div>
       {edit && <button onClick={toggleEdit}>Cancel</button>}
       {edit && <button onClick={save}>Save</button>}
