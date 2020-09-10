@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   addImages, deleteImage, getDishes, getImages,
   getRestaurantProfile, updateDish, updateRestaurantProfile,
-  createDish,
+  createDish, deleteDish,
 } from '../../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
 import Dishes from '../Dishes';
@@ -16,6 +16,7 @@ class RestaurantHome extends Component {
     this.handleOnProfileSave = this.handleOnProfileSave.bind(this);
     this.handleOnDishUpdate = this.handleOnDishUpdate.bind(this);
     this.handleOnDishAdd = this.handleOnDishAdd.bind(this);
+    this.handleOnDishDelete = this.handleOnDishDelete.bind(this);
   }
 
   async componentDidMount() {
@@ -57,6 +58,13 @@ class RestaurantHome extends Component {
       });
   }
 
+  async handleOnDishDelete(id) {
+    return deleteDish(id)
+      .then(async () => {
+        this.setState({ dishes: await getDishes() });
+      });
+  }
+
   render() {
     const { images, profile, dishes } = this.state;
     return (
@@ -72,6 +80,7 @@ class RestaurantHome extends Component {
           dishes={dishes}
           onDishUpdate={this.handleOnDishUpdate}
           onDishAdd={this.handleOnDishAdd}
+          onDishDelete={this.handleOnDishDelete}
         />
       </div>
     );

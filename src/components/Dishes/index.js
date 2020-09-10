@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Dish from '../Dish';
 
-const Dishes = ({ dishes, onDishUpdate, onDishAdd }) => {
+const Dishes = ({
+  dishes, onDishUpdate, onDishAdd, onDishDelete,
+}) => {
   const [showAdd, setShowAdd] = useState(false);
 
   const onAdd = (dish) => {
@@ -11,7 +13,11 @@ const Dishes = ({ dishes, onDishUpdate, onDishAdd }) => {
         setShowAdd(false);
       });
   };
-
+  const handleOnDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this dish?')) {
+      onDishDelete(id);
+    }
+  };
   return (
     <div>
       <button onClick={() => { setShowAdd(!showAdd); }}>
@@ -21,7 +27,14 @@ const Dishes = ({ dishes, onDishUpdate, onDishAdd }) => {
       {dishes.map((dish) => {
         return (
           <div key={dish.id}>
-            <Dish editMode dish={dish} onChange={(d) => onDishUpdate(dish.id, d)} />
+            <Dish
+              editMode
+              dish={dish}
+              onChange={(d) => onDishUpdate(dish.id, d)}
+            />
+            <div>
+              <button onClick={() => handleOnDelete(dish.id)}>Delete dish</button>
+            </div>
           </div>
         );
       })}
@@ -33,6 +46,7 @@ Dishes.propTypes = {
   dishes: PropTypes.array,
   onDishUpdate: PropTypes.func,
   onDishAdd: PropTypes.func,
+  onDishDelete: PropTypes.func,
 };
 
 export default Dishes;
