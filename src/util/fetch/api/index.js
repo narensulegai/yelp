@@ -7,3 +7,4 @@ export const getImages = () => get('images');
 export const addImages = (img) => post('images', img);
 export const deleteImage = (id) => destroy(`image/${id}`);
 export const updateRestaurantProfile = (d) => put('profile/restaurant', d);
+export const getRestaurantProfile = () => get('profile/restaurant');

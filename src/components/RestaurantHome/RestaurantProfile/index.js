@@ -35,23 +35,23 @@ const RestaurantProfile = ({
       {!edit && <button onClick={toggleEdit}>Edit</button>}
       <div>
         <span>Name</span>
-        <TextInput value="text" ref={name} />
+        <TextInput value={profile.name} ref={name} />
       </div>
       <div>
         <span>Location</span>
-        <TextInput value="text" ref={location} />
+        <TextInput value={profile.location} ref={location} />
       </div>
       <div>
         <span>Description</span>
-        <TextInput value="text" ref={description} />
+        <TextInput value={profile.description} ref={description} />
       </div>
       <div>
         <span>Contact information</span>
-        <TextInput value="text" ref={contactInformation} />
+        <TextInput value={profile.contactInformation} ref={contactInformation} />
       </div>
       <div>
         <span>Timings</span>
-        <TextInput value="text" ref={timings} />
+        <TextInput value={profile.timings} ref={timings} />
       </div>
       {edit && <button onClick={toggleEdit}>Cancel</button>}
       {edit && <button onClick={save}>Save</button>}
