@@ -4,6 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import Landing from './components/Landing';
 import Signup from './components/Signup';
 import RestaurantHome from './components/RestaurantHome';
+import CustomerHome from './components/CustomerHome';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
           <Landing />
         </Route>
         <Route path="/customerHome">
-          <div>Customer home</div>
+          <CustomerHome />
         </Route>
         <Route path="/restaurantHome">
           <RestaurantHome />

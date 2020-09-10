@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import ImageInput from '../../ImageInput';
 import TextInput from '../../TextInput';
 

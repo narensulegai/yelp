@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { post } from '../../util/fetch';
+import TextInput from '../TextInput';
 
 const Signup = ({ type, history }) => {
   const name = useRef();
@@ -26,21 +27,19 @@ const Signup = ({ type, history }) => {
     }
   };
   return (
-    <div>
-      <div>
-        <input type="text" ref={name} placeholder="Name" />
-      </div>
-      <div>
-        <input type="text" ref={email} placeholder="Email" />
-      </div>
-      <div>
-        <input type="password" ref={password} placeholder="Password" />
-      </div>
-      <div>
-        {type === 'restaurant' && <input type="text" ref={location} placeholder="Location" />}
-      </div>
-      <div>
-        <button onClick={handleSignUp}>Sign Up</button>
+    <div className="container">
+      <div className="row">
+        <div className="col-4" />
+        <div className="col-4">
+          <TextInput ref={name} label="Name" />
+          <TextInput ref={email} label="Email" />
+          <TextInput ref={password} label="Password" type="password"/>
+          {type === 'restaurant' && <TextInput ref={location} label="Location" />}
+          <div className="form-group text-center">
+            <button className="btn-primary" onClick={handleSignUp}>Sign Up</button>
+          </div>
+        </div>
+        <div className="col-4" />
       </div>
     </div>
   );
