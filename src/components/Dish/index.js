@@ -5,7 +5,7 @@ import ImageInput from '../ImageInput';
 import TextInput from '../TextInput';
 
 const Dish = ({
-  editMode, dish, onChange, images, onImageAdd, onImageDelete,
+  addMode, editMode, dish, onChange, images, onImageAdd, onImageDelete, onDelete,
 }) => {
   const name = useRef();
   const ingredients = useRef();
@@ -30,54 +30,44 @@ const Dish = ({
   const save = () => {
     return onChange(getForm()).then(toggleEdit);
   };
-  const add = () => {
+  const handleOnAdd = () => {
     onChange(getForm());
   };
+  const handleOnDelete = () => {
+    if (window.confirm('Are you sure you want to delete this dish?')) {
+      onDelete();
+    }
+  };
   return (
-    <div className={classNames({ edit })}>
-      {editMode && (
+    <div className="cardBlock">
+      {!addMode && (
       <ImageInput images={images}
-        onAdd={onImageAdd} onDelete={onImageDelete} singleFile={false}
-      />
+        onAdd={onImageAdd} onDelete={onImageDelete} singleFile={false} />
       )}
-      <div>
-        {(editMode && !edit) && <button onClick={toggleEdit}>Edit</button>}
-      </div>
-      <div>
-        <div className="d-flex">
-          <div>Name</div>
-          <TextInput ref={name} edit={edit} value={dish.name} />
-        </div>
-        <div className="d-flex">
-          <div>Ingredients</div>
-          <TextInput ref={ingredients} edit={edit} value={dish.ingredients} />
-        </div>
-        <div className="d-flex">
-          <div>Price</div>
-          <TextInput ref={price} edit={edit} value={dish.price} />
-        </div>
-        <div className="d-flex">
-          <div>Description</div>
-          <TextInput ref={description} edit={edit} value={dish.description} />
-        </div>
-        <div className="d-flex">
-          <div>Category</div>
-          <div>
-            {edit && (
-            <select ref={category} defaultValue={dish.dishCategory}>
-              {categories.map((c, i) => {
-                return <option key={i} value={i}>{categories[i]}</option>;
-              })}
-            </select>
-            )}
-            {!edit && <div>{categories[dish.dishCategory]}</div>}
-          </div>
+      <div className="card-columns mt-3">
+        <TextInput label="Name" ref={name} edit={edit} value={dish.name} />
+        <TextInput label="Ingredients" ref={ingredients} edit={edit} value={dish.ingredients} />
+        <TextInput label="Price" ref={price} edit={edit} value={dish.price} />
+        <TextInput label="Description" ref={description} edit={edit} value={dish.description} />
+        <div className="form-group">
+          <label className="font-weight-bold">Category</label>
+          {edit
+            ? (
+              <select ref={category} defaultValue={dish.dishCategory} className="form-control">
+                {categories.map((c, i) => {
+                  return <option key={i} value={i}>{categories[i]}</option>;
+                })}
+              </select>
+            )
+            : <div>{categories[dish.dishCategory]}</div>}
         </div>
       </div>
-      <div>
-        {(editMode && edit) && <button onClick={toggleEdit}>Cancel</button>}
-        {(editMode && edit) && <button onClick={save}>Save</button>}
-        {!editMode && <button onClick={add}>Add</button>}
+      <div className="mt-4">
+        {(editMode && !edit) && <button className="btn-primary" onClick={toggleEdit}>Edit</button>}
+        {(editMode && edit) && <button className="btn-outline" onClick={toggleEdit}>Cancel</button>}
+        {(editMode && edit) && <button className="btn-primary" onClick={save}>Save</button>}
+        {!editMode && <button className="btn-primary" onClick={handleOnAdd}>Add</button>}
+        {!addMode && <button className="btn-primary" onClick={handleOnDelete}>Delete</button>}
       </div>
     </div>
   );
@@ -87,6 +77,7 @@ Dish.propTypes = {
   editMode: PropTypes.bool,
   dish: PropTypes.object,
   onChange: PropTypes.func,
+  onDelete: PropTypes.func,
   images: PropTypes.array,
   onImageAdd: PropTypes.func,
   onImageDelete: PropTypes.func,

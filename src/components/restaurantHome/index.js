@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import {
   addImages, deleteImage, getDishes, getImages,
   getRestaurantProfile, updateDish, updateRestaurantProfile,
@@ -10,7 +11,9 @@ import Dishes from '../Dishes';
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { images: [], profile: {}, dishes: [] };
+    this.state = {
+      images: [], profile: {}, dishes: [], currentTab: 'profile',
+    };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
     this.handleOnProfileSave = this.handleOnProfileSave.bind(this);
@@ -78,27 +81,50 @@ class RestaurantHome extends Component {
   }
 
   render() {
-    const { images, profile, dishes } = this.state;
+    const {
+      images, profile, dishes, currentTab,
+    } = this.state;
     return (
-      <div>
-        <h2>Restaurant</h2>
-        <RestaurantProfile
-          images={images.filter((i) => i.type === 'profile')}
-          profile={profile}
-          onSave={this.handleOnProfileSave}
-          onProfileImageAdd={this.handleOnProfileImageAdd}
-          onProfileImageDelete={this.handleOnProfileImageDelete}
-        />
-        <h2>Dishes</h2>
-        <Dishes
-          images={images.filter((i) => i.type === 'dish')}
-          dishes={dishes}
-          onDishUpdate={this.handleOnDishUpdate}
-          onDishAdd={this.handleOnDishAdd}
-          onDishDelete={this.handleOnDishDelete}
-          onDishImageAdd={this.handleOnDishImageAdd}
-          onDishImageDelete={this.handleOnDishImageDelete}
-        />
+      <div className="container-fluid">
+
+        <div className="row mt-5">
+
+          <div className="col-2">
+            <button className={classNames({ 'font-weight-bold': currentTab === 'profile', 'btn btn-link d-block': true })}
+              onClick={() => this.setState({ currentTab: 'profile' })}>
+              Profile
+            </button>
+            <button className={classNames({ 'font-weight-bold': currentTab === 'dishes', 'btn btn-link d-block': true })}
+              onClick={() => this.setState({ currentTab: 'dishes' })}>
+              Dishes
+            </button>
+          </div>
+
+          <div className="col-10">
+
+            {currentTab === 'profile' && (
+              <RestaurantProfile
+                images={images.filter((i) => i.type === 'profile')}
+                profile={profile}
+                onSave={this.handleOnProfileSave}
+                onProfileImageAdd={this.handleOnProfileImageAdd}
+                onProfileImageDelete={this.handleOnProfileImageDelete}
+              />
+            )}
+
+            {currentTab === 'dishes' && (
+              <Dishes
+                images={images.filter((i) => i.type === 'dish')}
+                dishes={dishes}
+                onDishUpdate={this.handleOnDishUpdate}
+                onDishAdd={this.handleOnDishAdd}
+                onDishDelete={this.handleOnDishDelete}
+                onDishImageAdd={this.handleOnDishImageAdd}
+                onDishImageDelete={this.handleOnDishImageDelete}
+              />
+            )}
+          </div>
+        </div>
       </div>
     );
   }

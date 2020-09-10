@@ -30,31 +30,28 @@ const RestaurantProfile = ({
   };
 
   return (
-    <div>
-      <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
-      {!edit && <button onClick={toggleEdit}>Edit</button>}
-      <div>
-        <span>Name</span>
-        <TextInput edit={edit} value={profile.name} ref={name} />
+    <div className="row">
+      <div className="col-10">
+        <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
+        <div className="card-columns mt-3">
+          <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
+          <TextInput label="Location" edit={edit} value={profile.location} ref={location} />
+          <TextInput label="Description" edit={edit} value={profile.description} ref={description} />
+          <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
+          <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
+        </div>
       </div>
-      <div>
-        <span>Location</span>
-        <TextInput edit={edit} value={profile.location} ref={location} />
+      <div className="col-10 mt-5">
+        {edit
+          ? (
+            <>
+              <button className="btn btn-outline-primary" onClick={toggleEdit}>Cancel</button>
+              &nbsp;
+              <button className="btn btn-primary" onClick={save}>Save</button>
+            </>
+          )
+          : (<button className="btn btn-primary" onClick={toggleEdit}>Edit</button>)}
       </div>
-      <div>
-        <span>Description</span>
-        <TextInput edit={edit} value={profile.description} ref={description} />
-      </div>
-      <div>
-        <span>Contact information</span>
-        <TextInput edit={edit} value={profile.contactInformation} ref={contactInformation} />
-      </div>
-      <div>
-        <span>Timings</span>
-        <TextInput edit={edit} value={profile.timings} ref={timings} />
-      </div>
-      {edit && <button onClick={toggleEdit}>Cancel</button>}
-      {edit && <button onClick={save}>Save</button>}
     </div>
   );
 };
