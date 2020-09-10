@@ -4,30 +4,38 @@ import classNames from 'classnames';
 import ImageInput from '../ImageInput';
 import TextInput from '../TextInput';
 
-const Dish = ({ dish, onChange }) => {
+const Dish = ({ editMode, dish, onChange }) => {
   const name = useRef();
   const ingredients = useRef();
   const price = useRef();
   const category = useRef();
   const description = useRef();
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(!editMode);
   const categories = ['Appetizer', 'Salads', 'Main course', 'Desserts', 'Beverages'];
+
   const toggleEdit = () => {
     setEdit(!edit);
   };
-  const save = () => {
-    onChange({
+
+  const getForm = () => {
+    return {
       name: name.current.value,
       ingredients: ingredients.current.value,
       price: price.current.value,
       description: description.current.value,
       dishCategory: parseInt(category.current.value),
-    }).then(toggleEdit);
+    };
+  };
+  const save = () => {
+    return onChange(getForm()).then(toggleEdit);
+  };
+  const add = () => {
+    onChange(getForm());
   };
   return (
     <div className={classNames({ edit })}>
       <div>
-        {!edit && <button onClick={toggleEdit}>Edit</button>}
+        {(editMode && !edit) && <button onClick={toggleEdit}>Edit</button>}
       </div>
       <div>
         <div className="d-flex">
@@ -59,17 +67,18 @@ const Dish = ({ dish, onChange }) => {
             {!edit && <div>{categories[dish.dishCategory]}</div>}
           </div>
         </div>
-
       </div>
       <div>
-        {edit && <button onClick={toggleEdit}>Cancel</button>}
-        {edit && <button onClick={save}>Save</button>}
+        {(editMode && edit) && <button onClick={toggleEdit}>Cancel</button>}
+        {(editMode && edit) && <button onClick={save}>Save</button>}
+        {!editMode && <button onClick={add}>Add</button>}
       </div>
     </div>
   );
 };
 
 Dish.propTypes = {
+  editMode: PropTypes.bool,
   dish: PropTypes.object,
   onChange: PropTypes.func,
 };

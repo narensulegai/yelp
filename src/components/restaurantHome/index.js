@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {
   addImages, deleteImage, getDishes, getImages,
   getRestaurantProfile, updateDish, updateRestaurantProfile,
+  createDish,
 } from '../../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
-import Dish from '../Dish';
+import Dishes from '../Dishes';
 
 class RestaurantHome extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class RestaurantHome extends Component {
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
     this.handleOnProfileSave = this.handleOnProfileSave.bind(this);
     this.handleOnDishUpdate = this.handleOnDishUpdate.bind(this);
+    this.handleOnDishAdd = this.handleOnDishAdd.bind(this);
   }
 
   async componentDidMount() {
@@ -42,12 +44,16 @@ class RestaurantHome extends Component {
   }
 
   async handleOnDishUpdate(id, dish) {
-    updateDish(id, dish)
-      .then(() => {
-        getDishes()
-          .then((dishes) => {
-            this.setState({ dishes: [...dishes] });
-          });
+    return updateDish(id, dish)
+      .then(async () => {
+        this.setState({ dishes: await getDishes() });
+      });
+  }
+
+  async handleOnDishAdd(dish) {
+    return createDish(dish)
+      .then(async () => {
+        this.setState({ dishes: await getDishes() });
       });
   }
 
@@ -55,22 +61,18 @@ class RestaurantHome extends Component {
     const { images, profile, dishes } = this.state;
     return (
       <div>
-         <RestaurantProfile
-          images={images}
-          profile={profile}
-          onSave={this.handleOnProfileSave}
-          onProfileImageAdd={this.handleOnProfileImageAdd}
-          onProfileImageDelete={this.handleOnProfileImageDelete}
-         />
-        {
-          dishes.map((dish) => {
-            return (
-              <div key={dish.id}>
-                <Dish dish={dish} onChange={(d) => this.handleOnDishUpdate(dish.id, d)} />
-              </div>
-            );
-          })
-        }
+        {/* <RestaurantProfile */}
+        {/*  images={images} */}
+        {/*  profile={profile} */}
+        {/*  onSave={this.handleOnProfileSave} */}
+        {/*  onProfileImageAdd={this.handleOnProfileImageAdd} */}
+        {/*  onProfileImageDelete={this.handleOnProfileImageDelete} */}
+        {/* /> */}
+        <Dishes
+          dishes={dishes}
+          onDishUpdate={this.handleOnDishUpdate}
+          onDishAdd={this.handleOnDishAdd}
+        />
       </div>
     );
   }
