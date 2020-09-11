@@ -5,15 +5,16 @@ import {
   addImages, deleteImage, getDishes, getImages,
   getRestaurantProfile, updateDish, updateRestaurantProfile,
   createDish, deleteDish,
-} from '../../util/fetch/api';
+} from '../util/fetch/api';
 import RestaurantProfile from './RestaurantProfile';
-import Dishes from '../Dishes';
+import Dishes from './Dishes';
+import RestaurantEvents from './RestaurantEvents';
 
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [], profile: {}, dishes: [], currentTab: 'profile',
+      images: [], profile: {}, dishes: [], currentTab: 'events',
     };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
@@ -101,6 +102,10 @@ class RestaurantHome extends Component {
               onClick={() => this.setState({ currentTab: 'dishes' })}>
               Dishes
             </button>
+            <button className={classNames({ 'font-weight-bold': currentTab === 'events', 'btn btn-link d-block': true })}
+              onClick={() => this.setState({ currentTab: 'events' })}>
+              Events
+            </button>
           </div>
 
           <div className="col-10">
@@ -126,6 +131,8 @@ class RestaurantHome extends Component {
                 onDishImageDelete={this.handleOnDishImageDelete}
               />
             )}
+
+            {currentTab === 'events' && <RestaurantEvents />}
           </div>
         </div>
       </div>

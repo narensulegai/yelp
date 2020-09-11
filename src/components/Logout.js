@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { logout } from '../../util/fetch/api';
+import { logout } from '../util/fetch/api';
 
 class Logout extends Component {
   constructor(props) {

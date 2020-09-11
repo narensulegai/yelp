@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ImageInput from '../../ImageInput';
-import TextInput from '../../TextInput';
+import ImageInput from './ImageInput';
+import TextInput from './TextInput';
 
 const RestaurantProfile = ({
   images, onProfileImageAdd, onProfileImageDelete, onSave, profile,

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
-import { get } from '../../util/fetch';
-import LoginPage from '../LoginPage';
+import { get } from '../util/fetch';
+import LoginPage from './LoginPage';
 
 class Landing extends PureComponent {
   constructor(props) {

@@ -4,15 +4,16 @@ import { Link } from 'react-router-dom';
 import {
   addImages, deleteImage, getImages,
   updateCustomerProfile, getCustomerProfile,
-} from '../../util/fetch/api';
+} from '../util/fetch/api';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
+import Events from './customer/Events';
 
 class CustomerHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [], profile: {}, currentTab: 'profile',
+      images: [], profile: {}, currentTab: 'events',
     };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
@@ -67,6 +68,10 @@ class CustomerHome extends Component {
               onClick={() => this.setState({ currentTab: 'profile' })}>
               Profile
             </button>
+            <button className={classNames({ 'font-weight-bold': currentTab === 'events', 'btn btn-link d-block': true })}
+              onClick={() => this.setState({ currentTab: 'events' })}>
+              Events
+            </button>
           </div>
 
           <div className="col-10">
@@ -84,6 +89,11 @@ class CustomerHome extends Component {
             {currentTab === 'dashboard' && (
               <CustomerDashboard />
             )}
+
+            {currentTab === 'events' && (
+              <Events />
+            )}
+
           </div>
         </div>
       </div>

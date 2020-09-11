@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FileUpload from '../FileUpload';
+import FileUpload from './FileUpload';
 
 const ImageInput = ({
   images, onAdd, onDelete, singleFile,

@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import { put } from '../../util/fetch';
+import { put } from '../util/fetch';
 
 const LoginPage = ({ onLogin, type }) => {
   const email = createRef();

@@ -15,3 +15,6 @@ export const createDish = (d) => post('dish', d);
 export const updateDish = (id, d) => put(`dish/${id}`, d);
 export const deleteDish = (id) => destroy(`dish/${id}`);
 export const logout = () => put('logout');
+export const getRestaurantEvents = () => get('restaurant/events');
+export const createEvent = (d) => post('event', d);
+export const getEvents = () => get('events');

@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { post } from '../../util/fetch';
-import TextInput from '../TextInput';
+import { post } from '../util/fetch';
+import TextInput from './TextInput';
 
 const Signup = ({ type, history }) => {
   const name = useRef();

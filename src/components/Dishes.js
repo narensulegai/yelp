@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Dish from '../Dish';
+import Dish from './Dish';
 
 const Dishes = ({
   images, dishes, onDishUpdate, onDishAdd, onDishDelete,
