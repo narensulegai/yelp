@@ -33,7 +33,7 @@ const Signup = ({ type, history }) => {
         <div className="col-4">
           <TextInput ref={name} label="Name" />
           <TextInput ref={email} label="Email" />
-          <TextInput ref={password} label="Password" type="password"/>
+          <TextInput ref={password} label="Password" type="password" />
           {type === 'restaurant' && <TextInput ref={location} label="Location" />}
           <div className="form-group text-center">
             <button className="btn-primary" onClick={handleSignUp}>Sign Up</button>

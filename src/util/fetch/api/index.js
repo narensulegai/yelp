@@ -8,6 +8,8 @@ export const addImages = (img) => post('images', img);
 export const deleteImage = (id) => destroy(`image/${id}`);
 export const updateRestaurantProfile = (d) => put('profile/restaurant', d);
 export const getRestaurantProfile = () => get('profile/restaurant');
+export const updateCustomerProfile = (d) => put('profile/customer', d);
+export const getCustomerProfile = () => get('profile/customer');
 export const getDishes = () => get('dishes');
 export const createDish = (d) => post('dish', d);
 export const updateDish = (id, d) => put(`dish/${id}`, d);

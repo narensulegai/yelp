@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import ImageInput from '../ImageInput';
 import TextInput from '../TextInput';
 
@@ -75,6 +74,7 @@ const Dish = ({
 
 Dish.propTypes = {
   editMode: PropTypes.bool,
+  addMode: PropTypes.bool,
   dish: PropTypes.object,
   onChange: PropTypes.func,
   onDelete: PropTypes.func,
