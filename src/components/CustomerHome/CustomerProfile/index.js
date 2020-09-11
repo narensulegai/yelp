@@ -31,7 +31,8 @@ const CustomerProfile = ({
   return (
     <div className="row">
       <div className="col-10">
-        <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
+        <ImageInput singleFile images={images}
+          onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
         <div className="card-columns mt-3">
           <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
           <TextInput label="About" edit={edit} value={profile.about} ref={about} />

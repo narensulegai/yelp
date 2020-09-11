@@ -21,19 +21,21 @@ class CustomerHome extends Component {
   async componentDidMount() {
     const images = await getImages();
     const profile = await getCustomerProfile();
-    this.setState({ images: images.slice(-1), profile });
+    this.setState({ images, profile });
   }
 
   async handleOnProfileImageAdd(fileIds) {
+    // Delete the current image first
+    if (this.state.images.length) {
+      await deleteImage(this.state.images[0].id);
+    }
     await addImages({ fileIds: fileIds.files, type: 'profile', typeId: null });
-    const images = await getImages();
-    this.setState({ images: images.slice(-1) });
+    this.setState({ images: await getImages() });
   }
 
   async handleOnProfileImageDelete(id) {
     await deleteImage(id);
-    const images = await getImages();
-    this.setState({ images: images.slice(-1) });
+    this.setState({ images: await getImages() });
   }
 
   async handleOnProfileSave(p) {

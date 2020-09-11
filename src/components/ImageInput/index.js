@@ -15,7 +15,7 @@ const ImageInput = ({
       {images.map((img, i) => (
         <div key={i} className="form-group">
           <div>
-            <img src={`/api/file/${img.fileId}`} alt={i} height={40} width={40} />
+            <img src={`/api/file/${img.fileId}`} alt="Reload page" height={40} width={40} />
           </div>
           <div onClick={() => { handleOnDelete(img.id); }}>Remove</div>
         </div>
