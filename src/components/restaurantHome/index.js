@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import {
   addImages, deleteImage, getDishes, getImages,
   getRestaurantProfile, updateDish, updateRestaurantProfile,
@@ -86,8 +87,10 @@ class RestaurantHome extends Component {
     } = this.state;
     return (
       <div className="container-fluid">
-
-        <div className="row mt-5">
+        <nav className="navbar clearfix">
+          <Link to="/logout">Logout</Link>
+        </nav>
+        <div className="row">
 
           <div className="col-2">
             <button className={classNames({ 'font-weight-bold': currentTab === 'profile', 'btn btn-link d-block': true })}
