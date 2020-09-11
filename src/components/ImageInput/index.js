@@ -11,18 +11,18 @@ const ImageInput = ({
     }
   };
   return (
-    <div className="card-columns cardBlock">
+    <div className="imagesContainer d-flex align-items-center">
       {images.map((img, i) => (
-        <div key={i} className="form-group">
-          <div>
-            <img src={`/api/file/${img.fileId}`} alt="Reload page" height={40} width={40} />
+        <div key={i} className="imageBox mr-2">
+          <img src={`/api/file/${img.fileId}`} alt="Reload page" className="imageTile" />
+          <div className="removeImageButton" onClick={() => {
+            handleOnDelete(img.id);
+          }}>
+            Remove
           </div>
-          <div onClick={() => { handleOnDelete(img.id); }}>Remove</div>
         </div>
       ))}
-      <div className="form-group">
-        <FileUpload singleFile={singleFile} onUpload={onAdd} />
-      </div>
+      <FileUpload singleFile={singleFile} onUpload={onAdd} />
     </div>
   );
 };

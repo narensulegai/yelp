@@ -18,8 +18,8 @@ const FileUpload = ({ singleFile, onUpload }) => {
   };
   return (
     singleFile
-      ? <input type="file" accept="image/*" onChange={handleOnChange} className="form-control-file" />
-      : <input type="file" accept="image/*" onChange={handleOnChange} className="form-control-file" multiple />
+      ? <input type="file" accept="image/*" onChange={handleOnChange} className="uploadButton" />
+      : <input type="file" accept="image/*" onChange={handleOnChange} className="uploadButton" multiple />
   );
 };
 

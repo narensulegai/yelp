@@ -5,6 +5,7 @@ import Landing from './components/Landing';
 import Signup from './components/Signup';
 import RestaurantHome from './components/RestaurantHome';
 import CustomerHome from './components/CustomerHome';
+import Logout from './components/Logout';
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
         </Route>
         <Route path="/restaurantSignup">
           <Signup type="restaurant" />
+        </Route>
+        <Route path="/logout">
+          <Logout />
         </Route>
       </HashRouter>
     </div>

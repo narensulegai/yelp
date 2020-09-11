@@ -14,3 +14,4 @@ export const getDishes = () => get('dishes');
 export const createDish = (d) => post('dish', d);
 export const updateDish = (id, d) => put(`dish/${id}`, d);
 export const deleteDish = (id) => destroy(`dish/${id}`);
+export const logout = () => put('logout');
