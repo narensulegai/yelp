@@ -24,4 +24,6 @@ Backend/uploads
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-*.idea/*
+Frontend/.idea
+Backend/.idea
+.idea/
