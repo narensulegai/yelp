@@ -37,13 +37,13 @@ class View extends Component {
   render() {
     return (
       <div className="row">
-        <div className="row12">
+        <div className="col-12">
           <a href="#/customer/dashboard">Go back</a>
           <h4>{this.state.restaurant.name}</h4>
           <div>Add comment</div>
           <TextInput ref={this.comment} label="Comment"/>
           <TextInput ref={this.rating} label="Rating"/>
-          <button onClick={this.handleAddComment}>Comment</button>
+          <button className="btn-primary" onClick={this.handleAddComment}>Comment</button>
           <div>
             {this.state.comments.map((c, i) => {
               return <div key={i} className="card mt-3">
