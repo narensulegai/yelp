@@ -3,10 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { logout } from '../util/fetch/api';
 
 class Logout extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   async componentDidMount() {
     logout()
       .then(() => {

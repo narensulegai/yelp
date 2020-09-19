@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { getRestaurantEvents, createEvent, deleteEvent } from '../util/fetch/api';
 import Event from './Event';
 import NewEvent from './NewEvent';
