@@ -18,7 +18,7 @@ const Signup = ({ type, history }) => {
     };
     if (type === 'customer') {
       post('signup/customer', d).then(() => {
-        history.push('/customerHome');
+        history.push('/customer/dashboard');
       });
     } else {
       post('signup/restaurant', { ...d, ...{ location: location.current.value } }).then(() => {

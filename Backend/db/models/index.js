@@ -12,7 +12,7 @@ const intType = () => ({
 });
 
 const customer = {
-  modelName: 'Customer',
+  modelName: 'customer',
   attributes: {
     name: stringType(),
     email: { ...stringType(), unique: true },
@@ -30,7 +30,7 @@ const customer = {
 };
 
 const restaurant = {
-  modelName: 'Restaurant',
+  modelName: 'restaurant',
   attributes: {
     name: stringType(),
     email: { ...stringType(), unique: true },
@@ -48,7 +48,7 @@ const restaurant = {
 };
 
 const image = {
-  modelName: 'Image',
+  modelName: 'image',
   attributes: {
     fileId: stringType(),
     scope: stringType(),
@@ -59,7 +59,7 @@ const image = {
 };
 
 const dish = {
-  modelName: 'Dish',
+  modelName: 'dish',
   attributes: {
     restaurantId: intType(),
     name: stringType(),
@@ -71,7 +71,7 @@ const dish = {
 };
 
 const event = {
-  modelName: 'Event',
+  modelName: 'event',
   attributes: {
     name: stringType(),
     restaurantId: intType(),
@@ -84,14 +84,24 @@ const event = {
 };
 
 const customerEvent = {
-  modelName: 'CustomerEvent',
+  modelName: 'customerEvent',
   attributes: {
     eventId: intType(),
     customerId: stringType(),
   },
 };
+
+const comment = {
+  modelName: 'comment',
+  attributes: {
+    restaurantId: intType(),
+    customerId: intType(),
+    text: stringType(),
+    rating: intType(),
+  },
+};
 const models = [
-  customer, restaurant, image, dish, event, customerEvent,
+  customer, restaurant, image, dish, event, customerEvent, comment,
 ];
 
 module.exports = models.map((m) => merge({

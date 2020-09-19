@@ -12,7 +12,7 @@ const Event = ({ event, onRegister }) => {
     <div className="card mt-2">
       <div className="card-header pointer-event" onClick={toggle}>
         <h4>Event<b> {event.name}</b></h4>
-        <div>Hosted by restaurant {event.Restaurant.name}</div>
+        <div>Hosted by restaurant {event.restaurant.name}</div>
         <h6 className="pointer-event">Click to see details</h6>
       </div>
       {expand && (

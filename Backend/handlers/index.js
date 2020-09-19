@@ -1,13 +1,15 @@
 const multer = require('multer');
 const path = require('path');
-const Sequelize = require('sequelize');
 const {
-  Customer, Restaurant, Image, Dish, Event, CustomerEvent,
+  customer: Customer, restaurant: Restaurant, image: Image, dish: Dish,
+  event: Event, customerEvent: CustomerEvent, comment: Comment,
 } = require('../db');
 
 Event.belongsTo(Restaurant);
 CustomerEvent.belongsTo(Event);
 Event.hasMany(CustomerEvent);
+Restaurant.hasMany(Comment);
+Comment.belongsTo(Customer);
 
 const err = (msg) => ({ err: msg });
 module.exports = {
@@ -175,7 +177,7 @@ module.exports = {
         },
       ],
     });
-    resp.json(events.filter((r) => r.CustomerEvents.length === 0));
+    resp.json(events.filter((r) => r.customerEvents.length === 0));
   },
   registerEvent: async (req, resp) => {
     resp.json(await CustomerEvent.create({
@@ -189,5 +191,24 @@ module.exports = {
       },
       include: Event,
     }));
+  },
+  getRestaurants: async (req, resp) => {
+    resp.json(await Restaurant.findAll());
+  },
+  getComments: async (req, resp) => {
+    resp.json(await Comment.findAll({
+      where: {
+        restaurantId: req.params.id,
+      },
+      include: Customer,
+    }));
+  },
+  addComment: async (req, resp) => {
+    const comment = {
+      ...req.body,
+      customerId: req.session.user.id,
+      restaurantId: req.params.id,
+    };
+    resp.json(await Comment.create(comment));
   },
 };

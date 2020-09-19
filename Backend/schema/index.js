@@ -53,6 +53,10 @@ const schemaDef = {
     date: reqStr('Date'),
     time: reqStr('Time'),
   }),
+  addComment: Joi.object({
+    text: reqStr('Comment'),
+    rating: reqStr('Rating'),
+  }),
 };
 const schema = {};
 for (const k in schemaDef) {

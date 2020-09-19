@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { Link, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
 import Events from './customer/Events';
+import RestaurantView from "./restaurant/View";
 
 class CustomerHome extends Component {
   render() {
@@ -16,7 +16,7 @@ class CustomerHome extends Component {
           <a className="navbar-text" href="#/customer/events">Event</a>
           <a className="navbar-nav" href="#/logout">Logout</a>
         </nav>
-        <div className="container">
+        <div className="container mt-3">
           <Route path="/customer/profile">
             <CustomerProfile />
           </Route>
@@ -25,6 +25,9 @@ class CustomerHome extends Component {
           </Route>
           <Route path="/customer/events">
             <Events />
+          </Route>
+          <Route path="/customer/restaurant/:id">
+            <RestaurantView />
           </Route>
         </div>
       </>

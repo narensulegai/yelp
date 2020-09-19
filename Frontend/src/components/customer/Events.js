@@ -40,8 +40,8 @@ class Events extends Component {
             return (
               <div key={i} className="card mb-2">
                 <div className="card-header">
-                  <h4>Event <b>{e.Event.name}</b></h4>
-                  <div>{e.Event.description}</div>
+                  <h4>Event <b>{e.event.name}</b></h4>
+                  <div>{e.event.description}</div>
                 </div>
               </div>
             );

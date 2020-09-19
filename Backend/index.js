@@ -44,6 +44,9 @@ app.use(cookieParser());
   ['get', '/api/events', handler.getEvents, null],
   ['get', '/api/customer/events', handler.getCustomerEvents, null],
   ['post', '/api/registerEvent/:id', handler.registerEvent, null],
+  ['get', '/api/restaurants', handler.getRestaurants, null],
+  ['get', '/api/comments/:id', handler.getComments, null],
+  ['post', '/api/comment/:id', handler.addComment, null, schema.addComment],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
     if (r[4]) {
