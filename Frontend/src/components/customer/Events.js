@@ -22,7 +22,7 @@ class Events extends Component {
   render() {
     return (
       <div className="row">
-        <div className="col-4">
+        <div className="col-6">
           <h4>All events</h4>
           {this.state.allEvents.map((event, i) => {
             return (
@@ -33,7 +33,7 @@ class Events extends Component {
             );
           })}
         </div>
-        <div className="col-4">
+        <div className="col-6">
           <h4>Registered events</h4>
           {this.state.customerEvents.length === 0 && <div>You have not registered for any events</div>}
           {this.state.customerEvents.map((e, i) => {

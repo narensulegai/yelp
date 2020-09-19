@@ -61,7 +61,7 @@ const CustomerProfile = () => {
 
   return (
     <div className="row">
-      <div className="col-8">
+      <div className="col-12">
         <ImageInput singleFile images={images}
           onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
         <div>
@@ -73,7 +73,7 @@ const CustomerProfile = () => {
         </div>
 
       </div>
-      <div className="col-8 d-flex justify-content-between">
+      <div className="col-12 d-flex justify-content-between">
         {edit
           ? (
             <>
