@@ -10,6 +10,7 @@ CustomerEvent.belongsTo(Event);
 Event.hasMany(CustomerEvent);
 Restaurant.hasMany(Comment);
 Comment.belongsTo(Customer);
+CustomerEvent.belongsTo(Customer);
 
 const err = (msg) => ({ err: msg });
 module.exports = {
@@ -161,10 +162,22 @@ module.exports = {
       where: {
         restaurantId: req.session.user.id,
       },
+      include: [{
+        model: CustomerEvent,
+        include: Customer,
+      }],
     }));
   },
   createEvent: async (req, resp) => {
     resp.json(await Event.create({ restaurantId: req.session.user.id, ...req.body }));
+  },
+  deleteEvent: async (req, resp) => {
+    resp.json(await Event.destroy({
+      where: {
+        restaurantId: req.session.user.id,
+        id: req.params.id,
+      },
+    }));
   },
   getEvents: async (req, resp) => {
     const events = await Event.findAll({

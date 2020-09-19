@@ -24,12 +24,13 @@ class Events extends Component {
       <div className="row">
         <div className="col-6">
           <h4>All events</h4>
-          {this.state.allEvents.map((event, i) => {
+          {this.state.allEvents.length === 0 && <div>There are no events to show</div>}
+          {this.state.allEvents.map((event) => {
             return (
-              <Event event={event} key={i}
-                     onRegister={() => {
-                       this.handleOnRegister(event.id);
-                     }}/>
+              event ? <Event event={event} key={event.id}
+                             onRegister={() => {
+                               this.handleOnRegister(event.id);
+                             }}/> : null
             );
           })}
         </div>
@@ -38,12 +39,12 @@ class Events extends Component {
           {this.state.customerEvents.length === 0 && <div>You have not registered for any events</div>}
           {this.state.customerEvents.map((e, i) => {
             return (
-              <div key={i} className="card mb-2">
+              e.event ? <div key={i} className="card mb-2">
                 <div className="card-header">
                   <h4>Event <b>{e.event.name}</b></h4>
                   <div>{e.event.description}</div>
                 </div>
-              </div>
+              </div> : null
             );
           })}
         </div>

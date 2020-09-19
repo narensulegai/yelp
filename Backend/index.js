@@ -40,6 +40,7 @@ app.use(cookieParser());
   ['put', '/api/dish/:id', handler.updateDish, null, schema.createDish],
   ['delete', '/api/dish/:id', handler.deleteDish, null],
   ['post', '/api/event', handler.createEvent, null, schema.createEvent],
+  ['delete', '/api/event/:id', handler.deleteEvent, null],
   ['get', '/api/restaurant/events', handler.getRestaurantEvents, null],
   ['get', '/api/events', handler.getEvents, null],
   ['get', '/api/customer/events', handler.getCustomerEvents, null],

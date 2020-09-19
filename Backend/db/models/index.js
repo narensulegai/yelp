@@ -87,7 +87,7 @@ const customerEvent = {
   modelName: 'customerEvent',
   attributes: {
     eventId: intType(),
-    customerId: stringType(),
+    customerId: intType(),
   },
 };
 
