@@ -14,12 +14,12 @@ class Landing extends PureComponent {
   async componentDidMount() {
     const currUser = await get('currentUser');
     if (currUser.scope !== null) {
-      this.props.history.push(currUser.scope === 'customer' ? '/customer/dashboard' : '/restaurantHome');
+      this.props.history.push(currUser.scope === 'customer' ? '/customer/dashboard' : '/restaurant/profile');
     }
   }
 
   handleOnLogin() {
-    this.props.history.push(this.state.currTab === 'customer' ? '/customer/dashboard' : '/restaurantHome');
+    this.props.history.push(this.state.currTab === 'customer' ? '/customer/dashboard' : '/restaurant/profile');
   }
 
   toggleLogin() {

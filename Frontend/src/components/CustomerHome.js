@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
 import Events from './customer/Events';
-import RestaurantView from "./restaurant/View";
+import RestaurantView from './restaurant/View';
 
 class CustomerHome extends Component {
   render() {

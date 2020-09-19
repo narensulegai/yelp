@@ -22,7 +22,7 @@ const Signup = ({ type, history }) => {
       });
     } else {
       post('signup/restaurant', { ...d, ...{ location: location.current.value } }).then(() => {
-        history.push('/restaurantHome');
+        history.push('/restaurant/profile');
       });
     }
   };

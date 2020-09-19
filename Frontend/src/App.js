@@ -17,7 +17,7 @@ function App() {
         <Route path="/customer">
           <CustomerHome />
         </Route>
-        <Route path="/restaurantHome">
+        <Route path="/restaurant">
           <RestaurantHome />
         </Route>
         <Route path="/customerSignup">
