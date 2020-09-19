@@ -9,28 +9,26 @@ import Logout from './components/Logout';
 
 function App() {
   return (
-    <div>
-      <HashRouter>
-        <Route path="/" exact>
-          <Landing />
-        </Route>
-        <Route path="/customerHome">
-          <CustomerHome />
-        </Route>
-        <Route path="/restaurantHome">
-          <RestaurantHome />
-        </Route>
-        <Route path="/customerSignup">
-          <Signup type="customer" />
-        </Route>
-        <Route path="/restaurantSignup">
-          <Signup type="restaurant" />
-        </Route>
-        <Route path="/logout">
-          <Logout />
-        </Route>
-      </HashRouter>
-    </div>
+    <HashRouter>
+      <Route path="/" exact>
+        <Landing />
+      </Route>
+      <Route path="/customerHome">
+        <CustomerHome />
+      </Route>
+      <Route path="/restaurantHome">
+        <RestaurantHome />
+      </Route>
+      <Route path="/customerSignup">
+        <Signup type="customer" />
+      </Route>
+      <Route path="/restaurantSignup">
+        <Signup type="restaurant" />
+      </Route>
+      <Route path="/logout">
+        <Logout />
+      </Route>
+    </HashRouter>
   );
 }
 

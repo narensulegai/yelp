@@ -30,23 +30,23 @@ const CustomerProfile = ({
 
   return (
     <div className="row">
-      <div className="col-10">
+      <div className="col-8">
         <ImageInput singleFile images={images}
           onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
-        <div className="card-columns mt-3">
+        <div>
           <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
           <TextInput label="About" edit={edit} value={profile.about} ref={about} />
           <TextInput label="Yelping Since" edit={edit} value={profile.yelpingSince} ref={yelpingSince} />
           <TextInput label="Things I love" edit={edit} value={profile.thingsILove} ref={thingsILove} />
           <TextInput label="Website" edit={edit} value={profile.website} ref={website} />
         </div>
+
       </div>
-      <div className="col-10 mt-5">
+      <div className="col-8 d-flex justify-content-between">
         {edit
           ? (
             <>
               <button className="btn btn-outline-primary" onClick={toggleEdit}>Cancel</button>
-              &nbsp;
               <button className="btn btn-primary" onClick={save}>Save</button>
             </>
           )

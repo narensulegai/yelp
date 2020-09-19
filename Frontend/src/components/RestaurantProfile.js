@@ -30,17 +30,15 @@ const RestaurantProfile = ({
 
   return (
     <div className="row">
-      <div className="col-10">
+      <div className="col-8">
         <ImageInput images={images} onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
-        <div className="card-columns mt-3">
-          <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
-          <TextInput label="Location" edit={edit} value={profile.location} ref={location} />
-          <TextInput label="Description" edit={edit} value={profile.description} ref={description} />
-          <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
-          <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
-        </div>
+        <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
+        <TextInput label="Location" edit={edit} value={profile.location} ref={location} />
+        <TextInput label="Description" edit={edit} value={profile.description} ref={description} />
+        <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
+        <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
       </div>
-      <div className="col-10 mt-5">
+      <div className="col-8 d-flex justify-content-between">
         {edit
           ? (
             <>

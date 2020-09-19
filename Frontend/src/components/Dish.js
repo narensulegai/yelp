@@ -61,7 +61,7 @@ const Dish = ({
             : <div>{categories[dish.dishCategory]}</div>}
         </div>
       </div>
-      <div className="mt-4">
+      <div className="d-flex justify-content-between">
         {(editMode && !edit) && <button className="btn-primary" onClick={toggleEdit}>Edit</button>}
         {(editMode && edit) && <button className="btn-outline" onClick={toggleEdit}>Cancel</button>}
         {(editMode && edit) && <button className="btn-primary" onClick={save}>Save</button>}
