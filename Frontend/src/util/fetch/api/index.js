@@ -18,3 +18,5 @@ export const logout = () => put('logout');
 export const getRestaurantEvents = () => get('restaurant/events');
 export const createEvent = (d) => post('event', d);
 export const getEvents = () => get('events');
+export const getCustomerEvents = () => get('customer/events');
+export const registerEvent = (id) => post(`registerEvent/${id}`);

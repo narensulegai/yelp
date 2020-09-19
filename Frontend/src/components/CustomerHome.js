@@ -8,7 +8,7 @@ import Events from './customer/Events';
 class CustomerHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentTab: 'profile' };
+    this.state = { currentTab: 'events' };
   }
 
   render() {
@@ -23,7 +23,8 @@ class CustomerHome extends Component {
         <div className="row">
 
           <div className="col-2">
-            <button className={classNames({ 'font-weight-bold': currentTab === 'dashboard', 'btn btn-link d-block': true })}
+            <button
+              className={classNames({ 'font-weight-bold': currentTab === 'dashboard', 'btn btn-link d-block': true })}
               onClick={() => this.setState({ currentTab: 'dashboard' })}>
               Dashboard
             </button>

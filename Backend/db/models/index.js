@@ -81,10 +81,17 @@ const event = {
     date: stringType(),
     time: stringType(),
   },
+};
 
+const customerEvent = {
+  modelName: 'CustomerEvent',
+  attributes: {
+    eventId: intType(),
+    customerId: stringType(),
+  },
 };
 const models = [
-  customer, restaurant, image, dish, event,
+  customer, restaurant, image, dish, event, customerEvent,
 ];
 
 module.exports = models.map((m) => merge({
