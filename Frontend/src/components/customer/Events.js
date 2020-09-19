@@ -3,18 +3,15 @@ import { getEvents } from '../../util/fetch/api';
 import Event from './Event';
 
 class Events extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { events: [] };
-    this.handleOnRegister = this.handleOnRegister.bind(this);
-  }
+
+  state = { events: [] }
 
   async componentDidMount() {
     const events = await getEvents();
     this.setState({ events });
   }
 
-  handleOnRegister(id) {
+  handleOnRegister = (id) =>{
     console.log(id);
   }
 

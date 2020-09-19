@@ -1,38 +1,69 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import ImageInput from './ImageInput';
 import TextInput from './TextInput';
+import {
+  addImages, deleteImage, getCustomerProfile, getImages, updateCustomerProfile,
+} from '../util/fetch/api';
 
-const CustomerProfile = ({
-  images, onProfileImageAdd, onProfileImageDelete, onSave, profile,
-}) => {
+const CustomerProfile = () => {
   const name = useRef();
   const about = useRef();
   const yelpingSince = useRef();
   const thingsILove = useRef();
   const website = useRef();
   const [edit, setEdit] = useState(false);
+  const [profile, setProfile] = useState({});
+  const [images, setImages] = useState([]);
+
+  const getCustImages = async () => {
+    const img = await getImages();
+    return img.filter((i) => i.type === 'profile');
+  };
+
+  useEffect(() => {
+    getCustomerProfile().then(setProfile);
+    getCustImages().then(setImages);
+  }, []);
 
   const toggleEdit = () => {
     setEdit(!edit);
   };
 
-  const save = async () => {
-    await onSave({
+  const handleOnProfileSave = () => {
+    const p = {
       name: name.current.value,
       about: about.current.value,
       yelpingSince: yelpingSince.current.value,
       thingsILove: thingsILove.current.value,
       website: website.current.value,
-    });
-    setEdit(!edit);
+    };
+    updateCustomerProfile(p)
+      .then(() => {
+        getCustomerProfile().then(setProfile);
+        setEdit(!edit);
+      });
+  };
+
+  const handleOnProfileImageAdd = async (fileIds) => {
+    // Delete the current image first
+    if (images.length) {
+      await deleteImage(images[0].id);
+    }
+    await addImages({ fileIds: fileIds.files, type: 'profile', typeId: null });
+    setImages(await getCustImages());
+  };
+
+  const handleOnProfileImageDelete = async (id) => {
+    await deleteImage(id);
+    setImages(await getCustImages());
   };
 
   return (
     <div className="row">
       <div className="col-8">
         <ImageInput singleFile images={images}
-          onAdd={onProfileImageAdd} onDelete={onProfileImageDelete} />
+          onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
         <div>
           <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
           <TextInput label="About" edit={edit} value={profile.about} ref={about} />
@@ -47,7 +78,7 @@ const CustomerProfile = ({
           ? (
             <>
               <button className="btn btn-outline-primary" onClick={toggleEdit}>Cancel</button>
-              <button className="btn btn-primary" onClick={save}>Save</button>
+              <button className="btn btn-primary" onClick={handleOnProfileSave}>Save</button>
             </>
           )
           : (<button className="btn btn-primary" onClick={toggleEdit}>Edit</button>)}
@@ -56,12 +87,6 @@ const CustomerProfile = ({
   );
 };
 
-CustomerProfile.propTypes = {
-  images: PropTypes.array,
-  onProfileImageAdd: PropTypes.func,
-  onProfileImageDelete: PropTypes.func,
-  onSave: PropTypes.func,
-  profile: PropTypes.object,
-};
+CustomerProfile.propTypes = {};
 
 export default CustomerProfile;
