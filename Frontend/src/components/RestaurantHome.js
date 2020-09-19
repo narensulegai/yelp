@@ -9,12 +9,13 @@ import {
 import RestaurantProfile from './RestaurantProfile';
 import Dishes from './Dishes';
 import RestaurantEvents from './RestaurantEvents';
+import Comment from "./restaurant/Comment";
 
 class RestaurantHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [], profile: {}, dishes: [], currentTab: 'events',
+      images: [], profile: {}, dishes: [], currentTab: 'comments',
     };
     this.handleOnProfileImageAdd = this.handleOnProfileImageAdd.bind(this);
     this.handleOnProfileImageDelete = this.handleOnProfileImageDelete.bind(this);
@@ -133,6 +134,7 @@ class RestaurantHome extends Component {
             )}
 
             {currentTab === 'events' && <RestaurantEvents />}
+            {currentTab === 'comments' && <Comment />}
           </div>
         </div>
       </div>

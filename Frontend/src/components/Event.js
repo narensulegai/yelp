@@ -10,13 +10,14 @@ const Event = ({ event, onDelete }) => {
       <div className="card-body">
         <p>{event.description}</p>
         <h6>Hashtags {event.hashTags}</h6>
-        <div>Registered users:</div>
+        <div>Registered users ({event.customerEvents.length})</div>
         <div>{event.customerEvents.map((c) => {
-          return <span key={c.customer.id}>{c.customer.name}</span>;
-        })}</div>
+          return <span key={c.customer.id}>{c.customer.name}&nbsp;</span>;
+        })}
+        </div>
+        <div>Venue at {event.location} on {event.date} at {event.time}</div>
       </div>
       <div className="card-footer">
-        <div>Venue at {event.location} on {event.date} at {event.time}</div>
         <button className="btn-primary" onClick={onDelete}>Delete</button>
       </div>
     </div>
@@ -25,6 +26,7 @@ const Event = ({ event, onDelete }) => {
 
 Event.propTypes = {
   event: PropTypes.object,
+  onDelete: PropTypes.func,
 };
 
 export default Event;
