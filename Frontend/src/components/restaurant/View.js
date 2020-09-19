@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {addComment, getComments, getRestaurants} from '../../util/fetch/api';
+import TextInput from "../TextInput";
 
 class View extends Component {
   constructor(props) {
@@ -40,21 +41,9 @@ class View extends Component {
           <a href="#/customer/dashboard">Go back</a>
           <h4>{this.state.restaurant.name}</h4>
           <div>Add comment</div>
-          <div className="form-group">
-            <div>Comment</div>
-            <div>
-              <input type="text" ref={this.comment}/>
-            </div>
-          </div>
-          <div className="form-group">
-            <div>Rating</div>
-            <div>
-              <input type="text" ref={this.rating}/>
-            </div>
-          </div>
-          <div className="form-group">
-            <button onClick={this.handleAddComment}>Comment</button>
-          </div>
+          <TextInput ref={this.comment} label="Comment"/>
+          <TextInput ref={this.rating} label="Rating"/>
+          <button onClick={this.handleAddComment}>Comment</button>
           <div>
             {this.state.comments.map((c, i) => {
               return <div key={i} className="card mt-3">
