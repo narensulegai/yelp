@@ -100,8 +100,20 @@ const comment = {
     rating: intType(),
   },
 };
+
+const order = {
+  modelName: 'order',
+  attributes: {
+    restaurantId: intType(),
+    customerId: intType(),
+    dishId: intType(),
+    isPickup: { type: DataTypes.BOOLEAN },
+    isCanceled: { type: DataTypes.BOOLEAN, defaultValue: false },
+    status: stringType(),
+  },
+};
 const models = [
-  customer, restaurant, image, dish, event, customerEvent, comment,
+  customer, restaurant, image, dish, event, customerEvent, comment, order,
 ];
 
 module.exports = models.map((m) => merge({

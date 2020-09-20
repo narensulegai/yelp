@@ -2,15 +2,19 @@ const multer = require('multer');
 const path = require('path');
 const {
   customer: Customer, restaurant: Restaurant, image: Image, dish: Dish,
-  event: Event, customerEvent: CustomerEvent, comment: Comment,
+  event: Event, customerEvent: CustomerEvent, comment: Comment, order: Order,
 } = require('../db');
 
 Event.belongsTo(Restaurant);
 CustomerEvent.belongsTo(Event);
+CustomerEvent.belongsTo(Customer);
 Event.hasMany(CustomerEvent);
 Restaurant.hasMany(Comment);
 Comment.belongsTo(Customer);
-CustomerEvent.belongsTo(Customer);
+
+Order.belongsTo(Restaurant);
+Order.belongsTo(Customer);
+Order.belongsTo(Dish);
 
 const err = (msg) => ({ err: msg });
 module.exports = {
@@ -223,5 +227,34 @@ module.exports = {
       restaurantId: req.params.id,
     };
     resp.json(await Comment.create(comment));
+  },
+  getRestaurantDishes: async (req, resp) => {
+    resp.json(await Dish.findAll({ where: { restaurantId: req.params.id } }));
+  },
+  placeOrder: async (req, resp) => {
+    const dish = await Dish.findByPk(parseInt(req.params.id));
+    resp.json(await dish.createOrder({
+      restaurantId: dish.restaurantId,
+      customerId: req.session.user.id,
+    }));
+  },
+  myOrders: async (req, resp) => {
+    const userId = req.session.user.id;
+    resp.json(await Order.findAll({
+      where: req.session.scope === 'customer'
+        ? { customerId: userId }
+        : { restaurantId: userId },
+      include: [Restaurant, Customer, Dish],
+    }));
+  },
+  updateMyOrder: async (req, resp) => {
+    const userId = req.session.user.id;
+    const id = parseInt(req.params.id);
+    // dont allow rest to cancel order or user to change status
+    resp.json(await Order.update(req.body, {
+      where: req.session.scope === 'customer'
+        ? { customerId: userId, id }
+        : { restaurantId: userId, id },
+    }));
   },
 };

@@ -25,7 +25,7 @@ class CustomerDashboard extends Component {
               <div key={i} className="card mt-3">
                 <div className="card-header">
                   <h4>
-                    <a href={`#/customer/restaurant/${r.id}`}>{r.name}</a>
+                    <a href={`#/customer/restaurant/${r.id}/comments`}>{r.name}</a>
                   </h4>
                   <div>{r.timings}</div>
                 </div>

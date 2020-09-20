@@ -4,6 +4,7 @@ import RestaurantProfile from './RestaurantProfile';
 import Dishes from './Dishes';
 import RestaurantEvents from './RestaurantEvents';
 import Comment from './restaurant/Comment';
+import Orders from './restaurant/Orders';
 
 class RestaurantHome extends Component {
   render() {
@@ -15,6 +16,7 @@ class RestaurantHome extends Component {
           <a className="navbar-text" href="#/restaurant/dishes">Dishes</a>
           <a className="navbar-text" href="#/restaurant/events">Event</a>
           <a className="navbar-text" href="#/restaurant/comments">Comments</a>
+          <a className="navbar-text" href="#/restaurant/orders">Orders</a>
           <a className="navbar-nav" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
@@ -29,6 +31,9 @@ class RestaurantHome extends Component {
           </Route>
           <Route path="/restaurant/comments">
             <Comment />
+          </Route>
+          <Route path="/restaurant/orders">
+            <Orders />
           </Route>
         </div>
       </>
