@@ -50,15 +50,15 @@ const Orders = () => {
           .map((o) => {
             return (
               <div key={o.id}>
-                <div>Restaurant : {o.restaurant.name}</div>
+                <a href={`/restaurant/customer/${o.customer.id}`}>Customer  {o.customer.name}</a>
                 <div>Dish : {o.dish.name}</div>
                 <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
 
-                <div className="form-group">
-                  <div className="font-weight-bold">
-                    Change status
-                  </div>
-                  <select defaultValue={o.status} ref={(el) => status.current[o.id] = el} className="form-control">
+                <div>
+                  <span>
+                    Change status&nbsp;
+                  </span>
+                  <select defaultValue={o.status} ref={(el) => status.current[o.id] = el}>
                     <option value="new">Order Received</option>
                     <option value="preparing">Preparing</option>
                     {o.isPickup
@@ -77,7 +77,7 @@ const Orders = () => {
                   </select>
                 </div>
                 <div>
-                  <button className="btn-primary" onClick={() => handleOnSave(o.id)}>Save</button>
+                  <button className="btn-primary mt-3" onClick={() => handleOnSave(o.id)}>Save</button>
                 </div>
               </div>
             );
