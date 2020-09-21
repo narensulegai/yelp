@@ -60,6 +60,11 @@ body {
     border-radius: 5px;
 }
 
+.mapContainer {
+    height: 500px;
+    width: 100%;
+}
+
 .uploadButton {
     height: 26px;
     line-height: 20px;

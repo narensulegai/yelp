@@ -53,7 +53,6 @@ const Orders = () => {
                 <a href={`/restaurant/customer/${o.customer.id}`}>Customer  {o.customer.name}</a>
                 <div>Dish : {o.dish.name}</div>
                 <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
-
                 <div>
                   <span>
                     Change status&nbsp;
