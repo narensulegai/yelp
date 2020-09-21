@@ -52,6 +52,7 @@ app.use(cookieParser());
   ['post', '/api/placeOrder/:id', handler.placeOrder, null],
   ['get', '/api/myOrders', handler.myOrders, null],
   ['put', '/api/myOrder/:id', handler.updateMyOrder, null],
+  ['get', '/api/customer/:id', handler.getCustomer, null],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
     if (r[4]) {

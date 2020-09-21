@@ -5,6 +5,7 @@ import Dishes from './Dishes';
 import RestaurantEvents from './RestaurantEvents';
 import Comment from './restaurant/Comment';
 import Orders from './restaurant/Orders';
+import CustomerView from './customer/View';
 
 class RestaurantHome extends Component {
   render() {
@@ -34,6 +35,9 @@ class RestaurantHome extends Component {
           </Route>
           <Route path="/restaurant/orders">
             <Orders />
+          </Route>
+          <Route path="/restaurant/customer/:id">
+            <CustomerView />
           </Route>
         </div>
       </>

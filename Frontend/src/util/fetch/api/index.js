@@ -24,6 +24,7 @@ export const getEvents = () => get('events');
 export const getCustomerEvents = () => get('customer/events');
 export const registerEvent = (id) => post(`registerEvent/${id}`);
 export const getRestaurants = () => get('restaurants');
+export const getCustomer = (id) => get(`customer/${id}`);
 export const addComment = (id, d) => post(`comment/${id}`, d);
 export const getComments = (id) => get(`comments/${id}`);
 export const myOrders = () => get('myOrders');

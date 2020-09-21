@@ -4,16 +4,12 @@ import { logout } from '../util/fetch/api';
 
 class Logout extends Component {
   async componentDidMount() {
-    logout()
-      .then(() => {
-        this.props.history.push('/');
-      });
+    await logout();
+    this.props.history.push('/');
   }
 
   render() {
-    return (
-      <div className="text-center">Logging out</div>
-    );
+    return <div className="text-center">Logging out</div>;
   }
 }
 

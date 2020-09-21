@@ -138,6 +138,9 @@ module.exports = {
   getCustomerProfile: async (req, resp) => {
     resp.json(await Customer.findByPk(req.session.user.id));
   },
+  getCustomer: async (req, resp) => {
+    resp.json(await Customer.findByPk(req.params.id));
+  },
   createDish: async (req, resp) => {
     const dish = { ...req.body, restaurantId: req.session.user.id };
     resp.json(await Dish.create(dish));
