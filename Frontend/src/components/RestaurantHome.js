@@ -11,14 +11,14 @@ class RestaurantHome extends Component {
   render() {
     return (
       <>
-        <nav className="navbar navbar-dark bg-dark">
-          <div className="navbar-brand">Yelp</div>
-          <a className="navbar-text" href="#/restaurant/profile">Profile</a>
-          <a className="navbar-text" href="#/restaurant/dishes">Dishes</a>
-          <a className="navbar-text" href="#/restaurant/events">Event</a>
-          <a className="navbar-text" href="#/restaurant/comments">Comments</a>
-          <a className="navbar-text" href="#/restaurant/orders">Orders</a>
-          <a className="navbar-nav" href="#/logout">Logout</a>
+        <nav className="navbar navbar-expand-lg navbar-light bg-dark">
+          <div className="navbar-brand text-light">Yelp</div>
+          <a className="nav-link text-light" href="#/restaurant/profile">Profile</a>
+          <a className="nav-link text-light" href="#/restaurant/dishes">Dishes</a>
+          <a className="nav-link text-light" href="#/restaurant/events">Event</a>
+          <a className="nav-link text-light" href="#/restaurant/comments">Comments</a>
+          <a className="nav-link text-light" href="#/restaurant/orders">Orders</a>
+          <a className="nav-link text-light" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
           <Route path="/restaurant/profile">
