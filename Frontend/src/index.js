@@ -5,17 +5,17 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import AppReducer from './reducers';
 
 window.error = (msg) => {
   const e = window.document.getElementById('err');
   e.innerText = msg;
 };
 
-function yelpApp(state, action) {
-
-}
-
-const store = createStore(yelpApp);
+const store = createStore(
+  AppReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
 
 ReactDOM.render(
   <React.StrictMode>
