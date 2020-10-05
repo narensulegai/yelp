@@ -33,7 +33,7 @@ module.exports = {
   },
   logout: async (req, res) => {
     req.session.destroy();
-    res.json({});
+    res.json(true);
   },
   current: async (req, resp) => {
     if (req.session && req.session.scope) {
