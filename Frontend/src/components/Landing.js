@@ -3,7 +3,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import { get } from '../util/fetch';
 import LoginPage from './LoginPage';
 
-class Landing extends PureComponent {
+export class Landing extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { currTab: 'customer' };
@@ -47,7 +47,7 @@ class Landing extends PureComponent {
               <div>&nbsp;or&nbsp;</div>
               <NavLink to="/restaurantSignup">Sign up as a restaurant</NavLink>
             </div>
-            <div className="text-center  mt-4">
+            <div className="text-center mt-4">
               <button className="btn btn-outline-primary" onClick={this.toggleLogin}>
                 {currTab === 'restaurant'
                   ? 'No, login as customer'

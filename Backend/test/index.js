@@ -21,7 +21,7 @@ describe('A customer', () => {
       });
   });
 
-  it('should be able to show current user when logged in', (done) => {
+  it('should be able to show current user when logged in using GET /api/currentUser', (done) => {
     chai.request(server)
       .get('/api/currentUser')
       .set('Cookie', vars.cookies)
@@ -31,7 +31,7 @@ describe('A customer', () => {
       });
   });
 
-  it('should be able to update profile', (done) => {
+  it('should be able to update profile using PUT /api/profile/customer', (done) => {
     chai.request(server)
       .put('/api/profile/customer')
       .send({ name: 'new name' })
@@ -42,7 +42,7 @@ describe('A customer', () => {
       });
   });
 
-  it('should be able to get profile', (done) => {
+  it('should be able to get profile using GET /api/profile/customer', (done) => {
     chai.request(server)
       .get('/api/profile/customer')
       .set('Cookie', vars.cookies)
@@ -52,7 +52,7 @@ describe('A customer', () => {
       });
   });
 
-  it('should be able to logout', (done) => {
+  it('should be able to logout using PUT /api/logout', (done) => {
     chai.request(server)
       .put('/api/logout')
       .set('Cookie', vars.cookies)
@@ -62,7 +62,7 @@ describe('A customer', () => {
       });
   });
 
-  it('should be able to list all my orders', (done) => {
+  it('should be able to list all my orders using GET /api/myOrders', (done) => {
     chai.request(server)
       .get('/api/myOrders')
       .set('Cookie', vars.cookies)
