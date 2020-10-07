@@ -1,9 +1,12 @@
 const call = (method, api, data = null) => new Promise((res, rej) => {
-  fetch(`api/${api}`,
+  fetch(`http://localhost:5000/api/${api}`,
     {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: data ? JSON.stringify(data) : null,
+      // CORS
+      credentials: 'include',
+      mode: 'cors',
     })
     .then((r) => {
       r.json()

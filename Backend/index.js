@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const FileStore = require('session-file-store')(session);
+const cors = require('cors');
 const handler = require('./handlers');
 const schema = require('./schema');
 
@@ -19,6 +20,11 @@ app.use(session({
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 
 [
   ['put', '/api/login/:user', handler.login, null],
