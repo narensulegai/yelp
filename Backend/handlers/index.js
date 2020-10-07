@@ -1,9 +1,12 @@
 const multer = require('multer');
 const path = require('path');
+const bcrypt = require('bcrypt');
 const {
   customer: Customer, restaurant: Restaurant, image: Image, dish: Dish,
   event: Event, customerEvent: CustomerEvent, comment: Comment, order: Order,
 } = require('../db');
+
+const saltRounds = 10;
 
 Event.belongsTo(Restaurant);
 CustomerEvent.belongsTo(Event);
@@ -20,20 +23,33 @@ const err = (msg) => ({ err: msg });
 module.exports = {
   login: async (req, res) => {
     const u = req.params.user;
-    const m = u === 'customer' ? Customer : Restaurant;
+    const m = u === 'customer' ? Customer.unscoped() : Restaurant.unscoped();
     const { email, password } = req.body;
-    const cust = await m.findAll({ where: { email, password } });
-    if (cust !== null && cust.length === 1) {
-      [req.session.user] = cust;
-      req.session.scope = u;
-      res.json(cust[0]);
+    const cust = await m.findAll({ where: { email }, raw: true });
+    if (cust.length === 0) {
+      res.status(401).json(err('Email doesn\'t exist'));
     } else {
-      res.status(401).json(err('Email password doesn\'t match'));
+      bcrypt.compare(password, cust[0].password, (e, doseMatch) => {
+        if (doseMatch) {
+          [req.session.user] = cust;
+          req.session.scope = u;
+          res.json(cust[0]);
+        } else {
+          res.status(401).json(err('Email password doesn\'t match'));
+        }
+      });
     }
   },
   logout: async (req, res) => {
-    req.session.destroy();
-    res.json(true);
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+        res.json(false);
+      } else {
+        res.clearCookie('connect.sid');
+        res.json(true);
+      }
+    });
   },
   current: async (req, resp) => {
     if (req.session && req.session.scope) {
@@ -44,12 +60,13 @@ module.exports = {
   },
   signupCustomer: async (req, resp) => {
     try {
-      const r = await Customer.create(req.body);
-      const newCustomer = r.get({ plain: true });
-      delete newCustomer.password;
-      req.session.user = newCustomer;
-      req.session.scope = 'customer';
-      resp.json(newCustomer);
+      bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
+        const r = await Customer.create({ ...req.body, password });
+        const newCustomer = r.get({ plain: true });
+        req.session.user = newCustomer;
+        req.session.scope = 'customer';
+        resp.json(newCustomer);
+      });
     } catch (e) {
       if (e.name === 'SequelizeUniqueConstraintError') {
         resp.status(400).json(err('Email id is already taken'));
@@ -60,12 +77,13 @@ module.exports = {
   },
   signupRestaurant: async (req, resp) => {
     try {
-      const r = await Restaurant.create(req.body);
-      const newRestaurant = r.get({ plain: true });
-      delete newRestaurant.password;
-      req.session.user = newRestaurant;
-      req.session.scope = 'restaurant';
-      resp.json(newRestaurant);
+      bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
+        const r = await Restaurant.create({ ...req.body, password });
+        const newRestaurant = r.get({ plain: true });
+        req.session.user = newRestaurant;
+        req.session.scope = 'restaurant';
+        resp.json(newRestaurant);
+      });
     } catch (e) {
       if (e.name === 'SequelizeUniqueConstraintError') {
         resp.status(400).json(err('Email id is already taken'));
