@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {addComment, getComments, getRestaurants} from '../../util/fetch/api';
-import TextInput from "../TextInput";
 import PlaceOrder from "./PlacerOrder";
 import {Route} from 'react-router-dom';
 
@@ -31,6 +30,8 @@ class View extends Component {
       .then(async () => {
         const comments = await getComments(this.state.restaurantId);
         this.setState({comments});
+        this.comment.current.value = "";
+        window.alert('Thank you for your review!');
       })
   }
 
@@ -39,25 +40,38 @@ class View extends Component {
       <div className="row">
         <div className="col-12">
           <a href="#/customer/dashboard">Go back</a>
-          <h4>{this.state.restaurant.name}</h4>
+          <h2>{this.state.restaurant.name}</h2>
 
-          <a href={`#/customer/restaurant/${this.state.restaurantId}/placeOrder`}>Place Order</a>
-          &nbsp;|&nbsp;
           <a href={`#/customer/restaurant/${this.state.restaurantId}/comments`}>Add a review</a>
+          &nbsp;|&nbsp;
+          <a href={`#/customer/restaurant/${this.state.restaurantId}/placeOrder`}>Place Order</a>
+
 
           <Route path={`/customer/restaurant/${this.state.restaurantId}/placeOrder`}>
             <PlaceOrder restaurantId={this.state.restaurantId}/>
           </Route>
 
           <Route path={`/customer/restaurant/${this.state.restaurantId}/comments`}>
-            <div>Add comment</div>
-            <TextInput ref={this.comment} label="Comment"/>
-            <TextInput ref={this.rating} label="Rating"/>
-            <button className="btn-primary" onClick={this.handleAddComment}>Comment</button>
+            <div className="mt-3">
+              <span className="mr-3">Rate this restaurant</span>
+              <select defaultValue="5" ref={this.rating} className="custom-select-sm">
+                <option value="5">Great</option>
+                <option value="4">Good</option>
+                <option value="3">Average</option>
+                <option value="2">Not good</option>
+                <option value="1">Bad</option>
+              </select>
+            </div>
+            <div className="mt-3">
+              <textarea className="form-control" rows="3" placeholder="Add your review here" ref={this.comment}/>
+            </div>
+            <div className="mt-3">
+              <button className="btn-primary" onClick={this.handleAddComment}>Add review</button>
+            </div>
           </Route>
 
-          <div>
-            <h2>Reviews</h2>
+          <div className="mt-3">
+            <h5>User reviews</h5>
             {this.state.comments.length === 0 && <div>There are no review yet.</div>}
             {this.state.comments.map((c) => {
               return <div key={c.id} className="card mt-3">

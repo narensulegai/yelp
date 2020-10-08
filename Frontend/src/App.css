@@ -6,15 +6,21 @@ body {
 }
 
 #err {
-    color: red;
+    color: #bb0000;
     width: 300px;
     position: fixed;
-    top: 0;
+    top: 60px;
     left: 50%;
     margin-left: -150px;
     z-index: 1;
-    background: green;
+    background: #d8d8d8;
     text-align: center;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px 1px black;
+}
+
+#err:empty {
+    display: none;
 }
 
 .edit .onView, .onEdit {

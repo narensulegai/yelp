@@ -67,8 +67,8 @@ const Dish = ({
             {(editMode && !edit) && <button className="btn-primary" onClick={toggleEdit}>Edit</button>}
             {(editMode && edit) && <button className="btn-outline" onClick={toggleEdit}>Cancel</button>}
             {(editMode && edit) && <button className="btn-primary" onClick={save}>Save</button>}
-            {!editMode && <button className="btn-primary" onClick={handleOnAdd}>Add</button>}
-            {!addMode && <button className="btn-primary" onClick={handleOnDelete}>Delete</button>}
+            {!editMode && <button className="btn-primary" onClick={handleOnAdd}>Add dish</button>}
+            {(!addMode && !edit) && <button className="btn-primary" onClick={handleOnDelete}>Delete</button>}
           </div>
         </div>
       </div>

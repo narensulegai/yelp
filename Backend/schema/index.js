@@ -54,7 +54,7 @@ const schemaDef = {
     time: reqStr('Time'),
   }),
   addComment: Joi.object({
-    text: reqStr('Comment'),
+    text: reqStr('Review'),
     rating: reqStr('Rating'),
   }),
 };

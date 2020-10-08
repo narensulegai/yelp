@@ -3,7 +3,6 @@ import { getRestaurants } from '../util/fetch/api';
 import Map from './Map';
 
 class CustomerDashboard extends Component {
-
   constructor(props) {
     super(props);
     this.state = { restaurants: [] };
@@ -24,9 +23,10 @@ class CustomerDashboard extends Component {
           </div>
         </div>
         <div className="col-6">
+          {this.state.restaurants.length === 0 && <div>No restaurants to show</div>}
           {this.state.restaurants.map((r, i) => {
             return (
-              <div key={i} className="card">
+              <div key={i} className="card mb-3">
                 <div className="card-header">
                   <h6>
                     <a href={`#/customer/restaurant/${r.id}/comments`}>{r.name}</a>
@@ -47,7 +47,9 @@ class CustomerDashboard extends Component {
           })}
         </div>
         <div className="col-6">
-          <Map location={this.state.restaurants.map((r) => r.location)} />
+          {this.state.restaurants.length
+            ? <Map locations={this.state.restaurants.map((r) => r.location)} />
+            : <div>No restaurants show on map</div>}
         </div>
       </div>
     );

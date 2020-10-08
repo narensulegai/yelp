@@ -14,7 +14,7 @@ CustomerEvent.belongsTo(Customer);
 Event.hasMany(CustomerEvent);
 Restaurant.hasMany(Comment);
 Comment.belongsTo(Customer);
-
+Dish.hasMany(Order);
 Order.belongsTo(Restaurant);
 Order.belongsTo(Customer);
 Order.belongsTo(Dish);
@@ -25,15 +25,16 @@ module.exports = {
     const u = req.params.user;
     const m = u === 'customer' ? Customer.unscoped() : Restaurant.unscoped();
     const { email, password } = req.body;
-    const cust = await m.findAll({ where: { email }, raw: true });
-    if (cust.length === 0) {
+    const user = await m.findOne({ where: { email }, raw: true });
+    if (user === null) {
       res.status(401).json(err('Email doesn\'t exist'));
     } else {
-      bcrypt.compare(password, cust[0].password, (e, doseMatch) => {
+      bcrypt.compare(password, user.password, (e, doseMatch) => {
         if (doseMatch) {
-          [req.session.user] = cust;
+          delete user.password;
+          req.session.user = user;
           req.session.scope = u;
-          res.json(cust[0]);
+          res.json(user);
         } else {
           res.status(401).json(err('Email password doesn\'t match'));
         }
@@ -255,6 +256,7 @@ module.exports = {
   placeOrder: async (req, resp) => {
     const dish = await Dish.findByPk(parseInt(req.params.id));
     resp.json(await dish.createOrder({
+      status: 'new',
       restaurantId: dish.restaurantId,
       customerId: req.session.user.id,
     }));

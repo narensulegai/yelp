@@ -20,35 +20,43 @@ const MyOrders = () => {
     setOrderFilter(e.target.value);
   };
   return (
-    <div>
-      <h4>My Orders</h4>
-      <select value={orderFilter} onChange={handleOrderFilterChange}>
-        <option value="new">My Orders</option>
-        <option value="preparing">Preparing</option>
-      </select>
-      {orders
-        .filter((o) => {
-          if (orderFilter === 'preparing') {
-            return orderFilter === o.status;
-          }
-          return true;
-        })
-        .map((o) => {
-          return (
-            <div key={o.id}>
-              <div>Restaurant : {o.restaurant.name}</div>
-              <div>Dish : {o.dish.name}</div>
-              <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
-              <div>
-                <button className="btn-primary"
-                  onClick={() => handleCancelOrder(o.id)}
-                  disabled={o.isCanceled}>
-                  {o.isCanceled ? 'Order canceled' : 'Cancel'}
-                </button>
+    <div className="row">
+      <div className="col-6">
+        <h4>My Orders</h4>
+        <div className="mb-3">
+          <span className="mr-3">Filter by</span>
+          <select value={orderFilter} onChange={handleOrderFilterChange}>
+            <option value="new">New Orders</option>
+            <option value="preparing">Preparing</option>
+          </select>
+        </div>
+
+        {orders
+          .filter((o) => {
+            if (orderFilter === 'preparing') {
+              return orderFilter === o.status;
+            }
+            return true;
+          })
+          .map((o) => {
+            return (
+              <div key={o.id} className="card mb-3">
+                <div className="card-header">
+                  <div>Restaurant : {o.restaurant.name}</div>
+                  <div>Dish : {o.dish.name}</div>
+                  <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
+                  <div className="mt-2">
+                    <button className="btn-primary"
+                      onClick={() => handleCancelOrder(o.id)}
+                      disabled={o.isCanceled}>
+                      {o.isCanceled ? 'Order canceled' : 'Cancel Order'}
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
     </div>
   );
 };

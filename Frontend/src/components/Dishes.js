@@ -65,11 +65,12 @@ const Dishes = () => {
           )
           : (
             <button onClick={() => { setShowAdd(true); }} className="btn-primary">
-              Add a new dish
+              Add a dish
             </button>
           )}
         {!showAdd && (
           <div className="mt-3">
+            {dishes.length === 0 ? <div>You have not added any dishes, please add one</div> : null}
             {dishes.map((dish) => {
               return (
                 <div key={dish.id} className="mt-3">

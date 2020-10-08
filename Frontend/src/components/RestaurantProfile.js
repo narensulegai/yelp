@@ -56,7 +56,8 @@ const RestaurantProfile = () => {
 
   return (
     <div className="row">
-      <div className="col-8">
+      <div className="col-6">
+        <h4>Restaurant profile</h4>
         <ImageInput images={images}
           onAdd={handleOnProfileImageAdd}
           onDelete={handleOnProfileImageDelete} />
@@ -65,16 +66,16 @@ const RestaurantProfile = () => {
         <TextInput label="Description" edit={edit} value={profile.description} ref={description} />
         <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
         <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
-      </div>
-      <div className="col-8 d-flex justify-content-between">
-        {edit
-          ? (
-            <>
-              <button className="btn btn-outline-primary" onClick={toggleEdit}>Cancel</button>
-              <button className="btn btn-primary" onClick={handleOnProfileSave}>Save</button>
-            </>
-          )
-          : <button className="btn btn-primary" onClick={toggleEdit}>Edit</button>}
+        <div className="d-flex justify-content-between">
+          {edit
+            ? (
+              <>
+                <button className="btn-outline-primary" onClick={toggleEdit}>Cancel</button>
+                <button className="btn-primary" onClick={handleOnProfileSave}>Save</button>
+              </>
+            )
+            : <button className="btn-primary" onClick={toggleEdit}>Edit</button>}
+        </div>
       </div>
     </div>
   );

@@ -13,19 +13,20 @@ const PlaceOrder = ({ restaurantId }) => {
 
   const handlePlaceOrder = async (dishId) => {
     await placeOrder(dishId);
-    window.alert('Order placed');
+    window.alert('Your order has been placed!');
   };
 
   return (
-    <div>
+    <div className="mb-3">
+      {dishes.length === 0 ? <div>Restaurant has not listed any dishes yet.</div> : null}
       {dishes.map((d) => {
         return (
           <div className="card mb-3" key={d.id}>
             <div className="card-header">
               <div>Dish {d.name}</div>
               <div>Price ${d.price}</div>
-              <div>
-                <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Place order</button>
+              <div className="mt-2">
+                <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
               </div>
             </div>
           </div>

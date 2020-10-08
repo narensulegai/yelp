@@ -10,13 +10,13 @@ class CustomerHome extends Component {
   render() {
     return (
       <>
-        <nav className="navbar navbar-dark bg-dark">
-          <div className="navbar-brand">Yelp</div>
-          <a className="navbar-text" href="#/customer/dashboard">Dashboard</a>
-          <a className="navbar-text" href="#/customer/profile">Profile</a>
-          <a className="navbar-text" href="#/customer/events">Event</a>
-          <a className="navbar-text" href="#/customer/myOrders">My Orders</a>
-          <a className="navbar-nav" href="#/logout">Logout</a>
+        <nav className="navbar navbar-expand-lg navbar-light bg-dark">
+          <div className="navbar-brand text-light">Yelp</div>
+          <a className="nav-link text-light" href="#/customer/dashboard">Dashboard</a>
+          <a className="nav-link text-light" href="#/customer/profile">Profile</a>
+          <a className="nav-link text-light" href="#/customer/events">Event</a>
+          <a className="nav-link text-light" href="#/customer/myOrders">My Orders</a>
+          <a className="nav-link text-light" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
           <Route path="/customer/profile">

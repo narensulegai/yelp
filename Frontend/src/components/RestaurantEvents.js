@@ -35,11 +35,12 @@ class RestaurantEvents extends Component {
   render() {
     return (
       <div className="row">
-        <div className="col-4">
+        <div className="col-6">
           <NewEvent onAdd={this.handleOnEventAdd} />
         </div>
         <div className="col-6">
           <h4>Your events</h4>
+          {this.state.events.length === 0 ? <div>You have not added any events yet.</div> : null}
           {this.state.events.map((e) => {
             return (
               <Event key={e.id} event={e} onDelete={() => {

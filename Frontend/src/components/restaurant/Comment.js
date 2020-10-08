@@ -17,15 +17,16 @@ class Comment extends Component {
     return (
       <div className="row">
         <div className="col-12">
-          <h6>Customer comments</h6>
+          <h4>Customer reviews</h4>
+          {this.state.comments.length === 0 ? <div>No comments yet</div> : null}
           {this.state.comments.map((c) => {
             return (
               <div key={c.id} className="card mb-3">
                 <div className="card-header">
                   <div>{c.text}</div>
-                  <div>{c.rating}/5</div>
+                  <div>Rated {c.rating} of 5</div>
                   <div>
-                    <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
+                    Review by <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
                   </div>
                 </div>
               </div>
