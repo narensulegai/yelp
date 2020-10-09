@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getRestaurantDishes, placeOrder } from '../../util/fetch/api';
+import Carousal from '../Carousal';
 
 const PlaceOrder = ({ restaurantId }) => {
   const [dishes, setDishes] = useState([]);
@@ -23,7 +24,11 @@ const PlaceOrder = ({ restaurantId }) => {
         return (
           <div className="card mb-3" key={d.id}>
             <div className="card-header">
-              <div>Dish <b>{d.name}</b></div>
+              <div><b>{d.name}</b></div>
+              <div>Ingredients: {d.ingredients}</div>
+              <div className="mt-2">
+                <Carousal images={d.images} />
+              </div>
               <div>Price <b>${d.price}</b></div>
               <div className="mt-2">
                 <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>

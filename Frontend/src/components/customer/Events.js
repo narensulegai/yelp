@@ -51,7 +51,9 @@ class Events extends Component {
         </div>
         <div className="col-6">
           <h4>Registered events</h4>
-          {this.state.customerEvents.length === 0 && <div>You have not registered for any events</div>}
+          {this.state.customerEvents.length === 0
+            ? <div>You have not registered for any events</div>
+            : null}
           {this.state.customerEvents.map((e, i) => {
             return (
               e.event ? (

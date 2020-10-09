@@ -18,6 +18,9 @@ Dish.hasMany(Order);
 Order.belongsTo(Restaurant);
 Order.belongsTo(Customer);
 Order.belongsTo(Dish);
+Customer.hasOne(Image, { foreignKey: 'userId' });
+Restaurant.hasMany(Image, { foreignKey: 'userId' });
+Dish.hasMany(Image, { foreignKey: 'typeId' });
 
 const err = (msg) => ({ err: msg });
 module.exports = {
@@ -134,10 +137,8 @@ module.exports = {
     res.json({ id });
   },
   getFile: async (req, res) => {
-    const userId = req.session.user.id;
-    const { scope } = req.session;
     const fileId = req.params.id;
-    const f = await Image.findOne({ where: { userId, scope, fileId } });
+    const f = await Image.findOne({ where: { fileId } });
     // Check if user owns the file
     if (f === null) {
       res.status(404).json(err('File not found'));
@@ -158,7 +159,16 @@ module.exports = {
     resp.json(await Customer.findByPk(req.session.user.id));
   },
   getCustomer: async (req, resp) => {
-    resp.json(await Customer.findByPk(req.params.id));
+    resp.json(await Customer.findByPk(req.params.id, {
+      include: [
+        {
+          model: Image,
+          where: {
+            scope: 'customer',
+          },
+        },
+      ],
+    }));
   },
   createDish: async (req, resp) => {
     const dish = { ...req.body, restaurantId: req.session.user.id };
@@ -173,7 +183,20 @@ module.exports = {
     }));
   },
   getDishes: async (req, resp) => {
-    resp.json(await Dish.findAll({ where: { restaurantId: req.session.user.id } }));
+    const restaurantId = req.session.user.id;
+    resp.json(await Dish.findAll({
+      where: { restaurantId },
+      include: [
+        {
+          model: Image,
+          where: {
+            scope: 'restaurant',
+            type: 'dish',
+            userId: restaurantId,
+          },
+        },
+      ],
+    }));
   },
   deleteDish: async (req, resp) => {
     resp.json(await Dish.destroy({
@@ -232,7 +255,17 @@ module.exports = {
     }));
   },
   getRestaurants: async (req, resp) => {
-    resp.json(await Restaurant.findAll());
+    resp.json(await Restaurant.findAll({
+      include: [
+        {
+          model: Image,
+          where: {
+            scope: 'restaurant',
+            type: 'profile',
+          },
+        },
+      ],
+    }));
   },
   getComments: async (req, resp) => {
     resp.json(await Comment.findAll({
@@ -251,7 +284,20 @@ module.exports = {
     resp.json(await Comment.create(comment));
   },
   getRestaurantDishes: async (req, resp) => {
-    resp.json(await Dish.findAll({ where: { restaurantId: req.params.id } }));
+    const restaurantId = req.params.id;
+    resp.json(await Dish.findAll({
+      where: { restaurantId },
+      include: [
+        {
+          model: Image,
+          where: {
+            scope: 'restaurant',
+            type: 'dish',
+            userId: restaurantId,
+          },
+        },
+      ],
+    }));
   },
   placeOrder: async (req, resp) => {
     const dish = await Dish.findByPk(parseInt(req.params.id));

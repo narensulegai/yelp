@@ -14,7 +14,7 @@ const ImageInput = ({
     <div className="imagesContainer d-flex align-items-center">
       {images.map((img, i) => (
         <div key={i} className="imageBox mr-2">
-          <img src={`/api/file/${img.fileId}`} alt="Reload page" className="imageTile" />
+          <img src={`/api/file/${img.fileId}`} className="imageTile" />
           <div className="removeImageButton" onClick={() => {
             handleOnDelete(img.id);
           }}>

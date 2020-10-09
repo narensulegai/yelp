@@ -18,7 +18,7 @@ class Comment extends Component {
       <div className="row">
         <div className="col-12">
           <h4>Customer reviews</h4>
-          {this.state.comments.length === 0 ? <div>No comments yet</div> : null}
+          {this.state.comments.length === 0 ? <div>No reviews yet</div> : null}
           {this.state.comments.map((c) => {
             return (
               <div key={c.id} className="card mb-3">

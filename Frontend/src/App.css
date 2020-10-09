@@ -3,6 +3,7 @@
 body {
     position: relative;
     background: url("../src/fba7da61.png") repeat;
+    padding-bottom: 40px;
 }
 
 #err {
@@ -51,6 +52,20 @@ body {
     height: 100%;
     width: 100%;
     border-radius: 5px;
+}
+
+.multiImage, .profileImage {
+    height: 100px;
+    width: 100px;
+    border-radius: 40px;
+    border: 1px solid black;
+    font-size: 10px;
+}
+
+.multiImage{
+    border: none;
+    border-radius: 0;
+    margin-right: 10px;
 }
 
 .removeImageButton {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {getRestaurants} from '../util/fetch/api';
 import Map from './Map';
+import Carousal from "./Carousal";
 
 class CustomerDashboard extends Component {
   constructor(props) {
@@ -50,11 +51,14 @@ class CustomerDashboard extends Component {
           {this.state.restaurants.length === 0 && <div>No restaurants to show</div>}
           {this.state.restaurants.map((r, i) => {
             return (
-              <div key={i} className="card mb-3">
+              <div key={r.id} className="card mb-3">
                 <div className="card-header">
                   <h4>
                     <a href={`#/customer/restaurant/${r.id}/comments`}>{r.name}</a>
                   </h4>
+                  <div className="mt-2">
+                    <Carousal images={r.images}/>
+                  </div>
                   <div>
                     <span>Timings {r.timings || '-'}</span>
                     &nbsp;|&nbsp;

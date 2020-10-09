@@ -56,15 +56,15 @@ const Orders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <div>Order number {o.id}</div>
+                  <h4>#{o.id}</h4>
                   <div>
-                    Order placed by <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
+                    <b>{o.dish.name}</b>
+                     &nbsp;for <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
                   </div>
-                  <div>Dish : {o.dish.name}</div>
-                  <div>Status : {o.status}</div>
+                  <div>Order status <b>{o.status}</b></div>
                   <div>
                     <span className="mr-3">
-                      Update order
+                      Update order status to
                     </span>
                     <select className="mr-3" defaultValue={o.status} ref={(el) => status.current[o.id] = el}>
                       <option value="new">Order Received</option>

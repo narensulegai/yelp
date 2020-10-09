@@ -42,10 +42,11 @@ class View extends Component {
           <a href="#/customer/dashboard">Go back</a>
           <h2>{this.state.restaurant.name}</h2>
 
-          <a href={`#/customer/restaurant/${this.state.restaurantId}/comments`}>Add a review</a>
-          &nbsp;|&nbsp;
-          <a href={`#/customer/restaurant/${this.state.restaurantId}/placeOrder`}>Place Order</a>
-
+          <div className="mb-3">
+            <a href={`#/customer/restaurant/${this.state.restaurantId}/comments`}>Add a review</a>
+            &nbsp;|&nbsp;
+            <a href={`#/customer/restaurant/${this.state.restaurantId}/placeOrder`}>Place Order</a>
+          </div>
 
           <Route path={`/customer/restaurant/${this.state.restaurantId}/placeOrder`}>
             <PlaceOrder restaurantId={this.state.restaurantId}/>
@@ -54,7 +55,7 @@ class View extends Component {
           <Route path={`/customer/restaurant/${this.state.restaurantId}/comments`}>
             <div className="mt-3">
               <span className="mr-3">Rate this restaurant</span>
-              <select defaultValue="5" ref={this.rating} className="custom-select-sm">
+              <select defaultValue="5" ref={this.rating}>
                 <option value="5">Great</option>
                 <option value="4">Good</option>
                 <option value="3">Average</option>
@@ -71,13 +72,16 @@ class View extends Component {
           </Route>
 
           <div className="mt-3">
-            <h5>User reviews</h5>
+            <h5>Customer reviews</h5>
             {this.state.comments.length === 0 && <div>There are no review yet.</div>}
             {this.state.comments.map((c) => {
               return <div key={c.id} className="card mt-3">
                 <div className="card-header">
-                  <div>Comment <b>{c.text}</b></div>
-                  <div>Rating <b>{c.rating}/5</b></div>
+                  <div>
+                    <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
+                    <b className="ml-2">{c.rating} of 5</b>
+                  </div>
+                  <div>{c.text}</div>
                 </div>
               </div>
             })}
