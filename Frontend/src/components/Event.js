@@ -8,9 +8,9 @@ const Event = ({ event, onDelete }) => {
         {event.name}
       </div>
       <div className="card-body">
-        <p>{event.description}</p>
+        <div>{event.description}</div>
         <h6>Hashtags {event.hashTags}</h6>
-        <div>Registered users ({event.customerEvents.length})</div>
+        <div>{event.customerEvents.length} user(s) have registered</div>
         <div>{event.customerEvents.map((c) => {
           return (
             <a href={`#/restaurant/customer/${c.customer.id}`}
@@ -21,7 +21,7 @@ const Event = ({ event, onDelete }) => {
         <div>Venue at {event.location} on {event.date} at {event.time}</div>
       </div>
       <div className="card-footer">
-        <button className="btn-primary" onClick={onDelete}>Delete</button>
+        <button className="btn-primary" onClick={onDelete}>Delete event</button>
       </div>
     </div>
   );

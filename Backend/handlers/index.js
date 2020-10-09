@@ -166,6 +166,7 @@ module.exports = {
           where: {
             scope: 'customer',
           },
+          required: false,
         },
       ],
     }));
@@ -186,16 +187,6 @@ module.exports = {
     const restaurantId = req.session.user.id;
     resp.json(await Dish.findAll({
       where: { restaurantId },
-      include: [
-        {
-          model: Image,
-          where: {
-            scope: 'restaurant',
-            type: 'dish',
-            userId: restaurantId,
-          },
-        },
-      ],
     }));
   },
   deleteDish: async (req, resp) => {
@@ -214,6 +205,7 @@ module.exports = {
       include: [{
         model: CustomerEvent,
         include: Customer,
+        required: false,
       }],
     }));
   },
@@ -263,6 +255,7 @@ module.exports = {
             scope: 'restaurant',
             type: 'profile',
           },
+          required: false,
         },
       ],
     }));
@@ -295,6 +288,7 @@ module.exports = {
             type: 'dish',
             userId: restaurantId,
           },
+          required: false, // Force left join
         },
       ],
     }));

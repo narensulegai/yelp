@@ -21,7 +21,7 @@ const NewEvent = ({ onAdd }) => {
   };
   return (
     <div>
-      <h4>New event</h4>
+      <h4>Create an event</h4>
       <div>
         <TextInput label="Name" ref={name} />
         <TextInput label="Description" ref={description} />

@@ -23,11 +23,11 @@ class Comment extends Component {
             return (
               <div key={c.id} className="card mb-3">
                 <div className="card-header">
-                  <div>{c.text}</div>
-                  <div>Rated {c.rating} of 5</div>
                   <div>
-                    Review by <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
+                    <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
+                    &nbsp;<b>{c.rating} of 5</b>
                   </div>
+                  <div>{c.text}</div>
                 </div>
               </div>
             );

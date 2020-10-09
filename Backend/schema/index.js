@@ -42,7 +42,7 @@ const schemaDef = {
   createDish: Joi.object({
     name: reqStr('Name'),
     ingredients: reqStr('Ingredients'),
-    price: reqStr('Price'),
+    price: Joi.number().required().label('Price'),
     description: reqStr('Description'),
     dishCategory: Joi.number().required(),
   }),
