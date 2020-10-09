@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { currentUser, getComments } from '../../util/fetch/api';
+import Review from '../Review';
 
 class Comment extends Component {
   constructor(props) {
@@ -20,17 +21,7 @@ class Comment extends Component {
           <h4>Customer reviews</h4>
           {this.state.comments.length === 0 ? <div>No reviews yet</div> : null}
           {this.state.comments.map((c) => {
-            return (
-              <div key={c.id} className="card mb-3">
-                <div className="card-header">
-                  <div>
-                    <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
-                    &nbsp;<b>{c.rating} of 5</b>
-                  </div>
-                  <div>{c.text}</div>
-                </div>
-              </div>
-            );
+            return <Review key={c.id} comment={c} />;
           })}
         </div>
       </div>

@@ -122,6 +122,5 @@ const models = [
 module.exports = models.map((m) => merge({
   options: {
     freezeTableName: true,
-    timestamps: false,
   },
 }, m));

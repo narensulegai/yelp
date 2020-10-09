@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { formatDate, to12Hr } from '../util';
 
 const Event = ({ event, onDelete }) => {
   return (
@@ -18,7 +19,7 @@ const Event = ({ event, onDelete }) => {
           );
         })}
         </div>
-        <div>Venue at {event.location} on {event.date} at {event.time}</div>
+        <div>Venue at {event.location} on {formatDate(event.date)} at {to12Hr(event.time)}</div>
       </div>
       <div className="card-footer">
         <button className="btn-primary" onClick={onDelete}>Delete event</button>

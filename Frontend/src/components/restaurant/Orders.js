@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   getRestaurantProfile, myOrders, updateMyOrder,
 } from '../../util/fetch/api';
+import {formatDate} from "../../util";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -56,10 +57,11 @@ const Orders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <h4>#{o.id}</h4>
+                  <h4>Order #{o.id}</h4>
+                  <div className="small">{formatDate(o.createdAt)}</div>
                   <div>
                     <b>{o.dish.name}</b>
-                     &nbsp;for <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
+                    &nbsp;for <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
                   </div>
                   <div>Order status <b>{o.status}</b></div>
                   <div>

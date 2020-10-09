@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { formatDate } from '../../util';
 import { myOrders, updateMyOrder } from '../../util/fetch/api';
 
 const MyOrders = () => {
@@ -42,9 +43,9 @@ const MyOrders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <div>Restaurant : {o.restaurant.name}</div>
-                  <div>Dish : {o.dish.name}</div>
-                  <div>Status : {o.status} for {o.restaurant.isPickup ? 'Pickup' : 'Yelp Delivery'}</div>
+                  <div className="small">{formatDate(o.createdAt)}</div>
+                  <div>Ordered <b>{o.dish.name} </b> from <b>{o.restaurant.name}</b></div>
+                  <div>Order status <b>{o.status}</b> ({o.restaurant.isPickup ? 'Pickup' : 'Yelp Delivery'})</div>
                   <div className="mt-2">
                     <button className="btn-primary"
                       onClick={() => handleCancelOrder(o.id)}

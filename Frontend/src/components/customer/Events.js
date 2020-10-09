@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { getCustomerEvents, getEvents, registerEvent } from '../../util/fetch/api';
 import Event from './Event';
+import { formatDate, to12Hr } from '../../util';
+
+const ts = (d) => new Date(`${d.date} ${d.time}`).getTime();
 
 class Events extends Component {
   constructor(props) {
@@ -38,16 +41,21 @@ class Events extends Component {
             <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
           </div>
           {this.state.allEvents.length === 0 && <div>There are no events to show</div>}
-          {this.state.allEvents.map((event) => {
-            return (
-              event ? (
-                <Event event={event} key={event.id}
-                  onRegister={() => {
-                    this.handleOnRegister(event.id);
-                  }} />
-              ) : null
-            );
-          })}
+          {this.state.allEvents
+            .sort((a, b) => {
+              return ts(a) - ts(b);
+            })
+            .map((event) => {
+              return (
+                event
+                  ? (
+                    <Event event={event} key={event.id} onRegister={() => {
+                      this.handleOnRegister(event.id);
+                    }} />
+                  )
+                  : null
+              );
+            })}
         </div>
         <div className="col-6">
           <h4>Registered events</h4>
@@ -61,7 +69,9 @@ class Events extends Component {
                   <div className="card-header">
                     <div>Event <b>{e.event.name}</b></div>
                     <div>{e.event.description}</div>
-                    <div>Venue at {e.event.location} on {e.event.date} at {e.event.time}</div>
+                    <div>Venue at {e.event.location}
+                      on {formatDate(e.event.date)}
+                      at {to12Hr(e.event.time)}</div>
                   </div>
                 </div>
               ) : null

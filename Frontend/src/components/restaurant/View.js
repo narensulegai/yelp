@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {addComment, getComments, getRestaurants} from '../../util/fetch/api';
 import PlaceOrder from "./PlacerOrder";
 import {Route} from 'react-router-dom';
+import Review from "../Review";
 
 class View extends Component {
   constructor(props) {
@@ -75,15 +76,7 @@ class View extends Component {
             <h5>Customer reviews</h5>
             {this.state.comments.length === 0 && <div>There are no review yet.</div>}
             {this.state.comments.map((c) => {
-              return <div key={c.id} className="card mt-3">
-                <div className="card-header">
-                  <div>
-                    <a href={`#/restaurant/customer/${c.customer.id}`}>{c.customer.name}</a>
-                    <b className="ml-2">{c.rating} of 5</b>
-                  </div>
-                  <div>{c.text}</div>
-                </div>
-              </div>
+              return <Review key={c.id} comment={c}/>
             })}
           </div>
         </div>
