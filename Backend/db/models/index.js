@@ -39,6 +39,10 @@ const restaurant = {
     description: stringType(),
     contactInformation: stringType(),
     timings: stringType(),
+    isPickup: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   options: {
     defaultScope: {
@@ -107,7 +111,6 @@ const order = {
     restaurantId: intType(),
     customerId: intType(),
     dishId: intType(),
-    isPickup: { type: DataTypes.BOOLEAN },
     isCanceled: { type: DataTypes.BOOLEAN, defaultValue: false },
     status: stringType(),
   },

@@ -30,6 +30,7 @@ const schemaDef = {
     description: reqStr('Description'),
     contactInformation: reqStr('Contact information'),
     timings: reqStr('Timings'),
+    isPickup: Joi.bool().required().label('Is pickup'),
   }),
   updateCustomerProfile: Joi.object({
     name: reqStr('Name'),

@@ -23,8 +23,8 @@ const PlaceOrder = ({ restaurantId }) => {
         return (
           <div className="card mb-3" key={d.id}>
             <div className="card-header">
-              <div>Dish {d.name}</div>
-              <div>Price ${d.price}</div>
+              <div>Dish <b>{d.name}</b></div>
+              <div>Price <b>${d.price}</b></div>
               <div className="mt-2">
                 <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
               </div>

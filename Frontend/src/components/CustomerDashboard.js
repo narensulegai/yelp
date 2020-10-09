@@ -37,6 +37,9 @@ class CustomerDashboard extends Component {
                     <span>Location {r.location}</span>
                   </div>
                   <div>
+                    Delivery Mode {r.isPickup ? 'Pickup' : 'Yelp Delivery'}
+                  </div>
+                  <div>
                     <a href={`#/customer/restaurant/${r.id}/comments`}>Comments</a>
                     &nbsp;|&nbsp;
                     <a href={`#/customer/restaurant/${r.id}/placeOrder`}>Place Order</a>

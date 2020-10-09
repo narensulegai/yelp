@@ -60,7 +60,7 @@ const CustomerProfile = () => {
 
   return (
     <div className="row">
-      <div className="col-12">
+      <div className="col-6">
         <ImageInput singleFile images={images}
           onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
         <div>
@@ -70,17 +70,16 @@ const CustomerProfile = () => {
           <TextInput label="Things I love" edit={edit} value={profile.thingsILove} ref={thingsILove} />
           <TextInput label="Website" edit={edit} value={profile.website} ref={website} />
         </div>
-
-      </div>
-      <div className="col-12 d-flex justify-content-between">
-        {edit
-          ? (
-            <>
-              <button className="btn btn-outline-primary" onClick={toggleEdit}>Cancel</button>
-              <button className="btn btn-primary" onClick={handleOnProfileSave}>Save</button>
-            </>
-          )
-          : (<button className="btn btn-primary" onClick={toggleEdit}>Edit</button>)}
+        <div className="d-flex justify-content-between">
+          {edit
+            ? (
+              <>
+                <button className="btn-outline-primary" onClick={toggleEdit}>Cancel</button>
+                <button className="btn-primary" onClick={handleOnProfileSave}>Save</button>
+              </>
+            )
+            : (<button className="btn-primary" onClick={toggleEdit}>Edit</button>)}
+        </div>
       </div>
     </div>
   );

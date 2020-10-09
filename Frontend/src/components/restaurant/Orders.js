@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { myOrders, updateMyOrder } from '../../util/fetch/api';
+import {
+  currentUser, getRestaurantProfile, myOrders, updateMyOrder,
+} from '../../util/fetch/api';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [orderFilter, setOrderFilter] = useState('new');
+  const [isPickup, setIsPickup] = useState(true);
   const status = useRef({});
 
   useEffect(() => {
     (async () => {
+      const { isPickup } = await getRestaurantProfile();
+      setIsPickup(isPickup);
       setOrders(await myOrders());
     })();
   }, []);
@@ -26,7 +31,7 @@ const Orders = () => {
   return (
     <div className="row">
       <div className="col-6">
-        <h4>Orders</h4>
+        <h4>Orders for {isPickup ? 'pickup' : 'Yelp delivery'}</h4>
         <select value={orderFilter} onChange={handleOrderFilterChange} className="mb-3">
           <option value="new">New Orders</option>
           <option value="preparing">Preparing</option>
@@ -51,11 +56,12 @@ const Orders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
+                  <div>Order number {o.id}</div>
                   <div>
                     Order placed by <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
                   </div>
                   <div>Dish : {o.dish.name}</div>
-                  <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
+                  <div>Status : {o.status}</div>
                   <div>
                     <span className="mr-3">
                       Update order
@@ -63,7 +69,7 @@ const Orders = () => {
                     <select className="mr-3" defaultValue={o.status} ref={(el) => status.current[o.id] = el}>
                       <option value="new">Order Received</option>
                       <option value="preparing">Preparing</option>
-                      {o.isPickup
+                      {isPickup
                         ? (
                           <>
                             <option value="pickup-ready">Pickup Ready</option>

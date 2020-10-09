@@ -16,7 +16,7 @@ class CustomerHome extends Component {
           <a className="nav-link text-light" href="#/customer/profile">Profile</a>
           <a className="nav-link text-light" href="#/customer/events">Event</a>
           <a className="nav-link text-light" href="#/customer/myOrders">My Orders</a>
-          <a className="nav-link text-light" href="#/logout">Logout</a>
+          <a className="text-light text-right" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
           <Route path="/customer/profile">

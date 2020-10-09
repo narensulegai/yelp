@@ -19,7 +19,10 @@ class View extends Component {
         <div className="col-12">
           <a href="#/restaurant/orders">Go back</a>
           <h4>{this.state.customer.name}</h4>
-          <div>{this.state.customer.email}</div>
+          <div>Email <b>{this.state.customer.email}</b></div>
+          <div>Yelping since  <b>{this.state.customer.yelpingSince || '-'}</b></div>
+          <div>Things I love <b>{this.state.customer.thingsILove || '-'}</b> </div>
+          <div>Website <b>{this.state.customer.website || '-'}</b> </div>
         </div>
       </div>
     );

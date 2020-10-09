@@ -44,7 +44,7 @@ const MyOrders = () => {
                 <div className="card-header">
                   <div>Restaurant : {o.restaurant.name}</div>
                   <div>Dish : {o.dish.name}</div>
-                  <div>Status : {o.status} ({o.isPickup ? 'Pickup' : 'Delivery'})</div>
+                  <div>Status : {o.status} for {o.restaurant.isPickup ? 'Pickup' : 'Yelp Delivery'}</div>
                   <div className="mt-2">
                     <button className="btn-primary"
                       onClick={() => handleCancelOrder(o.id)}
