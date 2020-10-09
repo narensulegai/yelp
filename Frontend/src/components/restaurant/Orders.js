@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  currentUser, getRestaurantProfile, myOrders, updateMyOrder,
+  getRestaurantProfile, myOrders, updateMyOrder,
 } from '../../util/fetch/api';
 
 const Orders = () => {

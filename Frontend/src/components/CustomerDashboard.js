@@ -34,13 +34,13 @@ class CustomerDashboard extends Component {
                   <div>
                     <span>Timings {r.timings || '-'}</span>
                     &nbsp;|&nbsp;
-                    <span>Location {r.location}</span>
+                    <span>Location {r.location || '-'}</span>
                   </div>
                   <div>
-                    Delivery Mode {r.isPickup ? 'Pickup' : 'Yelp Delivery'}
+                    Delivery by <b>{r.isPickup ? 'Pickup' : 'Yelp Delivery'}</b>
                   </div>
                   <div>
-                    <a href={`#/customer/restaurant/${r.id}/comments`}>Comments</a>
+                    <a href={`#/customer/restaurant/${r.id}/comments`}>Reviews</a>
                     &nbsp;|&nbsp;
                     <a href={`#/customer/restaurant/${r.id}/placeOrder`}>Place Order</a>
                   </div>

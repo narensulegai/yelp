@@ -11,12 +11,12 @@ class CustomerHome extends Component {
     return (
       <>
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
-          <div className="navbar-brand text-light">Yelp</div>
+          <div className="navbar-brand text-light">Yelp!</div>
           <a className="nav-link text-light" href="#/customer/dashboard">Dashboard</a>
           <a className="nav-link text-light" href="#/customer/profile">Profile</a>
           <a className="nav-link text-light" href="#/customer/events">Event</a>
           <a className="nav-link text-light" href="#/customer/myOrders">My Orders</a>
-          <a className="text-light text-right" href="#/logout">Logout</a>
+          <a className="nav-link" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
           <Route path="/customer/profile">
