@@ -11,18 +11,18 @@ const Event = ({ event, onRegister }) => {
   return (
     <div className="card mt-2">
       <div className="card-header pointer-event" onClick={toggle}>
-        <h4>Event<b> {event.name}</b></h4>
-        <div>Hosted by restaurant {event.restaurant.name}</div>
-        <h6 className="pointer-event">Click to see details</h6>
+        <div>Event<b> {event.name}</b></div>
+        <div>Hosted by <b>{event.restaurant.name}</b></div>
+        <a className="btn-link ">See more</a>
       </div>
       {expand && (
         <>
           <div className="card-body">
-            <p>{event.description}</p>
+            <div>{event.description}</div>
             <h6>Hashtags {event.hashTags}</h6>
+            <div>Venue at {event.location} on {event.date} at {event.time}</div>
           </div>
           <div className="card-footer">
-            <div>Venue at {event.location} on {event.date} at {event.time}</div>
             <div className="mt-2">
               <button onClick={onRegister} className="btn-primary">Register</button>
             </div>

@@ -34,7 +34,7 @@ class Events extends Component {
         <div className="col-6">
           <h4>All events</h4>
           <div className="d-flex">
-            <input type="text" className="flex-grow-1" ref={this.search} />
+            <input type="text" className="flex-grow-1" ref={this.search} placeholder="Search for an event" />
             <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
           </div>
           {this.state.allEvents.length === 0 && <div>There are no events to show</div>}
@@ -57,8 +57,9 @@ class Events extends Component {
               e.event ? (
                 <div key={i} className="card mb-2">
                   <div className="card-header">
-                    <h4>Event <b>{e.event.name}</b></h4>
+                    <div>Event <b>{e.event.name}</b></div>
                     <div>{e.event.description}</div>
+                    <div>Venue at {e.event.location} on {e.event.date} at {e.event.time}</div>
                   </div>
                 </div>
               ) : null
