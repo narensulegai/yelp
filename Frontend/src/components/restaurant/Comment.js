@@ -17,7 +17,7 @@ class Comment extends Component {
     return (
       <div className="row">
         <div className="col-6">
-          <h4>Customer reviews by dish</h4>
+          <h4>Customer reviews</h4>
           {this.state.dishes.map((d) => {
             return (
               <div key={d.id} className="mt-3">
