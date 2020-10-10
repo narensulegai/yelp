@@ -9,7 +9,7 @@ const dbModel = models.reduce((acc, m) => {
 }, {});
 
 (async () => {
-  // await db.sync({ force: true, alter: true });
+  // await db.sync({ force: true });
   // await db.sync({ alter: true });
 })();
 

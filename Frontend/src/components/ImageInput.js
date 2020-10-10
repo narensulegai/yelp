@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FileUpload from './FileUpload';
+import { fileUrl } from '../util/fetch/api';
 
 const ImageInput = ({
   images, onAdd, onDelete, singleFile,
@@ -14,7 +15,7 @@ const ImageInput = ({
     <div className="imagesContainer d-flex align-items-center">
       {images.map((img, i) => (
         <div key={i} className="imageBox">
-          <img src={`/api/file/${img.fileId}`} className="imageTile" />
+          <img src={fileUrl(img.fileId)} className="imageTile" />
           <div className="removeImageButton" onClick={() => {
             handleOnDelete(img.id);
           }}>
