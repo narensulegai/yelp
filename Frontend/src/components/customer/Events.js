@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { getCustomerEvents, getEvents, registerEvent } from '../../util/fetch/api';
+import {
+  getCustomerEvents, getEvents, registerEvent, searchEvents,
+} from '../../util/fetch/api';
 import Event from './Event';
 import { formatDate, to12Hr } from '../../util';
 
@@ -27,8 +29,12 @@ class Events extends Component {
     this.setState({ allEvents, customerEvents });
   }
 
-  handleOnSearch() {
-    // console.log(this.search.current.value);
+  async handleOnSearch() {
+    if (this.search.current.value === '') {
+      this.setState({ allEvents: await getEvents() });
+    } else {
+      this.setState({ allEvents: await searchEvents(this.search.current.value) });
+    }
   }
 
   render() {

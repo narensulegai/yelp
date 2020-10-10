@@ -59,6 +59,7 @@ app.use(cors({
   ['get', '/api/myOrders', handler.myOrders, 'any'],
   ['put', '/api/myOrder/:id', handler.updateMyOrder, 'any'],
   ['get', '/api/customer/:id', handler.getCustomer, null],
+  ['get', '/api/searchEvent/:text', handler.searchEvent, null],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
     if (r[3] === 'restaurant' || r[3] === 'customer') {

@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const { Sequelize } = require('sequelize');
 const {
   customer: Customer, restaurant: Restaurant, image: Image, dish: Dish,
   event: Event, customerEvent: CustomerEvent, comment: Comment, order: Order,
@@ -319,5 +320,24 @@ module.exports = {
         ? { customerId: userId, id }
         : { restaurantId: userId, id },
     }));
+  },
+  searchEvent: async (req, resp) => {
+    const { text } = req.params;
+    const events = await Event.findAll({
+      where: {
+        name: { [Sequelize.Op.like]: `%${text}%` },
+      },
+      include: [
+        { model: Restaurant },
+        {
+          model: CustomerEvent,
+          where: {
+            customerId: req.session.user.id,
+          },
+          required: false, // Force left join
+        },
+      ],
+    });
+    resp.json(events.filter((r) => r.customerEvents.length === 0));
   },
 };

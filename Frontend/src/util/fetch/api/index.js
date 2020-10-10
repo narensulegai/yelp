@@ -21,6 +21,7 @@ export const getRestaurantEvents = () => get('restaurant/events');
 export const createEvent = (d) => post('event', d);
 export const deleteEvent = (id) => destroy(`event/${id}`);
 export const getEvents = () => get('events');
+export const searchEvents = (text) => get(`searchEvent/${text}`);
 export const getCustomerEvents = () => get('customer/events');
 export const registerEvent = (id) => post(`registerEvent/${id}`);
 export const getRestaurants = () => get('restaurants');
