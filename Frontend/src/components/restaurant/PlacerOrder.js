@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getRestaurantDishes, placeOrder } from '../../util/fetch/api';
 import Carousal from '../Carousal';
+import AddReview from './AddReview';
 
 const PlaceOrder = ({ restaurantId }) => {
   const [dishes, setDishes] = useState([]);
   const deliveryMode = useRef();
+
   useEffect(() => {
     (async () => {
       setDishes(await getRestaurantDishes(restaurantId));
@@ -23,23 +25,31 @@ const PlaceOrder = ({ restaurantId }) => {
       {dishes.map((d) => {
         return (
           <div className="card mb-3" key={d.id}>
-            <div className="card-header">
-              <div><b>{d.name}</b></div>
-              <div>Ingredients: {d.ingredients}</div>
-              <div className="mt-2">
-                <Carousal images={d.images} />
+            <div className="card-header d-flex">
+
+              <div className="flex-grow-1">
+                <div><b>{d.name}</b></div>
+                <div>Ingredients: {d.ingredients}</div>
+                <div className="mt-2">
+                  <Carousal images={d.images} />
+                </div>
+                <div>Price <b>${d.price}</b></div>
+                <div className="form-group">
+                  <label className="mr-3">Select delivery mode</label>
+                  <select defaultValue="pickup" ref={deliveryMode}>
+                    <option value="pickup">Pickup</option>
+                    <option value="delivery">Yelp delivery</option>
+                  </select>
+                </div>
+                <div className="mt-2">
+                  <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
+                </div>
               </div>
-              <div>Price <b>${d.price}</b></div>
-              <div className="form-group">
-                <label className="mr-3">Select delivery mode</label>
-                <select defaultValue="pickup" ref={deliveryMode}>
-                  <option value="pickup">Pickup</option>
-                  <option value="delivery">Yelp delivery</option>
-                </select>
+
+              <div className="flex-grow-1">
+                <AddReview dish={d} />
               </div>
-              <div className="mt-2">
-                <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
-              </div>
+
             </div>
           </div>
         );

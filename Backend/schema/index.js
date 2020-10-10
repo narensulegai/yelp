@@ -10,6 +10,7 @@ const validate = (body, schema) => {
 };
 
 const reqStr = (label) => Joi.string().required().label(label);
+const reqNum = (label) => Joi.number().required().label(label);
 const optStr = (label) => Joi.string().allow('').label(label);
 
 const schemaDef = {
@@ -43,7 +44,7 @@ const schemaDef = {
     ingredients: reqStr('Ingredients'),
     price: Joi.number().required().label('Price'),
     description: reqStr('Description'),
-    dishCategory: Joi.number().required(),
+    dishCategory: reqNum('Category'),
   }),
   createEvent: Joi.object({
     name: reqStr('Name'),
@@ -55,7 +56,7 @@ const schemaDef = {
   }),
   addComment: Joi.object({
     text: reqStr('Review'),
-    rating: reqStr('Rating'),
+    rating: reqNum('Rating'),
   }),
 };
 const schema = {};

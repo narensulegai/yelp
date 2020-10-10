@@ -13,7 +13,7 @@ Event.belongsTo(Restaurant);
 CustomerEvent.belongsTo(Event);
 CustomerEvent.belongsTo(Customer);
 Event.hasMany(CustomerEvent);
-Restaurant.hasMany(Comment);
+Dish.hasMany(Comment);
 Comment.belongsTo(Customer);
 Dish.hasMany(Order);
 Order.belongsTo(Restaurant);
@@ -188,6 +188,10 @@ module.exports = {
     const restaurantId = req.session.user.id;
     resp.json(await Dish.findAll({
       where: { restaurantId },
+      include: [{
+        model: Comment,
+        include: Customer,
+      }],
     }));
   },
   deleteDish: async (req, resp) => {
@@ -264,7 +268,7 @@ module.exports = {
   getComments: async (req, resp) => {
     resp.json(await Comment.findAll({
       where: {
-        restaurantId: req.params.id,
+        dishId: req.params.id,
       },
       include: Customer,
     }));
@@ -273,7 +277,7 @@ module.exports = {
     const comment = {
       ...req.body,
       customerId: req.session.user.id,
-      restaurantId: req.params.id,
+      dishId: req.params.id,
     };
     resp.json(await Comment.create(comment));
   },

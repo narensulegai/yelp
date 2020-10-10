@@ -4,11 +4,12 @@ import { formatDate } from '../util';
 
 const Review = ({ comment }) => {
   return (
-    <div className="card mb-3">
-      <div className="card-header">
+    <div className="card mb-2">
+      <div className="card-body">
         <div>
           <a href={`#/restaurant/customer/${comment.customer.id}`}>{comment.customer.name}</a>
-          <b className="ml-2">{comment.rating} of 5</b>
+          &nbsp;rated&nbsp;
+          <b>{comment.rating} of 5</b>
         </div>
         <div>{comment.text}</div>
         <div className="small">{formatDate(comment.createdAt)}</div>

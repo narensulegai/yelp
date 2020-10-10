@@ -19,7 +19,9 @@ class View extends Component {
         <div className="row">
           <div className="col-12">
             <div>
-              <img src={`/api/file/${this.state.customer.image.fileId}`} className="profileImage" alt="Failed to load image"/>
+              {this.state.customer.image
+                ? <img src={`/api/file/${this.state.customer.image.fileId}`} className="profileImage" alt="Failed to load image" />
+                : 'No profile pic'}
             </div>
             <h4>{this.state.customer.name}</h4>
             <div>Email <b>{this.state.customer.email}</b></div>

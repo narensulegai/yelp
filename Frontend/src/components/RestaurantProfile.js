@@ -67,7 +67,6 @@ const RestaurantProfile = () => {
         <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
         <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
 
-
         <div className="d-flex justify-content-between">
           {edit
             ? (

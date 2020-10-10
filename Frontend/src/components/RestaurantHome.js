@@ -16,7 +16,7 @@ class RestaurantHome extends Component {
           <a className="nav-link text-light" href="#/restaurant/profile">Profile</a>
           <a className="nav-link text-light" href="#/restaurant/dishes">Dishes</a>
           <a className="nav-link text-light" href="#/restaurant/events">Event</a>
-          <a className="nav-link text-light" href="#/restaurant/comments">Comments</a>
+          <a className="nav-link text-light" href="#/restaurant/comments">Reviews</a>
           <a className="nav-link text-light" href="#/restaurant/orders">Orders</a>
           <a className="nav-link" href="#/logout">Logout</a>
         </nav>

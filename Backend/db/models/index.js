@@ -94,7 +94,7 @@ const customerEvent = {
 const comment = {
   modelName: 'comment',
   attributes: {
-    restaurantId: intType(),
+    dishId: intType(),
     customerId: intType(),
     text: stringType(),
     rating: intType(),
