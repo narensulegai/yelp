@@ -27,7 +27,7 @@ const MyOrders = () => {
         <div className="mb-3">
           <span className="mr-3">Filter by</span>
           <select value={orderFilter} onChange={handleOrderFilterChange}>
-            <option value="new">New Orders</option>
+            <option value="new">All Orders</option>
             <option value="preparing">Preparing</option>
           </select>
         </div>
@@ -43,16 +43,23 @@ const MyOrders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <div className="small">{formatDate(o.createdAt)}</div>
-                  <div>Ordered <b>{o.dish.name} </b> from <b>{o.restaurant.name}</b></div>
-                  <div>Order status <b>{o.status}</b> ({o.isPickup ? 'Pickup' : 'Yelp Delivery'})</div>
+                  <div>
+                    <div><b>{o.dish.name} </b> from <b>{o.restaurant.name}</b></div>
+                    <div>Order status <b>{o.status}</b> </div>
+                  </div>
+                  <div>
+                    <div className="small">Delivery method <b>{o.isPickup ? 'Pickup' : 'Yelp Delivery'}</b></div>
+                    <div className="small">{formatDate(o.createdAt)}</div>
+                  </div>
+
                   <div className="mt-2">
                     <button className="btn-primary"
                       onClick={() => handleCancelOrder(o.id)}
                       disabled={o.isCanceled}>
-                      {o.isCanceled ? 'Order canceled' : 'Cancel Order'}
+                      {o.isCanceled ? 'Order was canceled' : 'Cancel this order'}
                     </button>
                   </div>
+
                 </div>
               </div>
             );

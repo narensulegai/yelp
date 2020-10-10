@@ -66,18 +66,21 @@ class Events extends Component {
         <div className="col-6">
           <h4>Registered events</h4>
           {this.state.customerEvents.length === 0
-            ? <div>You have not registered for any events</div>
+            ? <div>You have not registered for any events yet.</div>
             : null}
           {this.state.customerEvents.map((e, i) => {
             return (
               e.event ? (
                 <div key={i} className="card mb-2">
                   <div className="card-header">
-                    <div>Event <b>{e.event.name}</b></div>
-                    <div>{e.event.description}</div>
-                    <div>Venue at {e.event.location}
-                      on {formatDate(e.event.date)}
-                      at {to12Hr(e.event.time)}</div>
+                    <div><b>{e.event.name}</b></div>
+                    <div className="small mt-2">{e.event.description}</div>
+                    <div className="small">
+                      Venue <b>{e.event.location}</b>&nbsp;
+                      on <b>{formatDate(e.event.date)}</b>&nbsp;
+                      at <b>{to12Hr(e.event.time)}</b>
+                    </div>
+                    <div className="small mt-2">Your registered on {formatDate(e.createdAt)}</div>
                   </div>
                 </div>
               ) : null

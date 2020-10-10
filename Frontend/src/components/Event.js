@@ -10,8 +10,15 @@ const Event = ({ event, onDelete }) => {
       </div>
       <div className="card-body">
         <div>{event.description}</div>
-        <h6>Hashtags {event.hashTags}</h6>
-        <div><b>{event.customerEvents.length}</b> user(s) have registered</div>
+        <div className="small mt-2">Hashtags {event.hashTags}</div>
+        <div className="small">
+          Venue at <b>{event.location}</b>
+          &nbsp;on <b>{formatDate(event.date)}</b>
+          &nbsp;at <b>{to12Hr(event.time)}</b>
+        </div>
+        <div className="mt-2">
+          <b>{event.customerEvents.length}</b> user(s) have registered
+        </div>
         <div>{event.customerEvents.map((c) => {
           return (
             <a href={`#/restaurant/customer/${c.customer.id}`}
@@ -19,14 +26,10 @@ const Event = ({ event, onDelete }) => {
           );
         })}
         </div>
-        <div>
-          Venue at <b>{event.location}</b>
-          &nbsp;on <b>{formatDate(event.date)}</b>
-          &nbsp;at <b>{to12Hr(event.time)}</b>
-        </div>
+
       </div>
       <div className="card-footer">
-        <button className="btn-primary" onClick={onDelete}>Delete event</button>
+        <button className="btn-primary" onClick={onDelete}>Delete this event</button>
       </div>
     </div>
   );

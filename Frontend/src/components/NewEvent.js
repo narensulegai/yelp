@@ -18,6 +18,12 @@ const NewEvent = ({ onAdd }) => {
       date: date.current.value,
       time: time.current.value,
     });
+    name.current.value = '';
+    description.current.value = '';
+    location.current.value = '';
+    hashTags.current.value = '';
+    date.current.value = '';
+    time.current.value = '';
   };
   return (
     <div>

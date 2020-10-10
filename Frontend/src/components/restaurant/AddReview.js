@@ -37,6 +37,7 @@ const AddReview = ({ dish }) => {
         const revs = await getComments(dish.id);
         setReviews(revs);
         setAverage(calcAvg(revs));
+        review.current.value = '';
         window.alert('Thank you for your review!');
       });
   };
@@ -46,7 +47,7 @@ const AddReview = ({ dish }) => {
       <div>
         <div>
           Average rating <b>{average}</b> of 5
-          <a className="nav-link d-inline" onClick={toggleShowReviews}>
+          <a className="nav-link d-inline pointer" onClick={toggleShowReviews}>
             Snow {reviews.length} review(s)
           </a>
         </div>
@@ -61,11 +62,11 @@ const AddReview = ({ dish }) => {
       <div className="mt-3">
         <span className="mr-3">Please rate {dish.name}</span>
         <select defaultValue="5" ref={rating}>
-          <option value="5">Great</option>
-          <option value="4">Good</option>
-          <option value="3">Average</option>
-          <option value="2">Not good</option>
-          <option value="1">Bad</option>
+          <option value="5">Great (5)</option>
+          <option value="4">Good (4)</option>
+          <option value="3">Average (3)</option>
+          <option value="2">Not good (2)</option>
+          <option value="1">Bad (1)</option>
         </select>
       </div>
       <div className="mt-3">

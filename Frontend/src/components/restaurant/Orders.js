@@ -30,6 +30,7 @@ const Orders = () => {
     <div className="row">
       <div className="col-6">
         <h4>Orders</h4>
+        <span className="mr-3">Filter by</span>
         <select value={orderFilter} onChange={handleOrderFilterChange} className="mb-3">
           <option value="new">New Orders</option>
           <option value="preparing">Preparing</option>
@@ -54,7 +55,7 @@ const Orders = () => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <h4><b>{o.dish.name}</b>&nbsp;order #{o.id}</h4>
+                  <h4>#{o.id}&nbsp;<b>{o.dish.name}</b></h4>
                   <div className="small">{formatDate(o.createdAt)}</div>
                   <div>
                     <b>{o.isPickup ? 'Pickup' : 'Yelp delivery'}</b>
@@ -62,8 +63,8 @@ const Orders = () => {
                   </div>
                   <div>Order status <b>{o.status}</b></div>
                   <div>
-                    <span className="mr-3">
-                      Update order status to
+                    <span className="mr-2">
+                      Update order status
                     </span>
                     <select className="mr-3" defaultValue={o.status} ref={(el) => status.current[o.id] = el}>
                       <option value="new">Order Received</option>

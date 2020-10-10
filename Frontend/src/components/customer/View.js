@@ -17,13 +17,13 @@ class View extends Component {
     return (
       this.state.customer && (
         <div className="row">
-          <div className="col-12">
-            <div>
+          <div className="col-12 text-center">
+            <div className="mt-4">
               {this.state.customer.image
                 ? <img src={`/api/file/${this.state.customer.image.fileId}`} className="profileImage" alt="Failed to load image" />
                 : 'No profile pic'}
             </div>
-            <h4>{this.state.customer.name}</h4>
+            <h4 className="mt-2">{this.state.customer.name}</h4>
             <div>Email <b>{this.state.customer.email}</b></div>
             <div>Yelping since <b>{this.state.customer.yelpingSince || '-'}</b></div>
             <div>Things I love <b>{this.state.customer.thingsILove || '-'}</b></div>

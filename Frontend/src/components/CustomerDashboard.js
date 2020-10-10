@@ -26,7 +26,7 @@ class CustomerDashboard extends Component {
         <div className="col-12 mb-3">
           <div className="row">
             <div className="col-12 d-flex">
-              <input type="text" className="flex-grow-1" placeholder="Search for a restaurant" ref={this.searchBox}/>
+              <input type="text" className="flex-grow-1" placeholder="Search for a restaurant, dish etc" ref={this.searchBox}/>
               <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
             </div>
           </div>
@@ -40,20 +40,19 @@ class CustomerDashboard extends Component {
                   <h4>
                     <a href={`#/customer/restaurant/${r.id}/comments`}>{r.name}</a>
                   </h4>
+                  <div className="small">{r.description}</div>
                   <div className="mt-2">
                     <Carousal images={r.images}/>
                   </div>
-                  <div>
-                    <span>Timings {r.timings || '-'}</span>
-                    &nbsp;|&nbsp;
-                    <span>Location {r.location || '-'}</span>
+                  <div className="small mt-2">
+                    <div>Open {r.timings || '-'}</div>
+                    <div>Located at {r.location || '-'}</div>
                   </div>
-                  <div className="small">{r.description}</div>
                   <div className="mt-3">
                     <h6>Menu</h6>
                     {r.dishes.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
                     {r.dishes.map(d => {
-                      return <div key={d.id}><b>{d.name}</b>&nbsp;(${d.price})</div>
+                      return <div className="small" key={d.id}><b>{d.name}</b>&nbsp;(${d.price})</div>
                     })}
                   </div>
                 </div>

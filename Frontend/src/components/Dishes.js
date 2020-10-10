@@ -52,7 +52,7 @@ const Dishes = () => {
 
   return (
     <div className="row">
-      <div className="col-10">
+      <div className="col-12">
         {showAdd
           ? (
             <>
@@ -64,29 +64,30 @@ const Dishes = () => {
             </>
           )
           : (
-            <button onClick={() => { setShowAdd(true); }} className="btn-primary">
-              Add a dish
+            <button onClick={() => { setShowAdd(true); }} className="btn-primary text-right">
+              Add a new dish
             </button>
           )}
-        {!showAdd && (
-          <div className="mt-3">
-            {dishes.length === 0 ? <div>You have not added any dishes, please add one</div> : null}
-            {dishes.map((dish) => {
-              return (
-                <div key={dish.id} className="mt-3">
-                  <Dish editMode addMode={false} dish={dish}
-                    images={images.filter((i) => i.typeId === dish.id)}
-                    onChange={(d) => handleOnDishUpdate(dish.id, d)}
-                    onDelete={() => handleOnDishDelete(dish.id)}
-                    onImageAdd={(fileIds) => handleOnDishImageAdd(fileIds, dish.id)}
-                    onImageDelete={handleOnDishImageDelete}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
+
+      {!showAdd && (
+      <div className="col-12">
+        {dishes.length === 0 ? <div>You have not added any dishes, please add one</div> : null}
+        {dishes.map((dish) => {
+          return (
+            <div key={dish.id} className="mt-3">
+              <Dish editMode addMode={false} dish={dish}
+                images={images.filter((i) => i.typeId === dish.id)}
+                onChange={(d) => handleOnDishUpdate(dish.id, d)}
+                onDelete={() => handleOnDishDelete(dish.id)}
+                onImageAdd={(fileIds) => handleOnDishImageAdd(fileIds, dish.id)}
+                onImageDelete={handleOnDishImageDelete}
+                  />
+            </div>
+          );
+        })}
+      </div>
+      )}
     </div>
   );
 };

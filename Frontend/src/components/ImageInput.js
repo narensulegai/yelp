@@ -13,7 +13,7 @@ const ImageInput = ({
   return (
     <div className="imagesContainer d-flex align-items-center">
       {images.map((img, i) => (
-        <div key={i} className="imageBox mr-2">
+        <div key={i} className="imageBox">
           <img src={`/api/file/${img.fileId}`} className="imageTile" />
           <div className="removeImageButton" onClick={() => {
             handleOnDelete(img.id);
@@ -22,7 +22,10 @@ const ImageInput = ({
           </div>
         </div>
       ))}
-      <FileUpload singleFile={singleFile} onUpload={onAdd} />
+      <div>
+        <span className="small mr-2 ml-2">Upload image</span>
+        <FileUpload singleFile={singleFile} onUpload={onAdd} />
+      </div>
     </div>
   );
 };

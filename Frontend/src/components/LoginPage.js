@@ -21,7 +21,7 @@ const LoginPage = ({ onLogin, type }) => {
         <input type="email" className="form-control" placeholder="Email" ref={email} />
       </div>
       <div className="form-group">
-        <input type="text" className="form-control" placeholder="Password" ref={password} />
+        <input type="password" className="form-control" placeholder="Password" ref={password} />
       </div>
       <div className="form-group text-center">
         <button type="submit" className="btn btn-primary" onClick={handleOnSignIn}>Sign in</button>
