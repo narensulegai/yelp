@@ -26,30 +26,27 @@ const PlaceOrder = ({ restaurantId }) => {
         return (
           <div className="card mb-3" key={d.id}>
             <div className="card-header d-flex">
-
+              {/* Order dish */}
               <div className="flex-grow-1">
                 <div><b>{d.name}</b></div>
-                <div>Ingredients: {d.ingredients}</div>
                 <div className="mt-2">
                   <Carousal images={d.images} />
                 </div>
                 <div>Price <b>${d.price}</b></div>
-                <div className="form-group">
+                <div>Ingredients: {d.ingredients}</div>
+                <div>
                   <label className="mr-3">Select delivery mode</label>
-                  <select defaultValue="pickup" ref={deliveryMode}>
+                  <select defaultValue="pickup" ref={deliveryMode} className="mr-3">
                     <option value="pickup">Pickup</option>
                     <option value="delivery">Yelp delivery</option>
                   </select>
-                </div>
-                <div className="mt-2">
                   <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
                 </div>
               </div>
-
+              {/* Review dish */}
               <div className="flex-grow-1">
                 <AddReview dish={d} />
               </div>
-
             </div>
           </div>
         );
