@@ -193,6 +193,7 @@ module.exports = {
         model: Comment,
         include: Customer,
       }],
+      order: [['id', 'DESC']],
     }));
   },
   deleteDish: async (req, resp) => {
@@ -213,6 +214,7 @@ module.exports = {
         include: Customer,
         required: false,
       }],
+      order: [['id', 'DESC']],
     }));
   },
   createEvent: async (req, resp) => {
@@ -236,6 +238,7 @@ module.exports = {
           required: false, // Force left join
         },
       ],
+      order: [['id', 'DESC']],
     });
     resp.json(events.filter((r) => r.customerEvents.length === 0));
   },
@@ -275,6 +278,7 @@ module.exports = {
           required: false,
         },
       ],
+      order: [['id', 'DESC']],
     }));
   },
   getComments: async (req, resp) => {
@@ -283,6 +287,7 @@ module.exports = {
         dishId: req.params.id,
       },
       include: Customer,
+      order: [['id', 'DESC']],
     }));
   },
   addComment: async (req, resp) => {
@@ -308,6 +313,7 @@ module.exports = {
           required: false, // Force left join
         },
       ],
+      order: [['id', 'DESC']],
     }));
   },
   placeOrder: async (req, resp) => {
@@ -327,6 +333,7 @@ module.exports = {
         ? { customerId: userId }
         : { restaurantId: userId },
       include: [Restaurant, Customer, Dish],
+      order: [['id', 'DESC']],
     }));
   },
   updateMyOrder: async (req, resp) => {
