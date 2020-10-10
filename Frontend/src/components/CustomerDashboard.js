@@ -15,20 +15,6 @@ class CustomerDashboard extends Component {
     this.setState({restaurants});
   }
 
-  handleOnFilterChange = async (e) => {
-    const filterBy = e.target.value
-    const allRestaurants = await getRestaurants();
-
-    const restaurants = allRestaurants.filter(r => {
-      if (filterBy === 'all') return true;
-      if (filterBy === 'pickup') return r.isPickup;
-      if (filterBy === 'delivery') return !r.isPickup;
-      return true;
-    });
-
-    this.setState({restaurants});
-  }
-
   handleOnSearch = async () => {
     const restaurants = await getRestaurants(this.searchBox.current.value);
     this.setState({restaurants});
@@ -43,14 +29,6 @@ class CustomerDashboard extends Component {
               <input type="text" className="flex-grow-1" placeholder="Search for a restaurant" ref={this.searchBox}/>
               <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
             </div>
-            {/*<div className="col-6">*/}
-            {/*  <span className="mr-3">Filter by delivery option</span>*/}
-            {/*  <select defaultValue="all" onChange={this.handleOnFilterChange}>*/}
-            {/*    <option value="all">Any</option>*/}
-            {/*    <option value="pickup">Pick up only</option>*/}
-            {/*    <option value="delivery">Yelp delivery only</option>*/}
-            {/*  </select>*/}
-            {/*</div>*/}
           </div>
         </div>
         <div className="col-6">
@@ -70,8 +48,13 @@ class CustomerDashboard extends Component {
                     &nbsp;|&nbsp;
                     <span>Location {r.location || '-'}</span>
                   </div>
-                  <div>
-                    Delivery by <b>{r.isPickup ? 'Pickup' : 'Yelp Delivery'}</b>
+                  <div className="small">{r.description}</div>
+                  <div className="mt-3">
+                    <h6>Menu</h6>
+                    {r.dishes.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
+                    {r.dishes.map(d => {
+                      return <div key={d.id}><b>{d.name}</b>&nbsp;(${d.price})</div>
+                    })}
                   </div>
                 </div>
               </div>

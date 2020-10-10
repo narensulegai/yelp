@@ -62,7 +62,7 @@ body {
     font-size: 10px;
 }
 
-.multiImage{
+.multiImage {
     border: none;
     border-radius: 0;
     margin-right: 10px;
@@ -91,4 +91,8 @@ body {
     height: 26px;
     line-height: 20px;
     font-size: 10px;
+}
+
+.pointer {
+    cursor: pointer;
 }
