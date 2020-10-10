@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getRestaurantDishes, placeOrder } from '../../util/fetch/api';
 import Carousal from '../Carousal';
 
 const PlaceOrder = ({ restaurantId }) => {
   const [dishes, setDishes] = useState([]);
-
+  const deliveryMode = useRef();
   useEffect(() => {
     (async () => {
       setDishes(await getRestaurantDishes(restaurantId));
@@ -13,7 +13,7 @@ const PlaceOrder = ({ restaurantId }) => {
   }, [restaurantId]);
 
   const handlePlaceOrder = async (dishId) => {
-    await placeOrder(dishId);
+    await placeOrder(dishId, { isPickup: deliveryMode.current.value === 'pickup' });
     window.alert('Your order has been placed!');
   };
 
@@ -30,6 +30,13 @@ const PlaceOrder = ({ restaurantId }) => {
                 <Carousal images={d.images} />
               </div>
               <div>Price <b>${d.price}</b></div>
+              <div className="form-group">
+                <label className="mr-3">Select delivery mode</label>
+                <select defaultValue="pickup" ref={deliveryMode}>
+                  <option value="pickup">Pickup</option>
+                  <option value="delivery">Yelp delivery</option>
+                </select>
+              </div>
               <div className="mt-2">
                 <button className="btn-primary" onClick={() => handlePlaceOrder(d.id)}>Order dish</button>
               </div>

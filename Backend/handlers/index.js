@@ -19,9 +19,9 @@ Dish.hasMany(Order);
 Order.belongsTo(Restaurant);
 Order.belongsTo(Customer);
 Order.belongsTo(Dish);
-Customer.hasOne(Image, { foreignKey: 'userId' });
-Restaurant.hasMany(Image, { foreignKey: 'userId' });
-Dish.hasMany(Image, { foreignKey: 'typeId' });
+Customer.hasOne(Image, { foreignKey: 'userId', constraints: false });
+Restaurant.hasMany(Image, { foreignKey: 'userId', constraints: false });
+Dish.hasMany(Image, { foreignKey: 'typeId', constraints: false });
 
 const err = (msg) => ({ err: msg });
 module.exports = {
@@ -296,7 +296,9 @@ module.exports = {
   },
   placeOrder: async (req, resp) => {
     const dish = await Dish.findByPk(parseInt(req.params.id));
+    const { isPickup } = req.body;
     resp.json(await dish.createOrder({
+      isPickup,
       status: 'new',
       restaurantId: dish.restaurantId,
       customerId: req.session.user.id,

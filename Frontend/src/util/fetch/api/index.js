@@ -12,7 +12,7 @@ export const updateCustomerProfile = (d) => put('profile/customer', d);
 export const getCustomerProfile = () => get('profile/customer');
 export const getDishes = () => get('dishes');
 export const getRestaurantDishes = (id) => get(`restaurant/dishes/${id}`);
-export const placeOrder = (id) => post(`placeOrder/${id}`);
+export const placeOrder = (id, d) => post(`placeOrder/${id}`, d);
 export const createDish = (d) => post('dish', d);
 export const updateDish = (id, d) => put(`dish/${id}`, d);
 export const deleteDish = (id) => destroy(`dish/${id}`);

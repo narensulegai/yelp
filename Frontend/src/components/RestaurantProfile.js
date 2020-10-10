@@ -11,7 +11,6 @@ const RestaurantProfile = () => {
   const description = useRef();
   const contactInformation = useRef();
   const timings = useRef();
-  const isPickup = useRef();
   const [edit, setEdit] = useState(false);
   const [images, setImages] = useState([]);
   const [profile, setProfile] = useState({});
@@ -37,7 +36,6 @@ const RestaurantProfile = () => {
       description: description.current.value,
       contactInformation: contactInformation.current.value,
       timings: timings.current.value,
-      isPickup: isPickup.current.checked,
     };
     updateRestaurantProfile(p)
       .then(async () => {
@@ -68,13 +66,7 @@ const RestaurantProfile = () => {
         <TextInput label="Description" edit={edit} value={profile.description} ref={description} />
         <TextInput label="Contact information" edit={edit} value={profile.contactInformation} ref={contactInformation} />
         <TextInput label="Timings" edit={edit} value={profile.timings} ref={timings} />
-        <div className="form-group">
-          <label className="font-weight-bold">Delivery mode</label>
-          <div>
-            <span className="mr-3">Pickup</span>
-            <input ref={isPickup} type="checkbox" disabled={!edit} defaultChecked={profile.isPickup} />
-          </div>
-        </div>
+
 
         <div className="d-flex justify-content-between">
           {edit
