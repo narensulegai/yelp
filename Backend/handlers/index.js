@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const { Sequelize } = require('sequelize');
+const { Op } = require('sequelize').Sequelize;
 const {
   customer: Customer, restaurant: Restaurant, image: Image, dish: Dish,
   event: Event, customerEvent: CustomerEvent, comment: Comment, order: Order,
@@ -13,6 +13,7 @@ Event.belongsTo(Restaurant);
 CustomerEvent.belongsTo(Event);
 CustomerEvent.belongsTo(Customer);
 Event.hasMany(CustomerEvent);
+Restaurant.hasMany(Dish);
 Dish.hasMany(Comment);
 Comment.belongsTo(Customer);
 Dish.hasMany(Order);
@@ -252,7 +253,14 @@ module.exports = {
     }));
   },
   getRestaurants: async (req, resp) => {
+    const { search } = req.query;
     resp.json(await Restaurant.findAll({
+      where: search ? {
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } },
+          { '$dishes.name$': { [Op.like]: `%${search}%` } },
+        ],
+      } : {},
       include: [
         {
           model: Image,
@@ -260,6 +268,10 @@ module.exports = {
             scope: 'restaurant',
             type: 'profile',
           },
+          required: false,
+        },
+        {
+          model: Dish,
           required: false,
         },
       ],
@@ -331,7 +343,7 @@ module.exports = {
     const { text } = req.params;
     const events = await Event.findAll({
       where: {
-        name: { [Sequelize.Op.like]: `%${text}%` },
+        name: { [Op.like]: `%${text}%` },
       },
       include: [
         { model: Restaurant },

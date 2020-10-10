@@ -6,6 +6,7 @@ import Carousal from "./Carousal";
 class CustomerDashboard extends Component {
   constructor(props) {
     super(props);
+    this.searchBox = React.createRef();
     this.state = {restaurants: [], filterBy: 'all'};
   }
 
@@ -28,23 +29,28 @@ class CustomerDashboard extends Component {
     this.setState({restaurants});
   }
 
+  handleOnSearch = async () => {
+    const restaurants = await getRestaurants(this.searchBox.current.value);
+    this.setState({restaurants});
+  }
+
   render() {
     return (
       <div className="row">
         <div className="col-12 mb-3">
           <div className="row">
-            <div className="col-6 d-flex">
-              <input type="text" className="flex-grow-1" placeholder="Search for a restaurant"/>
-              <button className="btn-primary">Search</button>
+            <div className="col-12 d-flex">
+              <input type="text" className="flex-grow-1" placeholder="Search for a restaurant" ref={this.searchBox}/>
+              <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
             </div>
-            <div className="col-6">
-              <span className="mr-3">Filter by delivery option</span>
-              <select defaultValue="all" onChange={this.handleOnFilterChange}>
-                <option value="all">Any</option>
-                <option value="pickup">Pick up only</option>
-                <option value="delivery">Yelp delivery only</option>
-              </select>
-            </div>
+            {/*<div className="col-6">*/}
+            {/*  <span className="mr-3">Filter by delivery option</span>*/}
+            {/*  <select defaultValue="all" onChange={this.handleOnFilterChange}>*/}
+            {/*    <option value="all">Any</option>*/}
+            {/*    <option value="pickup">Pick up only</option>*/}
+            {/*    <option value="delivery">Yelp delivery only</option>*/}
+            {/*  </select>*/}
+            {/*</div>*/}
           </div>
         </div>
         <div className="col-6">
@@ -66,11 +72,6 @@ class CustomerDashboard extends Component {
                   </div>
                   <div>
                     Delivery by <b>{r.isPickup ? 'Pickup' : 'Yelp Delivery'}</b>
-                  </div>
-                  <div>
-                    <a href={`#/customer/restaurant/${r.id}/comments`}>Reviews</a>
-                    &nbsp;|&nbsp;
-                    <a href={`#/customer/restaurant/${r.id}/placeOrder`}>Place Order</a>
                   </div>
                 </div>
               </div>
