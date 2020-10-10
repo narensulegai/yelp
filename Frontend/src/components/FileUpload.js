@@ -9,7 +9,7 @@ const FileUpload = ({ singleFile, onUpload }) => {
     for (const file of files) {
       data.append('files', file, file.name);
     }
-    fetch('/api/uploadFile', {
+    fetch('http://localhost:5000/api/uploadFile', {
       method: 'POST',
       body: data,
     })

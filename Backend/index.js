@@ -32,7 +32,7 @@ app.use(cors({
   ['get', '/api/currentUser', handler.current, null],
   ['post', '/api/signup/customer', handler.signupCustomer, null, schema.signupCustomer],
   ['post', '/api/signup/restaurant', handler.signupRestaurant, null, schema.signupRestaurant],
-  ['post', '/api/uploadFile', handler.uploadFile, 'any'],
+  ['post', '/api/uploadFile', handler.uploadFile, null],
   ['post', '/api/images', handler.addImages, 'any'],
   ['get', '/api/images', handler.getImages, 'any'],
   ['delete', '/api/image/:id', handler.deleteImage, 'any'],
