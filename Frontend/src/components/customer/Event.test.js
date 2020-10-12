@@ -7,7 +7,7 @@ describe('Event component', () => {
     const wrapper = shallow(<Event onRegister={() => {
     }}
       event={{ name: 'Event1', restaurant: { name: 'Rest1' } }} />);
-    expect(wrapper.find('h4').text()).toBe('Event Event1');
+    expect(wrapper.find('.card-header div b').text()).toBe(' Event1');
   });
   it('should call onRegister on button click', () => {
     const onRegisterClick = jest.fn();

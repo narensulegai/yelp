@@ -5,7 +5,7 @@ import NewEvent from './NewEvent';
 describe('NewEvent component', () => {
   it('should show Add a new event title', () => {
     const wrapper = shallow(<NewEvent />);
-    expect(wrapper.find('h4').text()).toBe('Add a new event');
+    expect(wrapper.find('h4').text()).toBe('Create an event');
   });
   it('should call onAdd on button click', () => {
     const onAddClick = jest.fn();

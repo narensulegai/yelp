@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {formatDate, to12Hr} from '../../util';
+import { formatDate, to12Hr } from '../../util';
 
 const Event = ({ event, onRegister }) => {
   const [expand, setExpand] = useState(false);
