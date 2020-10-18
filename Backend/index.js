@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const FileStore = require('session-file-store')(session);
 const cors = require('cors');
 const handler = require('./handlers');
+const mongoHandler = require('./mongoHandlers');
 const schema = require('./schema');
 
 const err = (msg) => ({ err: msg });
@@ -28,19 +29,29 @@ app.use(cors({
 
 [
   ['put', '/api/login/:user', handler.login, null],
+  ['put', '/mongo/login/:user', mongoHandler.login, null],
   ['put', '/api/logout', handler.logout, 'any'],
+  ['put', '/mongo/logout', handler.logout, 'any'],
   ['get', '/api/currentUser', handler.current, null],
+  ['get', '/mongo/currentUser', handler.current, null],
   ['post', '/api/signup/customer', handler.signupCustomer, null, schema.signupCustomer],
+  ['post', '/mongo/signup/customer', mongoHandler.signupCustomer, null, schema.signupCustomer],
   ['post', '/api/signup/restaurant', handler.signupRestaurant, null, schema.signupRestaurant],
   ['post', '/api/uploadFile', handler.uploadFile, null],
+  ['post', '/mongo/uploadFile', handler.uploadFile, null],
   ['post', '/api/images', handler.addImages, 'any'],
+  ['post', '/mongo/images', mongoHandler.addImages, 'any'],
   ['get', '/api/images', handler.getImages, 'any'],
+  ['get', '/mongo/images', mongoHandler.getImages, 'any'],
   ['delete', '/api/image/:id', handler.deleteImage, 'any'],
+  ['delete', '/mongo/image/:id', mongoHandler.deleteImage, 'any'],
   ['get', '/api/file/:id', handler.getFile, 'any'],
+  ['get', '/mongo/file/:id', mongoHandler.getFile, 'any'],
   ['put', '/api/profile/restaurant', handler.updateRestaurantProfile, 'restaurant', schema.updateRestaurantProfile],
   ['get', '/api/profile/restaurant', handler.getRestaurantProfile, 'restaurant'],
   ['put', '/api/profile/customer', handler.updateCustomerProfile, 'customer', schema.updateCustomerProfile],
   ['get', '/api/profile/customer', handler.getCustomerProfile, 'customer'],
+  ['get', '/mongo/profile/customer', mongoHandler.getCustomerProfile, 'customer'],
   ['get', '/api/dishes', handler.getDishes, 'restaurant'],
   ['post', '/api/dish', handler.createDish, 'restaurant', schema.createDish],
   ['put', '/api/dish/:id', handler.updateDish, 'restaurant', schema.createDish],
@@ -54,6 +65,7 @@ app.use(cors({
   ['get', '/api/restaurants', handler.getRestaurants, null],
   ['get', '/api/comments/:id', handler.getComments, 'any'],
   ['post', '/api/comment/:id', handler.addComment, 'customer', schema.addComment],
+  ['post', '/mongo/comment/:id', mongoHandler.addComment, 'customer', schema.addComment],
   ['get', '/api/restaurant/dishes/:id', handler.getRestaurantDishes, null],
   ['post', '/api/placeOrder/:id', handler.placeOrder, 'customer'],
   ['get', '/api/myOrders', handler.myOrders, 'any'],
