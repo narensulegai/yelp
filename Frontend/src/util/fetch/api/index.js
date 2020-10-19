@@ -1,5 +1,5 @@
 import {
-  get, post, destroy, put,
+  get, post, destroy, put, apiUrl,
 } from '..';
 
 export const currentUser = () => get('currentUser');
@@ -31,5 +31,5 @@ export const getComments = (id) => get(`comments/${id}`);
 export const myOrders = () => get('myOrders');
 export const updateMyOrder = (id, d) => put(`myOrder/${id}`, d);
 export const fileUrl = (fileId) => {
-  return `http://localhost:5000/api/file/${fileId}`;
+  return `${apiUrl}/file/${fileId}`;
 };

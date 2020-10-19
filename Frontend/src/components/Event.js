@@ -17,9 +17,9 @@ const Event = ({ event, onDelete }) => {
           &nbsp;at <b>{to12Hr(event.time)}</b>
         </div>
         <div className="mt-2">
-          <b>{event.customerEvents.length}</b> user(s) have registered
+          <b>{event.Registration.length}</b> user(s) have registered
         </div>
-        <div>{event.customerEvents.map((c) => {
+        <div>{event.Registration.map((c) => {
           return (
             <a href={`#/restaurant/customer/${c.customer.id}`}
               key={c.customer.id}>{c.customer.name}</a>

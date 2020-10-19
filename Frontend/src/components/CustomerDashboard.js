@@ -42,7 +42,8 @@ class CustomerDashboard extends Component {
                   </h4>
                   <div className="small">{r.description}</div>
                   <div className="mt-2">
-                    <Carousal images={r.images}/>
+                    {/*TODO*/}
+                    {/*<Carousal images={r.Image}/>*/}
                   </div>
                   <div className="small mt-2">
                     <div>Open {r.timings || '-'}</div>
@@ -50,8 +51,8 @@ class CustomerDashboard extends Component {
                   </div>
                   <div className="mt-3">
                     <h6>Menu</h6>
-                    {r.dishes.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
-                    {r.dishes.map(d => {
+                    {r.Dish.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
+                    {r.Dish.map(d => {
                       return <div className="small" key={d.id}><b>{d.name}</b>&nbsp;(${d.price})</div>
                     })}
                   </div>

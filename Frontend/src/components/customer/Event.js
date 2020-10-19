@@ -20,7 +20,6 @@ const Event = ({ event, onRegister }) => {
         <>
           <div className="card-body">
             <div className="small">{event.description}</div>
-            <div className="small">Hosted by <b>{event.restaurant.name}</b></div>
             <div className="small">Hashtags <b>{event.hashTags}</b></div>
             <div className="small">Venue <b>{event.location}</b></div>
           </div>

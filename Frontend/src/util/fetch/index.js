@@ -1,5 +1,7 @@
+export const apiUrl = 'http://localhost:5000/mongo';
+
 const call = (method, api, data = null) => new Promise((res, rej) => {
-  fetch(`http://localhost:5000/api/${api}`,
+  fetch(`${apiUrl}/${api}`,
     {
       method,
       headers: { 'Content-Type': 'application/json' },
