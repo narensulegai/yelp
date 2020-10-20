@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "PORT=5001 mocha  --exit",
-    "start": "nodemon --ignore sessions  index.js -V"
+    "start": "nodemon --ignore sessions --ignore uploads index.js -V"
   },
   "author": "",
   "license": "ISC",
