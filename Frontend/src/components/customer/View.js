@@ -19,8 +19,8 @@ class View extends Component {
         <div className="row">
           <div className="col-12 text-center">
             <div className="mt-4">
-              {this.state.customer.image
-                ? <img src={fileUrl(this.state.customer.image.fileId)} className="profileImage" alt="Failed to load image" />
+              {this.state.customer.fileId
+                ? <img src={fileUrl(this.state.customer.fileId)} className="profileImage" alt="Failed to load image" />
                 : 'No profile pic'}
             </div>
             <h4 className="mt-2">{this.state.customer.name}</h4>

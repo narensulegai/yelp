@@ -53,7 +53,7 @@ module.exports = {
     resp.json(await Customer.findById(req.session.user.id));
   },
   getCustomer: async (req, resp) => {
-    resp.json(await Customer.findById(req.session.user.id));
+    resp.json(await Customer.findById(req.params.id));
   },
   login: async (req, res) => {
     const u = req.params.user;

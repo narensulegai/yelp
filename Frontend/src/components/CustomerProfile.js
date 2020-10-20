@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ImageInput from './ImageInput';
 import TextInput from './TextInput';
 import {
-  addImages, deleteImage, getCustomerProfile, getImages, updateCustomerProfile,
+  getCustomerProfile, updateCustomerProfile,
 } from '../util/fetch/api';
 
 const CustomerProfile = () => {
