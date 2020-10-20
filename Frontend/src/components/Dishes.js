@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import { pick } from 'lodash';
 import Dish from './Dish';
 import {
-  addImages, createDish, deleteDish, deleteImage, getDishes, getImages, updateDish,
+  createDish, deleteDish, getDishes, updateDish,
 } from '../util/fetch/api';
 
 const Dishes = () => {
   const [showAdd, setShowAdd] = useState(false);
-  const [images, setImages] = useState([]);
   const [dishes, setDishes] = useState([]);
 
-  const getDishImages = async () => {
-    const imgs = await getImages();
-    return imgs.filter((i) => i.type === 'dish');
-  };
   useEffect(() => {
     (async () => {
-      setImages(await getDishImages());
       setDishes(await getDishes());
     })();
   }, []);
 
-  const handleOnDishImageAdd = async (fileIds, typeId) => {
-    await addImages({ fileIds: fileIds.files, type: 'dish', typeId });
-    setImages(await getDishImages());
-  };
-
-  const handleOnDishImageDelete = async (id) => {
-    await deleteImage(id);
-    setImages(await getDishImages());
-  };
-
-  const handleOnDishUpdate = async (id, dish) => {
-    return updateDish(id, dish)
+  const update = (id, dish) => {
+    return updateDish(id, pick(dish, ['fileIds', 'name', 'ingredients', 'price', 'description', 'dishCategory']))
       .then(async () => {
         setDishes(await getDishes());
       });
+  };
+  const handleOnDishImageAdd = async (fileIds, dish) => {
+    // Needs refactor, use dish id only
+    return update(dish.id, { ...dish, fileIds: dish.fileIds.concat(fileIds.files) });
+  };
+
+  const handleOnDishImageDelete = async (fileId, dish) => {
+    return update(dish.id, { ...dish, fileIds: dish.fileIds.filter((f) => f !== fileId) });
+  };
+
+  const handleOnDishUpdate = (id, dish) => {
+    return update(id, dish);
   };
 
   const handleOnDishAdd = async (dish) => {
@@ -77,11 +74,11 @@ const Dishes = () => {
           return (
             <div key={dish.id} className="mt-3">
               <Dish editMode addMode={false} dish={dish}
-                images={images.filter((i) => i.typeId === dish.id)}
+                images={dish.fileIds}
                 onChange={(d) => handleOnDishUpdate(dish.id, d)}
                 onDelete={() => handleOnDishDelete(dish.id)}
-                onImageAdd={(fileIds) => handleOnDishImageAdd(fileIds, dish.id)}
-                onImageDelete={handleOnDishImageDelete}
+                onImageAdd={(fileIds) => handleOnDishImageAdd(fileIds, dish)}
+                onImageDelete={(fileId) => handleOnDishImageDelete(fileId, dish)}
                   />
             </div>
           );

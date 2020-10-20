@@ -89,6 +89,7 @@ const modelDef = {
   },
   Dish: {
     model: {
+      fileIds: [{ type: String }],
       restaurant: { type: Types.ObjectId, ref: 'Restaurant', required: true },
       name: { type: String, required: true },
       ingredients: { type: String, default: '' },

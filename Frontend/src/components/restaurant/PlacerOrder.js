@@ -33,7 +33,7 @@ const PlaceOrder = ({ restaurantId }) => {
                 <div className="small">{d.description}</div>
                 <div className="small">Made with {d.ingredients}</div>
                 <div className="mt-2">
-                  {/* <Carousal images={d.images} /> */}
+                   <Carousal images={d.fileIds} />
                 </div>
                 <div className="mt-2">Order one for <b>${d.price}</b></div>
                 <div>

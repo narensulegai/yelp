@@ -39,6 +39,7 @@ const schemaDef = {
     about: optStr('About'),
   }),
   createDish: Joi.object({
+    fileIds: optFiles(),
     name: reqStr('Name'),
     ingredients: reqStr('Ingredients'),
     price: reqStr('Price'),
