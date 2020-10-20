@@ -43,7 +43,7 @@ class CustomerDashboard extends Component {
                   <div className="small">{r.description}</div>
                   <div className="mt-2">
                     {/*TODO*/}
-                    {/*<Carousal images={r.Image}/>*/}
+                    <Carousal images={r.fileIds}/>
                   </div>
                   <div className="small mt-2">
                     <div>Open {r.timings || '-'}</div>

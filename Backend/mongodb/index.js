@@ -41,6 +41,7 @@ const mongooseModel = (schema, transform) => t(s(schema), transform || (() => {}
 const modelDef = {
   Customer: {
     model: {
+      fileId: { type: String },
       name: { type: String, required: true },
       email: { type: String, required: true },
       password: { type: String, required: true },
@@ -55,6 +56,7 @@ const modelDef = {
   },
   Restaurant: {
     model: {
+      fileIds: [{ type: String }],
       name: { type: String, required: true },
       email: { type: String, required: true },
       password: { type: String, required: true },

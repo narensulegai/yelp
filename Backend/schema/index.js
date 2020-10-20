@@ -12,7 +12,7 @@ const validate = (body, schema) => {
 const reqStr = (label) => Joi.string().required().label(label);
 const reqNum = (label) => Joi.number().required().label(label);
 const optStr = (label) => Joi.string().allow('').label(label);
-
+const optFiles = () => Joi.array().items(Joi.string()).label('Files');
 const schemaDef = {
   signupCustomer: Joi.object({
     name: reqStr('Name'),
@@ -26,14 +26,13 @@ const schemaDef = {
     location: reqStr('Location'),
   }),
   updateRestaurantProfile: Joi.object({
-    name: reqStr('Name'),
-    location: reqStr('Location'),
-    description: reqStr('Description'),
-    contactInformation: reqStr('Contact information'),
-    timings: reqStr('Timings'),
+    fileIds: optFiles(),
+    description: optStr('Description'),
+    contactInformation: optStr('Contact information'),
+    timings: optStr('Timings'),
   }),
   updateCustomerProfile: Joi.object({
-    name: reqStr('Name'),
+    fileId: optStr('File'),
     yelpingSince: optStr('Yelping Since'),
     thingsILove: optStr('Things I love'),
     website: optStr('Website'),

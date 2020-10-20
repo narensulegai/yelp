@@ -6,65 +6,54 @@ import {
 } from '../util/fetch/api';
 
 const CustomerProfile = () => {
-  const name = useRef();
   const about = useRef();
   const yelpingSince = useRef();
   const thingsILove = useRef();
   const website = useRef();
   const [edit, setEdit] = useState(false);
   const [profile, setProfile] = useState({});
-  const [images, setImages] = useState([]);
-
-  const getCustImages = async () => {
-    const img = await getImages();
-    return img.filter((i) => i.type === 'profile');
-  };
 
   useEffect(() => {
     getCustomerProfile().then(setProfile);
-    getCustImages().then(setImages);
   }, []);
 
   const toggleEdit = () => {
     setEdit(!edit);
   };
 
-  const handleOnProfileSave = () => {
+  const update = (p) => {
+    return updateCustomerProfile(p)
+      .then(() => {
+        getCustomerProfile().then(setProfile);
+      });
+  };
+  const handleOnProfileSave = async () => {
     const p = {
-      name: name.current.value,
       about: about.current.value,
       yelpingSince: yelpingSince.current.value,
       thingsILove: thingsILove.current.value,
       website: website.current.value,
     };
-    updateCustomerProfile(p)
-      .then(() => {
-        getCustomerProfile().then(setProfile);
-        setEdit(!edit);
-      });
+    await update(p);
+    setEdit(!edit);
   };
 
   const handleOnProfileImageAdd = async (fileIds) => {
-    // Delete the current image first
-    if (images.length) {
-      await deleteImage(images[0].id);
-    }
-    await addImages({ fileIds: fileIds.files, type: 'profile', typeId: null });
-    setImages(await getCustImages());
+    update({ fileId: fileIds.files[0] });
   };
 
-  const handleOnProfileImageDelete = async (id) => {
-    await deleteImage(id);
-    setImages(await getCustImages());
+  const handleOnProfileImageDelete = async () => {
+    update({ fileId: '' });
   };
 
   return (
     <div className="row">
       <div className="col-6">
-        <ImageInput singleFile images={images}
+        <ImageInput singleFile images={profile.fileId ? [profile.fileId] : []}
           onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
         <div>
-          <TextInput label="Name" edit={edit} value={profile.name} ref={name} />
+          <TextInput label="Name" edit={false} value={profile.name} />
+          <TextInput label="Email" edit={false} value={profile.email} />
           <TextInput label="About" edit={edit} value={profile.about} ref={about} />
           <TextInput label="Yelping Since" edit={edit} value={profile.yelpingSince} ref={yelpingSince} />
           <TextInput label="Things I love" edit={edit} value={profile.thingsILove} ref={thingsILove} />

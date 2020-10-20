@@ -100,13 +100,7 @@ module.exports = {
   },
   getFile: async (req, res) => {
     const fileId = req.params.id;
-    const f = await Image.findOne({ fileId });
-    // Check if user owns the file
-    if (f === null) {
-      res.status(404).json(err('File not found'));
-    } else {
-      res.sendFile(path.join(__dirname, '../uploads', fileId));
-    }
+    res.sendFile(path.join(__dirname, '../uploads', fileId));
   },
   addComment: async (req, resp) => {
     const customerId = req.session.user.id;
