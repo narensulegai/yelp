@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "PORT=5001 mocha  --exit"
+    "test": "PORT=5001 mocha  --exit",
+    "start": "nodemon --ignore sessions  index.js -V"
   },
   "author": "",
   "license": "ISC",

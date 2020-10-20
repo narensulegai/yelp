@@ -38,7 +38,7 @@ class CustomerDashboard extends Component {
               <div key={r.id} className="card mb-3">
                 <div className="card-header">
                   <h4>
-                    <a href={`#/customer/restaurant/${r.id}/comments`}>{r.name}</a>
+                    <a href={`#/customer/restaurant/${r.id}`}>{r.name}</a>
                   </h4>
                   <div className="small">{r.description}</div>
                   <div className="mt-2">
@@ -51,8 +51,8 @@ class CustomerDashboard extends Component {
                   </div>
                   <div className="mt-3">
                     <h6>Menu</h6>
-                    {r.Dish.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
-                    {r.Dish.map(d => {
+                    {r.dishes.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
+                    {r.dishes.map(d => {
                       return <div className="small" key={d.id}><b>{d.name}</b>&nbsp;(${d.price})</div>
                     })}
                   </div>

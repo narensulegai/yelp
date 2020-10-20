@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { getDishes } from '../../util/fetch/api';
+import { getRestaurantComments } from '../../util/fetch/api';
 import Review from '../Review';
 
 class Comment extends Component {
   constructor(props) {
     super(props);
-    this.state = { dishes: [] };
+    this.state = { comments: [] };
   }
 
   async componentDidMount() {
-    const dishes = await getDishes();
-    this.setState({ dishes });
+    const comments = await getRestaurantComments();
+    this.setState({ comments });
   }
 
   render() {
@@ -18,17 +18,11 @@ class Comment extends Component {
       <div className="row">
         <div className="col-6">
           <h4>Customer reviews</h4>
-          {this.state.dishes.map((d) => {
+          {this.state.comments.map((comment) => {
             return (
-              <div key={d.id} className="mt-3">
-                <h6>{d.name} ({d.comments.length} review)</h6>
-                {d.comments.map((c) => {
-                  return (
-                    <div key={c.id} className="ml-2">
-                      <Review comment={c} />
-                    </div>
-                  );
-                })}
+              <div key={comment.id} className="ml-2">
+                <h6>Dish {comment.dish.name}</h6>
+                <Review comment={comment} />
               </div>
             );
           })}

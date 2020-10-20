@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const mongoose = require('mongoose');
 const {
-  Customer, Restaurant, Image,
+  Customer, Restaurant, Dish, Image, Comment, Event, Order,
 } = require('../mongodb');
 
 const saltRounds = 10;
@@ -49,6 +49,10 @@ module.exports = {
     resp.json(await customer.save());
   },
   getCustomerProfile: async (req, resp) => {
+    // TODO: same as getCustomer
+    resp.json(await Customer.findById(req.session.user.id));
+  },
+  getCustomer: async (req, resp) => {
     resp.json(await Customer.findById(req.session.user.id));
   },
   login: async (req, res) => {
@@ -105,120 +109,175 @@ module.exports = {
     }
   },
   addComment: async (req, resp) => {
-    const cust = await Customer.findById(req.session.user.id);
-    cust.Comment.push({
-      dishId: req.params.id,
+    const customerId = req.session.user.id;
+    const dishId = req.params.id;
+    const dish = await Dish.findById(dishId);
+    const comment = new Comment({
+      // to get comments by restaurant
+      restaurant: dish.restaurant,
+      customer: customerId,
+      dish: dishId,
       ...req.body,
     });
-    resp.json(await cust.save());
+    resp.json(await comment.save());
+  },
+  getComments: async (req, resp) => {
+    const dishId = req.params.id;
+    const comment = await Comment.find({ dish: dishId })
+      .populate('customer');
+      // .populate('dish');
+    resp.json(comment);
+  },
+  getRestaurantComments: async (req, resp) => {
+    const restaurantId = req.session.user.id;
+    const comment = await Comment.find({ restaurant: restaurantId })
+      .populate('customer')
+      .populate('dish');
+    resp.json(comment);
+  },
+  getRestaurantDishes: async (req, resp) => {
+    const restaurantId = req.params.id;
+    const dish = await Dish.find({ restaurant: restaurantId });
+    resp.json(dish);
+  },
+  placeOrder: async (req, resp) => {
+    const { isPickup } = req.body;
+    const dishId = req.params.id;
+    const customerId = req.session.user.id;
+    const order = new Order({
+      isPickup,
+      status: 'new',
+      dish: dishId,
+      customer: customerId,
+    });
+    resp.json(await order.save());
+  },
+  myOrders: async (req, resp) => {
+    if (req.session.scope === 'customer') {
+      const customerId = req.session.user.id;
+      const order = await Order.find({ customer: customerId })
+        .populate('dish');
+      resp.json(order);
+    }
+    if (req.session.scope === 'restaurant') {
+      const restaurantId = req.session.user.id;
+      const dish = await Dish.find({ restaurant: restaurantId });
+      const order = await Order.find({
+        dish: {
+          $in: dish.map((d) => mongoose.Types.ObjectId(d._id)),
+        },
+      })
+        .populate('dish')
+        .populate('customer');
+      resp.json(order);
+    }
+  },
+  updateMyOrder: async (req, resp) => {
+    if (req.session.scope === 'customer') {
+      const customerId = req.session.user.id;
+      const orderId = req.params.id;
+      const order = await Order.findOne({ _id: orderId, customer: customerId });
+      Object.assign(order, req.body);
+      resp.json(await order.save());
+    }
+    if (req.session.scope === 'restaurant') {
+      const restaurantId = req.session.user.id;
+      const orderId = req.params.id;
+      const order = await Order.findOne({ _id: orderId })
+        .populate('dish');
+      // Check if order belongs to restaurant
+      if (order.dish.restaurant.toString() === restaurantId) {
+        Object.assign(order, req.body);
+        resp.json(await order.save());
+      } else {
+        resp.status(400).json(err('Order not found'));
+      }
+    }
   },
   getRestaurants: async (req, resp) => {
     // TODO
     // const { search } = req.query;
-    const restaurant = await Restaurant.find();
+    const restaurant = await Restaurant.find()
+      // .populate('events')
+      .populate('dishes');
     resp.json(restaurant);
   },
-  getComments: async (req, resp) => {
-    resp.json(await Customer.aggregate()
-      .match({ 'Comment.dishId': req.params.id })
-      .unwind('Comment')
-      .sort({ 'Comment.createdAt': 'desc' }));
-  },
   updateRestaurantProfile: async (req, resp) => {
-    const restaurant = await Restaurant.findByIdAndUpdate(req.session.user.id, req.body);
+    const restaurant = await Restaurant.findById(req.session.user.id);
+    Object.assign(restaurant, req.body);
     resp.json(await restaurant.save());
   },
   getRestaurantProfile: async (req, resp) => {
     resp.json(await Restaurant.findById(req.session.user.id));
   },
   createDish: async (req, resp) => {
-    const restaurant = await Restaurant.findById(req.session.user.id);
-    const dish = { ...req.body };
-    restaurant.Dish.push(dish);
-    resp.json(await restaurant.save());
+    const restaurantId = req.session.user.id;
+    const dish = new Dish({ restaurant: restaurantId, ...req.body });
+    const newDish = await dish.save();
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.dishes.push(newDish.id);
+    await restaurant.save();
+    resp.json(newDish);
   },
   getDishes: async (req, resp) => {
     const restaurantId = req.session.user.id;
-    const restaurant = await Restaurant
-      .findById(restaurantId)
-      .populate('Dish.Comment.customerId');
-    resp.json(restaurant.Dish);
+    const dish = await Dish.find({ restaurant: restaurantId });
+    resp.json(dish);
   },
   updateDish: async (req, resp) => {
-    const restaurant = await Restaurant.findById(req.session.user.id);
-    Object.assign(restaurant.Dish.id(req.params.id), req.body);
-    restaurant.markModified('Dish');
-    resp.json(await restaurant.save());
+    const restaurant = req.session.user.id;
+    const dishId = req.params.id;
+    const dish = await Dish.findOne({ restaurant, _id: dishId });
+    Object.assign(dish, req.body);
+    resp.json(await dish.save());
   },
   deleteDish: async (req, resp) => {
-    const restaurant = await Restaurant.findById(req.session.user.id);
-    restaurant.Dish.id(req.params.id).remove();
-    resp.json(await restaurant.save());
+    const restaurantId = req.session.user.id;
+    const dishId = req.params.id;
+    const deletedDish = await Dish.findOneAndDelete({ restaurant: restaurantId, _id: dishId });
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.dishes.pull(dishId);
+    restaurant.save();
+    resp.json(deletedDish);
   },
   getRestaurantEvents: async (req, resp) => {
     const restaurantId = req.session.user.id;
-    const restaurant = await Restaurant
-      .findById(restaurantId)
-      .populate('Event.Registration.customerId');
-    resp.json(restaurant.Event);
+    const event = await Event.find({ restaurant: restaurantId })
+      .populate('Registration.customer');
+    resp.json(event);
   },
   createEvent: async (req, resp) => {
-    const restaurant = await Restaurant.findById(req.session.user.id);
-    restaurant.Event.push(req.body);
-    resp.json(await restaurant.save());
+    const restaurantId = req.session.user.id;
+    const event = new Event({ restaurant: restaurantId, ...req.body });
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.events.push(event.id);
+    await restaurant.save();
+    resp.json(await event.save());
   },
   deleteEvent: async (req, resp) => {
-    const restaurant = await Restaurant.findById(req.session.user.id);
-    restaurant.Event.id(req.params.id).remove();
-    resp.json(await restaurant.save());
+    const restaurantId = req.session.user.id;
+    const eventId = req.params.id;
+    const deletedEvent = await Event.findOneAndDelete({ restaurant: restaurantId, _id: eventId });
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.events.pull(eventId);
+    await restaurant.save();
+    resp.json(deletedEvent);
   },
   getUnregisteredEvents: async (req, resp) => {
     const customerId = req.session.user.id;
-    const restaurant = await Restaurant
-      .aggregate([
-        { $unwind: '$Event' },
-        { $match: { 'Event.Registration.customerId': { $ne: mongoose.Types.ObjectId(customerId) } } },
-        {
-          $addFields: {
-            id: '$_id',
-            'Event.id': '$Event._id',
-          },
-        },
-        {
-          $project: {
-            'Event.Registration': 0,
-            'Event._id': 0,
-          },
-        },
-      ]);
-    resp.json(restaurant.map((r) => r.Event));
+    const events = await Event.find({ 'Registration.customer': { $ne: mongoose.Types.ObjectId(customerId) } });
+    resp.json(events);
   },
   registerEvent: async (req, resp) => {
     const eventId = req.params.id;
     const customerId = req.session.user.id;
-    const restaurant = await Restaurant.findOne({ 'Event._id': eventId });
-    restaurant.Event.id(eventId).Registration.push({ customerId });
-    resp.json(await restaurant.save());
+    const event = await Event.findById(eventId);
+    event.Registration.push({ customer: customerId });
+    resp.json(await event.save());
   },
   getCustomerEvents: async (req, resp) => {
     const customerId = req.session.user.id;
-    const restaurant = await Restaurant
-      .aggregate([
-        { $unwind: '$Event' },
-        { $match: { 'Event.Registration.customerId': mongoose.Types.ObjectId(customerId) } },
-        {
-          $addFields: {
-            id: '$_id',
-            'Event.id': '$Event._id',
-          },
-        },
-        {
-          $project: {
-            'Event.Registration': 0,
-            'Event._id': 0,
-          },
-        },
-      ]);
-    resp.json(restaurant.map((r) => r.Event));
+    const events = await Event.find({ 'Registration.customer': { $eq: mongoose.Types.ObjectId(customerId) } });
+    resp.json(events);
   },
 };

@@ -22,7 +22,7 @@ const Event = ({ event, onDelete }) => {
         <div>{event.Registration.map((c) => {
           return (
             <a href={`#/restaurant/customer/${c.customer.id}`}
-              key={c.customer.id}>{c.customer.name}</a>
+              key={c.customer.id} className="mr-1">{c.customer.name}</a>
           );
         })}
         </div>

@@ -44,7 +44,7 @@ const MyOrders = () => {
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
                   <div>
-                    <div><b>{o.dish.name} </b> from <b>{o.restaurant.name}</b></div>
+                    <div><b>{o.dish.name} </b> from <b>{o.name}</b></div>
                     <div>Order status <b>{o.status}</b> </div>
                   </div>
                   <div>

@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { addComment, getComments, getRestaurants } from '../../util/fetch/api';
+import { getRestaurants } from '../../util/fetch/api';
 import PlaceOrder from './PlacerOrder';
 
 class View extends Component {
   constructor(props) {
     super(props);
-    const id = window.location.hash.split('/').slice(-2)[0];
+    const id = window.location.hash.split('/').slice(-1)[0];
     this.state = {
-      restaurant: {}, restaurantId: parseInt(id),
+      restaurant: {}, restaurantId: id,
     };
-    this.comment = React.createRef();
-    this.rating = React.createRef();
   }
 
   async componentDidMount() {

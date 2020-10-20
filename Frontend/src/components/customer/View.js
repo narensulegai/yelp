@@ -5,7 +5,7 @@ class View extends Component {
   constructor(props) {
     super(props);
     const id = window.location.hash.split('/').slice(-1)[0];
-    this.state = { customer: null, customerId: parseInt(id) };
+    this.state = { customer: null, customerId: id };
   }
 
   async componentDidMount() {
