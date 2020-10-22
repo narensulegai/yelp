@@ -19,7 +19,7 @@ const ImageInput = ({
           {images.map((fileId) => {
             return (
               <div key={fileId} className="imageBox">
-                <img src={fileUrl(fileId)} className="imageTile" />
+                <img src={fileUrl(fileId)} className="imageTile" alt=""/>
                 <div className="removeImageButton" onClick={() => {
                   handleOnDelete(fileId);
                 }}>

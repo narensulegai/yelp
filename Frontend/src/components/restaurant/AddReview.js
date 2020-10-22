@@ -47,9 +47,9 @@ const AddReview = ({ dish }) => {
       <div>
         <div>
           Average rating <b>{average}</b> of 5
-          <a className="nav-link d-inline pointer" onClick={toggleShowReviews}>
+          <div className="nav-link d-inline pointer" onClick={toggleShowReviews}>
             Snow {reviews.length} review(s)
-          </a>
+          </div>
         </div>
         {showReviews && (
           <div className="mt-3">
