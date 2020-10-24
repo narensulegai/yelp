@@ -1,37 +1,27 @@
 const express = require('express');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const FileStore = require('session-file-store')(session);
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const handler = require('./handlers');
 const mongoHandler = require('./mongoHandlers');
 const schema = require('./schema');
 
+require('dotenv').config();
+
 const err = (msg) => ({ err: msg });
 const app = express();
-app.use(session({
-  secret: 'cmpe_273_secure_string',
-  resave: false,
-  saveUninitialized: false,
-  store: new FileStore(),
-  cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  },
-}));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.ORIGIN,
   credentials: true,
 }));
 
 [
   ['put', '/api/login/:user', handler.login, null],
   ['put', '/mongo/login/:user', mongoHandler.login, null],
-  ['put', '/api/logout', handler.logout, 'any'],
-  ['put', '/mongo/logout', handler.logout, 'any'],
   ['get', '/api/currentUser', handler.current, null],
   ['get', '/mongo/currentUser', handler.current, null],
   ['post', '/api/signup/customer', handler.signupCustomer, null, schema.signupCustomer],
@@ -46,8 +36,8 @@ app.use(cors({
   ['get', '/mongo/images', mongoHandler.getImages, 'any'],
   ['delete', '/api/image/:id', handler.deleteImage, 'any'],
   ['delete', '/mongo/image/:id', mongoHandler.deleteImage, 'any'],
-  ['get', '/api/file/:id', handler.getFile, 'any'],
-  ['get', '/mongo/file/:id', mongoHandler.getFile, 'any'],
+  ['get', '/api/file/:id', handler.getFile, null],
+  ['get', '/mongo/file/:id', mongoHandler.getFile, null],
   ['put', '/api/profile/restaurant', handler.updateRestaurantProfile, 'restaurant', schema.updateRestaurantProfile],
   ['put', '/mongo/profile/restaurant', mongoHandler.updateRestaurantProfile, 'restaurant', schema.updateRestaurantProfile],
   ['get', '/api/profile/restaurant', handler.getRestaurantProfile, 'restaurant'],
@@ -96,16 +86,17 @@ app.use(cors({
   ['get', '/api/searchEvent/:text', handler.searchEvent, null],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
-    if (r[3] === 'restaurant' || r[3] === 'customer') {
-      const { scope } = req.session;
-      if (scope !== r[3]) {
-        resp.status(401).json(err('You are not authorized for this action.'));
-      }
-    }
-    if (r[3] === 'any') {
-      const { scope } = req.session;
-      if (!scope) {
+    if (r[3] !== null) {
+      const token = req.header('authorization');
+      try {
+        jwt.verify(token, process.env.JWT_SECRET);
+      } catch (e) {
         resp.status(401).json(err('You need to login.'));
+      }
+      const { scope, user } = jwt.decode(token);
+      req.session = { scope, user };
+      if (r[3] !== 'any' && scope !== r[3]) {
+        resp.status(401).json(err('You are not authorized to do this.'));
       }
     }
     if (r[4]) {

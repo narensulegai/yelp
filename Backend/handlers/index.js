@@ -46,17 +46,6 @@ module.exports = {
       });
     }
   },
-  logout: async (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error(err);
-        res.json(false);
-      } else {
-        res.clearCookie('connect.sid');
-        res.json(true);
-      }
-    });
-  },
   current: async (req, resp) => {
     if (req.session && req.session.scope) {
       resp.json({ user: req.session.user, scope: req.session.scope });

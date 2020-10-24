@@ -10,9 +10,11 @@ const LoginPage = ({ onLogin, type }) => {
     put(`login/${type}`, {
       email: email.current.value,
       password: password.current.value,
-    }).then((user) => {
-      onLogin(user);
-    });
+    })
+      .then(({ token, user }) => {
+        window.localStorage.setItem('token', token);
+        onLogin(user);
+      });
   };
 
   return (

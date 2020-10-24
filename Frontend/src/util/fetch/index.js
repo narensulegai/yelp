@@ -1,10 +1,11 @@
 export const apiUrl = 'http://localhost:5000/mongo';
 
 const call = (method, api, data = null) => new Promise((res, rej) => {
+  const token = localStorage.getItem('token');
   fetch(`${apiUrl}/${api}`,
     {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', authorization: token },
       body: data ? JSON.stringify(data) : null,
       // CORS
       credentials: 'include',

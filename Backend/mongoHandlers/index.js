@@ -1,22 +1,28 @@
 const bcrypt = require('bcrypt');
 const path = require('path');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const {
   Customer, Restaurant, Dish, Image, Comment, Event, Order,
 } = require('../mongodb');
 
 const saltRounds = 10;
 const err = (msg) => ({ err: msg });
+const expiresIn = 1008000;
 
+const signPayload = (payload) => {
+  const jwtSecret = process.env.JWT_SECRET;
+  return jwt.sign(payload, jwtSecret, { expiresIn });
+};
 module.exports = {
   signupCustomer: async (req, resp) => {
     bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
       const customer = new Customer({ ...req.body, password });
       try {
-        const c = await customer.save();
-        req.session.user = c;
-        req.session.scope = 'customer';
-        resp.json(c);
+        const user = await customer.save();
+        const payload = { user, scope: 'customer' };
+        const token = signPayload(payload);
+        resp.json({ token, user });
       } catch (e) {
         if (e.code === 11000) {
           resp.status(400).json(err('Email id is already taken'));
@@ -30,10 +36,10 @@ module.exports = {
     bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
       const restaurant = new Restaurant({ ...req.body, password });
       try {
-        const c = await restaurant.save();
-        req.session.user = c;
-        req.session.scope = 'restaurant';
-        resp.json(c);
+        const user = await restaurant.save();
+        const payload = { user, scope: 'customer' };
+        const token = signPayload(payload);
+        resp.json({ token, user });
       } catch (e) {
         if (e.code === 11000) {
           resp.status(400).json(err('Email id is already taken'));
@@ -49,15 +55,15 @@ module.exports = {
     resp.json(await customer.save());
   },
   getCustomerProfile: async (req, resp) => {
-    // TODO: same as getCustomer
     resp.json(await Customer.findById(req.session.user.id));
   },
   getCustomer: async (req, resp) => {
     resp.json(await Customer.findById(req.params.id));
   },
   login: async (req, res) => {
-    const u = req.params.user;
-    const m = u === 'customer' ? Customer : Restaurant;
+    const scope = req.params.user;
+    // TODO check for restaurant
+    const m = scope === 'customer' ? Customer : Restaurant;
     const { email, password } = req.body;
     const user = await m.findOne({ email });
     if (user === null) {
@@ -66,9 +72,9 @@ module.exports = {
       bcrypt.compare(password, user.password, (e, doseMatch) => {
         if (doseMatch) {
           delete user.password;
-          req.session.user = user;
-          req.session.scope = u;
-          res.json(user);
+          const payload = { user, scope };
+          const token = signPayload(payload);
+          res.json({ token, user });
         } else {
           res.status(401).json(err('Email password doesn\'t match'));
         }

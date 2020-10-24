@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { logout } from '../util/fetch/api';
 
 class Logout extends Component {
   async componentDidMount() {
-    await logout();
+    localStorage.removeItem('token');
     this.props.history.push('/');
   }
 
