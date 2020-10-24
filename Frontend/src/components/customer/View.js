@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { fileUrl, getCustomer } from '../../util/fetch/api';
+import Messenger from '../Messenger';
 
 class View extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class View extends Component {
     return (
       this.state.customer && (
         <div className="row">
-          <div className="col-12 text-center">
+          <div className="col-6 text-center">
             <div className="mt-4">
               {this.state.customer.fileId
                 ? <img src={fileUrl(this.state.customer.fileId)} className="profileImage" alt="" />
@@ -28,6 +29,9 @@ class View extends Component {
             <div>Yelping since <b>{this.state.customer.yelpingSince || '-'}</b></div>
             <div>Things I love <b>{this.state.customer.thingsILove || '-'}</b></div>
             <div>Website <b>{this.state.customer.website || '-'}</b></div>
+          </div>
+          <div className="col-6">
+            <Messenger toUser={this.state.customer} scope="customer" />
           </div>
         </div>
       )

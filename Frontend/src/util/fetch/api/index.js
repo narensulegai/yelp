@@ -28,6 +28,8 @@ export const addComment = (id, d) => post(`comment/${id}`, d);
 export const getComments = (id) => get(`comments/${id}`);
 export const myOrders = () => get('myOrders');
 export const updateMyOrder = (id, d) => put(`myOrder/${id}`, d);
+export const sendMessageTo = (text, userId) => post(`message/${userId}`, { text });
+export const getMessagesFrom = (userId) => get(`messages/${userId}`);
 export const fileUrl = (fileId) => {
   return `${apiUrl}/file/${fileId}`;
 };

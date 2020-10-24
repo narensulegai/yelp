@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const {
-  Customer, Restaurant, Dish, Image, Comment, Event, Order,
+  Customer, Restaurant, Dish, Image, Comment, Event, Order, Message,
 } = require('../mongodb');
 
 const saltRounds = 10;
@@ -37,7 +37,7 @@ module.exports = {
       const restaurant = new Restaurant({ ...req.body, password });
       try {
         const user = await restaurant.save();
-        const payload = { user, scope: 'customer' };
+        const payload = { user, scope: 'restaurant' };
         const token = signPayload(payload);
         resp.json({ token, user });
       } catch (e) {
@@ -55,7 +55,7 @@ module.exports = {
     resp.json(await customer.save());
   },
   getCustomerProfile: async (req, resp) => {
-    resp.json(await Customer.findById(req.session.user.id));
+    resp.json(await Customer.findById(req.session.user.id).populate('conversations'));
   },
   getCustomer: async (req, resp) => {
     resp.json(await Customer.findById(req.params.id));
@@ -279,5 +279,52 @@ module.exports = {
     const customerId = req.session.user.id;
     const events = await Event.find({ 'Registration.customer': { $eq: mongoose.Types.ObjectId(customerId) } });
     resp.json(events);
+  },
+  // TODO make 2 apis
+  sendMessageTo: async (req, resp) => {
+    const from = req.session.user.id;
+    const to = req.params.id;
+    const { text } = req.body;
+    const msg = { text };
+
+    if (req.session.scope === 'customer') {
+      const customer = await Customer.findById(from);
+      if (!customer.conversations.includes(to)) {
+        resp.string(400).json(err('You cannot start conversation with this restaurant'));
+      }
+      msg.fromRestaurant = false;
+      msg.restaurant = to;
+      msg.customer = from;
+    }
+
+    if (req.session.scope === 'restaurant') {
+      const customer = await Customer.findById(to);
+      if (!customer.conversations.includes(from)) {
+        // Track conversations
+        customer.conversations.push(from);
+        await customer.save();
+      }
+      msg.fromRestaurant = true;
+      msg.restaurant = from;
+      msg.customer = to;
+    }
+
+    const message = new Message(msg);
+    resp.json(await message.save());
+  },
+  // TODO make 2 apis
+  getMessagesFrom: async (req, resp) => {
+    const curr = req.session.user.id;
+    const from = req.params.id;
+
+    if (req.session.scope === 'customer') {
+      const messages = Message.find({ customer: curr, restaurant: from }).sort({ createdAt: 'desc' });
+      resp.json(await messages);
+    }
+
+    if (req.session.scope === 'restaurant') {
+      const messages = Message.find({ customer: from, restaurant: curr }).sort({ createdAt: 'desc' });
+      resp.json(await messages);
+    }
   },
 };

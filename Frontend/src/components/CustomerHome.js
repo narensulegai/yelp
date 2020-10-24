@@ -5,6 +5,7 @@ import CustomerDashboard from './CustomerDashboard';
 import Events from './customer/Events';
 import RestaurantView from './restaurant/View';
 import MyOrders from './customer/MyOrders';
+import Messages from './customer/Messages';
 
 class CustomerHome extends Component {
   render() {
@@ -16,6 +17,7 @@ class CustomerHome extends Component {
           <a className="nav-link text-light" href="#/customer/profile">My Profile</a>
           <a className="nav-link text-light" href="#/customer/events">Event</a>
           <a className="nav-link text-light" href="#/customer/myOrders">My Orders</a>
+          <a className="nav-link text-light" href="#/customer/messages">My Messages</a>
           <a className="nav-link" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
@@ -30,6 +32,9 @@ class CustomerHome extends Component {
           </Route>
           <Route path="/customer/myOrders">
             <MyOrders />
+          </Route>
+          <Route path="/customer/messages">
+            <Messages />
           </Route>
           <Route path="/customer/restaurant/:id">
             <RestaurantView />

@@ -16,13 +16,17 @@ const Signup = ({ type, history }) => {
       password: password.current.value,
     };
     if (type === 'customer') {
-      post('signup/customer', d).then(() => {
-        history.push('/customer/dashboard');
-      });
+      post('signup/customer', d)
+        .then(({ token }) => {
+          window.localStorage.setItem('token', token);
+          history.push('/customer/dashboard');
+        });
     } else {
-      post('signup/restaurant', { ...d, ...{ location: location.current.value } }).then(() => {
-        history.push('/restaurant/profile');
-      });
+      post('signup/restaurant', { ...d, location: location.current.value })
+        .then(({ token }) => {
+          window.localStorage.setItem('token', token);
+          history.push('/restaurant/profile');
+        });
     }
   };
   return (

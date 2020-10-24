@@ -1,4 +1,4 @@
-export const apiUrl = 'http://localhost:5000/mongo';
+export const apiUrl = `${process.env.REACT_APP_API_URL}/apiV1`;
 
 const call = (method, api, data = null) => new Promise((res, rej) => {
   const token = localStorage.getItem('token');
@@ -16,6 +16,7 @@ const call = (method, api, data = null) => new Promise((res, rej) => {
         .then((d) => {
           if (r.status === 200) {
             window.error(null);
+            window.message(null);
             res(d);
           } else {
             window.error(d.err);

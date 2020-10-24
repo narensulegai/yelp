@@ -11,7 +11,10 @@ window.error = (msg) => {
   const e = window.document.getElementById('err');
   e.innerText = msg;
 };
-
+window.message = (msg) => {
+  const e = window.document.getElementById('msg');
+  e.innerText = msg;
+};
 const store = createStore(
   AppReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
