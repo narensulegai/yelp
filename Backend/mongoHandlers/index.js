@@ -14,6 +14,9 @@ const signPayload = (payload) => {
   const jwtSecret = process.env.JWT_SECRET;
   return jwt.sign(payload, jwtSecret, { expiresIn });
 };
+
+const { topics } = require('../kafka');
+
 module.exports = {
   signupCustomer: async (req, resp) => {
     bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
@@ -308,9 +311,11 @@ module.exports = {
       msg.restaurant = from;
       msg.customer = to;
     }
-
+    resp.json(await req.kafkaMessage(topics.MESSAGES, msg));
+  },
+  saveMessage: (msg) => {
     const message = new Message(msg);
-    resp.json(await message.save());
+    return message.save();
   },
   // TODO make 2 apis
   getMessagesFrom: async (req, resp) => {

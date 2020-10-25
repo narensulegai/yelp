@@ -20,8 +20,15 @@ const Messenger = ({ toUser, scope, customerView = false }) => {
     setMessages(await getMessagesFrom(toUser.id));
   };
 
+  const handleOnRefresh = async () => {
+    setMessages(await getMessagesFrom(toUser.id));
+  };
+
   return (
     <div>
+      <div className="clearfix">
+        <button className="btn-primary float-right" onClick={handleOnRefresh}>Refresh</button>
+      </div>
       <div className="messages">
         {messages.reverse().map((m) => {
           return (

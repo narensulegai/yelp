@@ -5,8 +5,21 @@ const jwt = require('jsonwebtoken');
 const handler = require('./handlers');
 const mongoHandler = require('./mongoHandlers');
 const schema = require('./schema');
-
 require('dotenv').config();
+const { kafka, topics } = require('./kafka');
+
+let kafkaMessage = () => {
+  console.error('Kafka client has not connected yet, message will be lost');
+};
+
+(async () => {
+  const { subscribe, send } = await kafka();
+  console.log('Connected to kafka');
+  kafkaMessage = send;
+  subscribe(topics.MESSAGES, async (msg, t) => {
+    await mongoHandler.saveMessage(msg);
+  });
+})();
 
 const err = (msg) => ({ err: msg });
 const app = express();
@@ -108,9 +121,11 @@ app.use(cors({
         const messages = error.details.map((d) => d.message);
         resp.status(400).json(err(messages[0]));
       } else {
+        req.kafkaMessage = kafkaMessage;
         next();
       }
     } else {
+      req.kafkaMessage = kafkaMessage;
       next();
     }
   }, r[2]);
