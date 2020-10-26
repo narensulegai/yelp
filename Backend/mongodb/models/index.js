@@ -16,6 +16,7 @@ module.exports = {
       website: { type: String, default: '' },
       about: { type: String, default: '' },
       conversations: [{ type: Types.ObjectId, ref: 'Restaurant', required: true }],
+      following: [{ type: Types.ObjectId, ref: 'Customer', required: true }],
     },
     transform: (doc, ret) => {
       delete ret.password;

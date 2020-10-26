@@ -30,6 +30,9 @@ export const myOrders = () => get('myOrders');
 export const updateMyOrder = (id, d) => put(`myOrder/${id}`, d);
 export const sendMessageTo = (text, userId) => post(`message/${userId}`, { text });
 export const getMessagesFrom = (userId) => get(`messages/${userId}`);
+export const getCustomers = (text) => get(`customers?search=${text}`);
+export const getFollowing = (text) => get(`following?search=${text}`);
+export const follow = (id) => put(`follow/${id}`);
 export const fileUrl = (fileId) => {
   return `${apiUrl}/file/${fileId}`;
 };

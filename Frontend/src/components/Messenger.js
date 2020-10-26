@@ -26,10 +26,11 @@ const Messenger = ({ toUser, scope, customerView = false }) => {
 
   return (
     <div>
-      <div className="clearfix">
-        <button className="btn-primary float-right" onClick={handleOnRefresh}>Refresh</button>
+      <div>
+        <button className="btn-primary" onClick={handleOnRefresh}>Refresh</button>
       </div>
       <div className="messages">
+        <div>{messages.length === 0 ? 'No messages to show ' : null}</div>
         {messages.reverse().map((m) => {
           return (
             <div key={m.id} className={classNames({

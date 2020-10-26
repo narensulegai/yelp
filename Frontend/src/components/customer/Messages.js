@@ -29,7 +29,7 @@ const Messages = () => {
               You have messages {conversations.length} restaurant(s)
             </h4>
             <div>
-              <span>Select restaurant</span>
+              <span className="mr-3">Select restaurant</span>
               <select value={currentConversation.id} onChange={handleOnConversationChange}>
                 {conversations.map((c) => {
                   return <option key={c.id} value={c.id}>{c.name}</option>;

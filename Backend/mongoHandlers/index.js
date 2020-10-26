@@ -16,6 +16,20 @@ const signPayload = (payload) => {
 };
 
 module.exports = {
+  current: async (req, resp) => {
+    if (req.session && req.session.scope) {
+      let user = {};
+      if (req.session.scope === 'customer') {
+        user = await Customer.findById(req.session.user.id);
+      }
+      if (req.session.scope === 'restaurant') {
+        user = await Restaurant.findById(req.session.user.id);
+      }
+      resp.json({ user, scope: req.session.scope });
+    } else {
+      resp.json({ user: null, scope: null });
+    }
+  },
   signupCustomer: async (req, resp) => {
     bcrypt.hash(req.body.password, saltRounds, async (e, password) => {
       const customer = new Customer({ ...req.body, password });
@@ -56,7 +70,8 @@ module.exports = {
     resp.json(await customer.save());
   },
   getCustomerProfile: async (req, resp) => {
-    resp.json(await Customer.findById(req.session.user.id).populate('conversations'));
+    resp.json(await Customer.findById(req.session.user.id)
+      .populate('conversations'));
   },
   getCustomer: async (req, resp) => {
     resp.json(await Customer.findById(req.params.id));
@@ -268,7 +283,7 @@ module.exports = {
     if (req.session.scope === 'customer') {
       const customer = await Customer.findById(from);
       if (!customer.conversations.includes(to)) {
-        resp.string(400).json(err('You cannot start conversation with this restaurant'));
+        resp.status(400).json(err('You cannot start conversation with this restaurant'));
       }
       msg.fromRestaurant = false;
       msg.restaurant = to;
@@ -301,5 +316,26 @@ module.exports = {
     if (req.session.scope === 'restaurant') {
       resp.json(await req.requestKafka('getMessagesFrom', from, curr));
     }
+  },
+  follow: async (req, resp) => {
+    const customerId = req.session.user.id;
+    const followId = req.params.id;
+    const customer = await Customer.findById(customerId);
+    if (!customer.following.includes(followId)) {
+      customer.following.push(followId);
+    }
+    resp.json(await customer.save());
+  },
+  following: async (req, resp) => {
+    const { search } = req.query;
+    const { following } = req.session.user;
+    const customers = await Customer.find({ _id: { $in: [...(following || [])] } });
+    resp.json(customers);
+  },
+  customers: async (req, resp) => {
+    const { search } = req.query;
+    const { id, following } = req.session.user;
+    const customers = await Customer.find({ _id: { $nin: [id, ...(following || [])] } });
+    resp.json(customers);
   },
 };

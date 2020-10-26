@@ -1,11 +1,15 @@
 export const apiUrl = `${process.env.REACT_APP_API_URL}/apiV1`;
 
 const call = (method, api, data = null) => new Promise((res, rej) => {
+  const headers = { 'Content-Type': 'application/json' };
   const token = localStorage.getItem('token');
+  if (token) {
+    headers.authorization = token;
+  }
   fetch(`${apiUrl}/${api}`,
     {
       method,
-      headers: { 'Content-Type': 'application/json', authorization: token },
+      headers,
       body: data ? JSON.stringify(data) : null,
       // CORS
       credentials: 'include',

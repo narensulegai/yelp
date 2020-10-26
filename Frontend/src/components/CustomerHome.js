@@ -4,8 +4,10 @@ import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
 import Events from './customer/Events';
 import RestaurantView from './restaurant/View';
+import CustomerView from './customer/View';
 import MyOrders from './customer/MyOrders';
 import Messages from './customer/Messages';
+import Users from './Users';
 
 class CustomerHome extends Component {
   render() {
@@ -18,6 +20,7 @@ class CustomerHome extends Component {
           <a className="nav-link text-light" href="#/customer/events">Event</a>
           <a className="nav-link text-light" href="#/customer/myOrders">My Orders</a>
           <a className="nav-link text-light" href="#/customer/messages">My Messages</a>
+          <a className="nav-link text-light" href="#/customer/users">Users</a>
           <a className="nav-link" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
@@ -35,6 +38,12 @@ class CustomerHome extends Component {
           </Route>
           <Route path="/customer/messages">
             <Messages />
+          </Route>
+          <Route path="/customer/users">
+            <Users />
+          </Route>
+          <Route path="/customer/user/:id">
+            <CustomerView />
           </Route>
           <Route path="/customer/restaurant/:id">
             <RestaurantView />

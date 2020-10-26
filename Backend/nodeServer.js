@@ -39,7 +39,7 @@ app.use(cors({
   ['put', '/api/login/:user', handler.login, null],
   ['put', '/apiV1/login/:user', mongoHandler.login, null],
   ['get', '/api/currentUser', handler.current, null],
-  ['get', '/apiV1/currentUser', handler.current, null],
+  ['get', '/apiV1/currentUser', mongoHandler.current, null],
   ['post', '/api/signup/customer', handler.signupCustomer, null, schema.signupCustomer],
   ['post', '/apiV1/signup/customer', mongoHandler.signupCustomer, null, schema.signupCustomer],
   ['post', '/api/signup/restaurant', handler.signupRestaurant, null, schema.signupRestaurant],
@@ -100,19 +100,32 @@ app.use(cors({
   ['get', '/apiV1/searchEvent/:text', handler.searchEvent, null],
   ['post', '/apiV1/message/:id', mongoHandler.sendMessageTo, 'any'],
   ['get', '/apiV1/messages/:id', mongoHandler.getMessagesFrom, 'any'],
+  ['put', '/apiV1/follow/:id', mongoHandler.follow, 'customer'],
+  ['get', '/apiV1/customers', mongoHandler.customers, 'customer'],
+  ['get', '/apiV1/following', mongoHandler.following, 'customer'],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
-    if (r[3] !== null) {
-      const token = req.header('authorization');
+    const token = req.header('authorization');
+    req.session = {};
+    if (token) {
       try {
         jwt.verify(token, process.env.JWT_SECRET);
       } catch (e) {
-        resp.status(401).json(err('You need to login.'));
+        resp.status(401).json(err('You need to login, your session has expired'));
       }
-      const { scope, user } = jwt.decode(token);
-      req.session = { scope, user };
-      if (r[3] !== 'any' && scope !== r[3]) {
-        resp.status(401).json(err('You are not authorized to do this.'));
+      req.session = jwt.decode(token);
+    }
+
+    if (r[3] === 'restaurant' || r[3] === 'customer') {
+      const { scope } = req.session;
+      if (scope !== r[3]) {
+        resp.status(401).json(err('You are not authorized for this action.'));
+      }
+    }
+    if (r[3] === 'any') {
+      const { scope } = req.session;
+      if (!scope) {
+        resp.status(401).json(err('You need to login.'));
       }
     }
     if (r[4]) {

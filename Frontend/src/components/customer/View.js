@@ -1,17 +1,24 @@
-import React, { Component } from 'react';
-import { fileUrl, getCustomer } from '../../util/fetch/api';
+import React, {Component} from 'react';
+import {fileUrl, getCustomer, follow, currentUser} from '../../util/fetch/api';
 import Messenger from '../Messenger';
 
 class View extends Component {
   constructor(props) {
     super(props);
     const id = window.location.hash.split('/').slice(-1)[0];
-    this.state = { customer: null, customerId: id };
+    this.state = {customer: null, customerId: id, current: {}};
   }
 
   async componentDidMount() {
     const customer = await getCustomer(this.state.customerId);
-    this.setState({ customer });
+    const current = await currentUser();
+    this.setState({customer, current});
+  }
+
+  handleOnFollow = async () => {
+    await follow(this.state.customerId);
+    const current = await currentUser();
+    this.setState({current});
   }
 
   render() {
@@ -21,7 +28,7 @@ class View extends Component {
           <div className="col-6 text-center">
             <div className="mt-4">
               {this.state.customer.fileId
-                ? <img src={fileUrl(this.state.customer.fileId)} className="profileImage" alt="" />
+                ? <img src={fileUrl(this.state.customer.fileId)} className="profileImage" alt=""/>
                 : 'No profile pic'}
             </div>
             <h4 className="mt-2">{this.state.customer.name}</h4>
@@ -29,9 +36,18 @@ class View extends Component {
             <div>Yelping since <b>{this.state.customer.yelpingSince || '-'}</b></div>
             <div>Things I love <b>{this.state.customer.thingsILove || '-'}</b></div>
             <div>Website <b>{this.state.customer.website || '-'}</b></div>
+            {this.state.current.scope === 'customer' && <div className="mt-2">
+              <button className="btn-primary" onClick={this.handleOnFollow}>
+                {(this.state.current.user.following &&
+                  this.state.current.user.following.includes(this.state.customerId))
+                  ?  'Following'
+                  : 'Follow'}
+              </button>
+            </div>}
           </div>
           <div className="col-6">
-            <Messenger toUser={this.state.customer} scope="customer" />
+            {this.state.current.scope === 'restaurant' &&
+            <Messenger toUser={this.state.customer} scope="customer"/>}
           </div>
         </div>
       )
