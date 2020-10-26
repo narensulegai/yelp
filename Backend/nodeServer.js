@@ -5,17 +5,23 @@ const jwt = require('jsonwebtoken');
 const handler = require('./handlers');
 const mongoHandler = require('./mongoHandlers');
 const schema = require('./schema');
-require('dotenv').config();
 const { kafka } = require('./kafka');
+const modules = require('./modules');
+
+require('dotenv').config();
 
 let callAndWait = () => {
   console.log('Kafka client has not connected yet, message will be lost');
 };
 
 (async () => {
-  const k = await kafka();
-  callAndWait = k.callAndWait;
-  console.log('Connected to kafka');
+  if (process.env.MOCK_KAFKA !== 'true') {
+    const k = await kafka();
+    callAndWait = k.callAndWait;
+  } else {
+    callAndWait = async (fn, ...params) => modules[fn](...params);
+    console.log('Connected to dev kafka');
+  }
 })();
 
 const err = (msg) => ({ err: msg });

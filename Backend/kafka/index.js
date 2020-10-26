@@ -1,17 +1,6 @@
 const { Kafka, logLevel } = require('kafkajs');
 const crypto = require('crypto');
 
-const k = new Kafka({
-  logLevel: logLevel.NOTHING,
-  clientId: 'yelp',
-  brokers: ['localhost:9092'],
-});
-
-const producer = k.producer();
-const groupId = process.env.GROUP;
-// App wide consumer group
-const consumer = k.consumer({ groupId, fromBeginning: true });
-
 const allTopics = {
   API_CALL: 'api-call',
   API_RESP: 'api-resp',
@@ -26,6 +15,16 @@ const allTopics = {
 // })();
 
 async function kafka() {
+  const k = new Kafka({
+    logLevel: logLevel.NOTHING,
+    clientId: 'yelp',
+    brokers: ['localhost:9092'],
+  });
+
+  const producer = k.producer();
+  const groupId = process.env.GROUP;
+  // App wide consumer group
+  const consumer = k.consumer({ groupId, fromBeginning: true });
   // Topics need to be defined before staring the server
   const topics = Object.values(allTopics);
   const subscriptions = {};
@@ -64,7 +63,7 @@ async function kafka() {
   return {
     send,
     subscribe,
-    callAndWait: (fn, params) => new Promise((resolve, reject) => {
+    callAndWait: (fn, ...params) => new Promise((resolve, reject) => {
       const token = crypto.randomBytes(64).toString('hex');
       awaitCallbacks[token] = [resolve, reject];
       send(allTopics.API_CALL, { fn, params, token });

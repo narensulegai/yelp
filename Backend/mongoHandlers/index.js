@@ -286,7 +286,7 @@ module.exports = {
       msg.restaurant = from;
       msg.customer = to;
     }
-    resp.json(await req.requestKafka('saveMessage', [msg]));
+    resp.json(await req.requestKafka('saveMessage', msg));
   },
 
   // TODO make 2 apis
