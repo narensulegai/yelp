@@ -8,8 +8,8 @@ module.exports = {
   Customer: {
     model: {
       fileId: { type: String },
-      name: { type: String, required: true },
-      email: { type: String, required: true },
+      name: { type: String, required: true, index: true },
+      email: { type: String, required: true, index: { unique: true } },
       password: { type: String, required: true },
       yelpingSince: { type: String, default: '' },
       thingsILove: { type: String, default: '' },
@@ -26,7 +26,7 @@ module.exports = {
     model: {
       fileIds: [{ type: String }],
       name: { type: String, required: true },
-      email: { type: String, required: true },
+      email: { type: String, required: true, index: { unique: true } },
       password: { type: String, required: true },
       location: { type: String, default: '' },
       description: { type: String, default: '' },
