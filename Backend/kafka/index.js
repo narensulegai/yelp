@@ -1,18 +1,29 @@
 const { Kafka, logLevel } = require('kafkajs');
+const crypto = require('crypto');
 
 const k = new Kafka({
-  logLevel: logLevel.ERROR,
+  logLevel: logLevel.NOTHING,
   clientId: 'yelp',
   brokers: ['localhost:9092'],
 });
 
 const producer = k.producer();
+const groupId = process.env.GROUP;
 // App wide consumer group
-const consumer = k.consumer({ groupId: 'yelp', fromBeginning: true });
+const consumer = k.consumer({ groupId, fromBeginning: true });
 
 const allTopics = {
-  MESSAGES: 'message-t1',
+  API_CALL: 'api-call',
+  API_RESP: 'api-resp',
 };
+
+// Example usage
+// (async () => {
+// const k = await kafka();
+// k.subscribe(allTopics.TOPIC1, console.log);
+// k.send(allTopics.TOPIC1, 'm1');
+// const s = await k.callAndWait('sum', [1, 2]);
+// })();
 
 async function kafka() {
   // Topics need to be defined before staring the server
@@ -20,8 +31,18 @@ async function kafka() {
   const subscriptions = {};
   await producer.connect();
   await consumer.connect();
-
+  const awaitCallbacks = {};
   await Promise.all(topics.map((topic) => consumer.subscribe({ topic })));
+
+  const send = async (topic, msg) => producer
+    .send({ topic, messages: [{ value: JSON.stringify(msg) }] });
+
+  const subscribe = (topic, callback, name = null) => {
+    if (!subscriptions.hasOwnProperty(topic)) {
+      subscriptions[topic] = [];
+    }
+    subscriptions[topic].push((...args) => callback(...args, name));
+  };
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
@@ -32,23 +53,23 @@ async function kafka() {
       }
     },
   });
+
+  console.log(`Connected to kafka, joining consumer group ${groupId}`);
+
+  subscribe(allTopics.API_RESP, ({ token, resp, success }) => {
+    awaitCallbacks[token][success ? 0 : 1](resp);
+    delete awaitCallbacks[token];
+  });
+
   return {
-    send: async (topic, msg) => producer
-      .send({ topic, messages: [{ value: JSON.stringify(msg) }] }),
-    subscribe: async (topic, callback) => {
-      if (!subscriptions.hasOwnProperty(topic)) {
-        subscriptions[topic] = [];
-      }
-      subscriptions[topic].push(callback);
-    },
+    send,
+    subscribe,
+    callAndWait: (fn, params) => new Promise((resolve, reject) => {
+      const token = crypto.randomBytes(64).toString('hex');
+      awaitCallbacks[token] = [resolve, reject];
+      send(allTopics.API_CALL, { fn, params, token });
+    }),
   };
 }
-
-// Example usage
-// (async () => {
-//   const k = await kafka();
-//   k.subscribe(allTopics.TOPIC1, console.log);
-//   k.send(allTopics.TOPIC1, 'm1');
-// })();
 
 module.exports = { kafka, topics: allTopics };

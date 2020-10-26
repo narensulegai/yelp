@@ -6,19 +6,16 @@ const handler = require('./handlers');
 const mongoHandler = require('./mongoHandlers');
 const schema = require('./schema');
 require('dotenv').config();
-const { kafka, topics } = require('./kafka');
+const { kafka } = require('./kafka');
 
-let kafkaMessage = () => {
-  console.error('Kafka client has not connected yet, message will be lost');
+let callAndWait = () => {
+  console.log('Kafka client has not connected yet, message will be lost');
 };
 
 (async () => {
-  const { subscribe, send } = await kafka();
+  const k = await kafka();
+  callAndWait = k.callAndWait;
   console.log('Connected to kafka');
-  kafkaMessage = send;
-  subscribe(topics.MESSAGES, async (msg, t) => {
-    await mongoHandler.saveMessage(msg);
-  });
 })();
 
 const err = (msg) => ({ err: msg });
@@ -44,11 +41,8 @@ app.use(cors({
   ['post', '/api/uploadFile', handler.uploadFile, null],
   ['post', '/apiV1/uploadFile', handler.uploadFile, null],
   ['post', '/api/images', handler.addImages, 'any'],
-  ['post', '/apiV1/images', mongoHandler.addImages, 'any'],
   ['get', '/api/images', handler.getImages, 'any'],
-  ['get', '/apiV1/images', mongoHandler.getImages, 'any'],
   ['delete', '/api/image/:id', handler.deleteImage, 'any'],
-  ['delete', '/apiV1/image/:id', mongoHandler.deleteImage, 'any'],
   ['get', '/api/file/:id', handler.getFile, null],
   ['get', '/apiV1/file/:id', mongoHandler.getFile, null],
   ['put', '/api/profile/restaurant', handler.updateRestaurantProfile, 'restaurant', schema.updateRestaurantProfile],
@@ -121,11 +115,11 @@ app.use(cors({
         const messages = error.details.map((d) => d.message);
         resp.status(400).json(err(messages[0]));
       } else {
-        req.kafkaMessage = kafkaMessage;
+        req.requestKafka = callAndWait;
         next();
       }
     } else {
-      req.kafkaMessage = kafkaMessage;
+      req.requestKafka = callAndWait;
       next();
     }
   }, r[2]);

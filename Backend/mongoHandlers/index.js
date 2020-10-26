@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const {
-  Customer, Restaurant, Dish, Image, Comment, Event, Order, Message,
+  Customer, Restaurant, Dish, Comment, Event, Order, Message,
 } = require('../mongodb');
 
 const saltRounds = 10;
@@ -14,8 +14,6 @@ const signPayload = (payload) => {
   const jwtSecret = process.env.JWT_SECRET;
   return jwt.sign(payload, jwtSecret, { expiresIn });
 };
-
-const { topics } = require('../kafka');
 
 module.exports = {
   signupCustomer: async (req, resp) => {
@@ -83,29 +81,6 @@ module.exports = {
         }
       });
     }
-  },
-  addImages: async (req, res) => {
-    const images = req.body.fileIds
-      .map((fid) => new Image({
-        fileId: fid,
-        userId: req.session.user.id,
-        scope: req.session.scope,
-        type: req.body.type,
-        typeId: req.body.typeId,
-      }));
-    res.json(await Promise.all(images.map((i) => i.save())));
-  },
-  getImages: async (req, res) => {
-    res.json(await Image.find({ userId: req.session.user.id, scope: req.session.scope }));
-  },
-  deleteImage: async (req, res) => {
-    const { id } = req.params;
-    await Image.deleteOne({
-      userId: req.session.user.id,
-      scope: req.session.scope,
-      _id: id,
-    });
-    res.json({ id });
   },
   getFile: async (req, res) => {
     const fileId = req.params.id;
@@ -311,12 +286,9 @@ module.exports = {
       msg.restaurant = from;
       msg.customer = to;
     }
-    resp.json(await req.kafkaMessage(topics.MESSAGES, msg));
+    resp.json(await req.requestKafka('saveMessage', [msg]));
   },
-  saveMessage: (msg) => {
-    const message = new Message(msg);
-    return message.save();
-  },
+
   // TODO make 2 apis
   getMessagesFrom: async (req, resp) => {
     const curr = req.session.user.id;
