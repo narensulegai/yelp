@@ -286,7 +286,7 @@ module.exports = {
       msg.restaurant = from;
       msg.customer = to;
     }
-    resp.json(await req.requestKafka('saveMessage', msg));
+    resp.json(await req.requestKafka('sendMessageTo', msg));
   },
 
   // TODO make 2 apis
@@ -295,13 +295,11 @@ module.exports = {
     const from = req.params.id;
 
     if (req.session.scope === 'customer') {
-      const messages = Message.find({ customer: curr, restaurant: from }).sort({ createdAt: 'desc' });
-      resp.json(await messages);
+      resp.json(await req.requestKafka('getMessagesFrom', curr, from));
     }
 
     if (req.session.scope === 'restaurant') {
-      const messages = Message.find({ customer: from, restaurant: curr }).sort({ createdAt: 'desc' });
-      resp.json(await messages);
+      resp.json(await req.requestKafka('getMessagesFrom', from, curr));
     }
   },
 };
