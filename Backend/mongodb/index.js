@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // mongoose.connect('mongodb+srv://yelp:yelp2020@cluster0.g7lcr.mongodb.net/test', {
-mongoose.connect('mongodb://localhost/yelp', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/yelp1', { autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', () => {
   console.log('Mongo error');
 });
@@ -33,13 +33,21 @@ const s = (schema) => {
   return new mongoose.Schema(sch, { timestamps: true });
 };
 
-const mongooseModel = (schema, transform) => t(s(schema), transform || (() => {}));
+const mongooseModel = (schema, transform, index) => {
+  const schemaObj = s(schema);
+  if (index) {
+    schemaObj.index(index);
+  }
+  return t(schemaObj, transform || (() => {
+  }));
+};
 
 const modelDef = require('./models');
 
 const models = {};
 for (const k in modelDef) {
-  const { model, transform } = modelDef[k];
-  models[k] = mongoose.model(k, mongooseModel(model, transform));
+  const { model, transform, index } = modelDef[k];
+  models[k] = mongoose.model(k, mongooseModel(model, transform, index));
 }
+
 module.exports = models;

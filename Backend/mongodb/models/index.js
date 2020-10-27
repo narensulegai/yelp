@@ -8,7 +8,7 @@ module.exports = {
   Customer: {
     model: {
       fileId: { type: String },
-      name: { type: String, required: true, index: true },
+      name: { type: String, required: true },
       email: { type: String, required: true, index: { unique: true } },
       password: { type: String, required: true },
       yelpingSince: { type: String, default: '' },
@@ -74,15 +74,6 @@ module.exports = {
       isCanceled: { type: Boolean, default: false },
       isPickup: { type: Boolean, default: true },
       status: { type: String, required: true },
-    },
-  },
-  Image: {
-    model: {
-      fileId: { type: String, required: true },
-      scope: { type: String, required: true },
-      type: { type: String, required: true },
-      typeId: { type: String, default: null },
-      userId: { type: Types.ObjectId, default: null },
     },
   },
   Comment: {

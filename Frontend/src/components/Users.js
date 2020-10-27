@@ -10,8 +10,7 @@ const Users = () => {
 
   useEffect(() => {
     (async () => {
-      const users = await getCustomers('');
-      setUsers(users);
+      setUsers(await getCustomers(''));
     })();
   }, []);
 
@@ -44,6 +43,7 @@ const Users = () => {
         </div>
       </div>
       <div className="col-6 mt-2">
+        {users.length === 0 && <div>No user to show.</div>}
         {users.map((u) => {
           return (
             <div key={u.id} className="card mb-2">

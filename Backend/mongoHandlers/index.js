@@ -328,14 +328,22 @@ module.exports = {
   },
   following: async (req, resp) => {
     const { search } = req.query;
-    const { following } = req.session.user;
-    const customers = await Customer.find({ _id: { $in: [...(following || [])] } });
+    const { following } = await Customer.findById(req.session.user.id);
+    const findClause = { _id: { $in: following.map(mongoose.Types.ObjectId) } };
+    if (search) {
+      Object.assign(findClause, { name: { $regex: search, $options: 'i' } });
+    }
+    const customers = await Customer.find(findClause);
     resp.json(customers);
   },
   customers: async (req, resp) => {
     const { search } = req.query;
-    const { id, following } = req.session.user;
-    const customers = await Customer.find({ _id: { $nin: [id, ...(following || [])] } });
+    const { id, following } = await Customer.findById(req.session.user.id);
+    const findClause = { _id: { $nin: [id, ...following].map(mongoose.Types.ObjectId) } };
+    if (search) {
+      Object.assign(findClause, { name: { $regex: search, $options: 'i' } });
+    }
+    const customers = await Customer.find(findClause);
     resp.json(customers);
   },
 };
