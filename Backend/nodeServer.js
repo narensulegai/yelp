@@ -1,14 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const handler = require('./handlers');
 const mongoHandler = require('./mongoHandlers');
-const schema = require('./schema');
+const { schema, validate } = require('./schema');
 const { kafka } = require('./kafka');
 const modules = require('./modules');
-
-require('dotenv').config();
 
 let callAndWait = () => {
   console.log('Kafka client has not connected yet, message will be lost');
@@ -105,6 +104,7 @@ app.use(cors({
   ['get', '/apiV1/following', mongoHandler.following, 'customer'],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
+    console.log(r[0], r[1]);
     const token = req.header('authorization');
     req.session = {};
     if (token) {
@@ -116,7 +116,7 @@ app.use(cors({
       req.session = jwt.decode(token);
     }
 
-    if (r[3] === 'restaurant' || r[3] === 'customer') {
+    if (r[3] === 'company' || r[3] === 'employee') {
       const { scope } = req.session;
       if (scope !== r[3]) {
         resp.status(401).json(err('You are not authorized for this action.'));
@@ -129,7 +129,7 @@ app.use(cors({
       }
     }
     if (r[4]) {
-      const { error } = r[4](req.body);
+      const { error } = validate(req.body, r[4]);
       if (error) {
         const messages = error.details.map((d) => d.message);
         resp.status(400).json(err(messages[0]));
@@ -141,7 +141,13 @@ app.use(cors({
       req.requestKafka = callAndWait;
       next();
     }
-  }, r[2]);
+  }, async (req, res, next) => {
+    try {
+      await r[2](req, res, next);
+    } catch (e) {
+      next(e);
+    }
+  });
 });
 
 app.listen(parseInt(process.env.PORT || '5000'));

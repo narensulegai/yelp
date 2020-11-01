@@ -99,6 +99,7 @@ module.exports = {
   },
   getFile: async (req, res) => {
     const fileId = req.params.id;
+    // TODO check for path injection
     res.sendFile(path.join(__dirname, '../uploads', fileId));
   },
   addComment: async (req, resp) => {
@@ -304,7 +305,7 @@ module.exports = {
     resp.json(await req.requestKafka('sendMessageTo', msg));
   },
 
-  // TODO make 2 apis
+  // TODO make 2 apis for customer and restaurant
   getMessagesFrom: async (req, resp) => {
     const curr = req.session.user.id;
     const from = req.params.id;

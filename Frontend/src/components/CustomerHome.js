@@ -24,28 +24,28 @@ class CustomerHome extends Component {
           <a className="nav-link" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
-          <Route path="/customer/profile">
+          <Route path="/customer/profile" exact>
             <CustomerProfile />
           </Route>
-          <Route path="/customer/dashboard">
+          <Route path="/customer/dashboard" exact>
             <CustomerDashboard />
           </Route>
-          <Route path="/customer/events">
+          <Route path="/customer/events" exact>
             <Events />
           </Route>
-          <Route path="/customer/myOrders">
+          <Route path="/customer/myOrders" exact>
             <MyOrders />
           </Route>
-          <Route path="/customer/messages">
+          <Route path="/customer/messages" exact>
             <Messages />
           </Route>
-          <Route path="/customer/users">
+          <Route path="/customer/users" exact>
             <Users />
           </Route>
-          <Route path="/customer/user/:id">
+          <Route path="/customer/user/:id" exact>
             <CustomerView />
           </Route>
-          <Route path="/customer/restaurant/:id">
+          <Route path="/customer/restaurant/:id" exact>
             <RestaurantView />
           </Route>
         </div>

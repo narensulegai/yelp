@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { kafka, topics } = require('./kafka');
 const modules = require('./modules');
 

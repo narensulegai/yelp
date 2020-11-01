@@ -13,7 +13,7 @@ const reqStr = (label) => Joi.string().required().label(label);
 const reqNum = (label) => Joi.number().required().label(label);
 const optStr = (label) => Joi.string().allow('').label(label);
 const optFiles = () => Joi.array().items(Joi.string()).label('Files');
-const schemaDef = {
+const schema = {
   signupCustomer: Joi.object({
     name: reqStr('Name'),
     email: Joi.string().email().required().label('Email'),
@@ -59,9 +59,5 @@ const schemaDef = {
     rating: reqNum('Rating'),
   }),
 };
-const schema = {};
-for (const k in schemaDef) {
-  schema[k] = (body) => validate(body, schemaDef[k]);
-}
 
-module.exports = schema;
+module.exports = { schema, validate };
