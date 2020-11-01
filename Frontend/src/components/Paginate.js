@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { PAGE_SIZE } from '../util';
 
@@ -14,7 +14,12 @@ const Paginate = ({ numItems, onPageChange, currentPage }) => {
     return r;
   };
 
-  return (
+  useEffect(() => {
+    // Reset to page 0 if number of items change
+    onPageChange(0);
+  }, [numItems]);
+
+  return (numItems > 0) && (
     <div className="d-flex justify-content-center mt-2">
       {pages(numItems).map((p, i) => {
         return (
