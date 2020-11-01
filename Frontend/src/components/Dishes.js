@@ -4,11 +4,13 @@ import Dish from './Dish';
 import {
   createDish, deleteDish, getDishes, updateDish,
 } from '../util/fetch/api';
+import Paginate from './Paginate';
+import { slicePage } from '../util';
 
 const Dishes = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [dishes, setDishes] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(0);
   useEffect(() => {
     (async () => {
       setDishes(await getDishes());
@@ -50,6 +52,7 @@ const Dishes = () => {
   return (
     <div className="row">
       <div className="col-12">
+        {dishes.length === 0 ? <h6>You have not added any dishes, please add one</h6> : null}
         {showAdd
           ? (
             <>
@@ -69,8 +72,7 @@ const Dishes = () => {
 
       {!showAdd && (
       <div className="col-12">
-        {dishes.length === 0 ? <div>You have not added any dishes, please add one</div> : null}
-        {dishes.map((dish) => {
+        {slicePage(dishes, currentPage).map((dish) => {
           return (
             <div key={dish.id} className="mt-3">
               <Dish editMode addMode={false} dish={dish}
@@ -83,6 +85,8 @@ const Dishes = () => {
             </div>
           );
         })}
+        <Paginate numItems={dishes.length}
+          onPageChange={setCurrentPage} currentPage={currentPage} />
       </div>
       )}
     </div>
