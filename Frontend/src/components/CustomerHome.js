@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
 import Events from './customer/Events';
@@ -8,8 +10,15 @@ import CustomerView from './customer/View';
 import MyOrders from './customer/MyOrders';
 import Messages from './customer/Messages';
 import Users from './Users';
+import { currentUser } from '../util/fetch/api';
+import { setCurrentUser } from '../actions';
 
 class CustomerHome extends Component {
+  async componentDidMount() {
+    const currUser = await currentUser();
+    this.props.setCurrentUser(currUser);
+  }
+
   render() {
     return (
       <>
@@ -54,4 +63,12 @@ class CustomerHome extends Component {
   }
 }
 
-export default CustomerHome;
+const mapDispatchToProps = {
+  setCurrentUser,
+};
+
+CustomerHome.propTypes = {
+  setCurrentUser: PropTypes.func,
+};
+
+export default connect(null, mapDispatchToProps)(CustomerHome);

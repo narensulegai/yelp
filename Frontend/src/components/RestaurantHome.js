@@ -9,6 +9,7 @@ import Comment from './restaurant/Comment';
 import Orders from './restaurant/Orders';
 import CustomerView from './customer/View';
 import { currentUser } from '../util/fetch/api';
+import { setCurrentUser } from '../actions';
 
 class RestaurantHome extends Component {
   async componentDidMount() {
@@ -29,22 +30,22 @@ class RestaurantHome extends Component {
           <a className="nav-link" href="#/logout">Logout</a>
         </nav>
         <div className="container mt-3">
-          <Route path="/restaurant/profile">
+          <Route path="/restaurant/profile" exact>
             <RestaurantProfile />
           </Route>
-          <Route path="/restaurant/dishes">
+          <Route path="/restaurant/dishes" exact>
             <Dishes />
           </Route>
-          <Route path="/restaurant/events">
+          <Route path="/restaurant/events" exact>
             <RestaurantEvents />
           </Route>
-          <Route path="/restaurant/comments">
+          <Route path="/restaurant/comments" exact>
             <Comment />
           </Route>
-          <Route path="/restaurant/orders">
+          <Route path="/restaurant/orders" exact>
             <Orders />
           </Route>
-          <Route path="/restaurant/customer/:id">
+          <Route path="/restaurant/customer/:id" exact>
             <CustomerView />
           </Route>
         </div>
@@ -54,18 +55,11 @@ class RestaurantHome extends Component {
 }
 
 const mapDispatchToProps = {
-  // ... normally is an object full of action creators
-  setCurrentUser: (currentUser) => {
-    return {
-      type: 'SET_CURRENT_USER',
-      payload: {
-        currentUser,
-      },
-    };
-  },
+  setCurrentUser,
 };
 
 RestaurantHome.propTypes = {
   setCurrentUser: PropTypes.func,
 };
+
 export default connect(null, mapDispatchToProps)(RestaurantHome);

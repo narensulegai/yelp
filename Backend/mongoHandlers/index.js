@@ -20,7 +20,8 @@ module.exports = {
     if (req.session && req.session.scope) {
       let user = {};
       if (req.session.scope === 'customer') {
-        user = await Customer.findById(req.session.user.id);
+        user = await Customer.findById(req.session.user.id)
+          .populate('conversations');
       }
       if (req.session.scope === 'restaurant') {
         user = await Restaurant.findById(req.session.user.id);

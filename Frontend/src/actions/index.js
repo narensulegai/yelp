@@ -1,9 +1,8 @@
-export const setUser = (user) => ({
-  type: 'SET_USER',
-  user,
-});
-
-export const setScope = (scope) => ({
-  type: 'SET_SCOPE',
-  scope,
-});
+export const setCurrentUser = (currentUser) => {
+  return {
+    type: 'SET_CURRENT_USER',
+    payload: {
+      currentUser,
+    },
+  };
+};

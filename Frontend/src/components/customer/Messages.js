@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Messenger from '../Messenger';
-import { getCustomerProfile } from '../../util/fetch/api';
 
 const Messages = () => {
-  const [conversations, setConversations] = useState([]);
   const [currentConversation, setCurrentConversation] = useState(null);
 
+  const conversations = useSelector((state) => {
+    if (state.currentUser.user) {
+      return state.currentUser.user.conversations;
+    }
+    return [];
+  });
+
   useEffect(() => {
-    (async () => {
-      const customer = await getCustomerProfile();
-      setConversations(customer.conversations);
-      setCurrentConversation(customer.conversations[0]);
-    })();
+    if (conversations) setCurrentConversation(conversations[0]);
   }, []);
 
   const handleOnConversationChange = (e) => {
@@ -21,26 +23,26 @@ const Messages = () => {
   };
 
   return (
-    <div>
-      {currentConversation
-        ? (
-          <div>
-            <h4>
-              You have messages {conversations.length} restaurant(s)
-            </h4>
-            <div>
-              <span className="mr-3">Select restaurant</span>
-              <select value={currentConversation.id} onChange={handleOnConversationChange}>
-                {conversations.map((c) => {
-                  return <option key={c.id} value={c.id}>{c.name}</option>;
-                })}
-              </select>
-            </div>
+    <div className="row">
+      <div className="col-12">
+        {currentConversation
+          ? (
+            <>
+              <h4>You have messages {conversations.length} restaurant(s)</h4>
+              <div>
+                <span className="mr-3">Select restaurant</span>
+                <select value={currentConversation.id} onChange={handleOnConversationChange}>
+                  {conversations.map((c) => {
+                    return <option key={c.id} value={c.id}>{c.name}</option>;
+                  })}
+                </select>
+              </div>
 
-            <Messenger toUser={currentConversation} customerView />
-          </div>
-        )
-        : <div>No messages yet.</div>}
+              <Messenger toUser={currentConversation} customerView />
+            </>
+          )
+          : <div>No messages yet.</div>}
+      </div>
     </div>
   );
 };
