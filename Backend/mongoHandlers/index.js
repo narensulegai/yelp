@@ -70,10 +70,6 @@ module.exports = {
     Object.assign(customer, req.body);
     resp.json(await customer.save());
   },
-  getCustomerProfile: async (req, resp) => {
-    resp.json(await Customer.findById(req.session.user.id)
-      .populate('conversations'));
-  },
   getCustomer: async (req, resp) => {
     resp.json(await Customer.findById(req.params.id));
   },
@@ -201,9 +197,6 @@ module.exports = {
     const restaurant = await Restaurant.findById(req.session.user.id);
     Object.assign(restaurant, req.body);
     resp.json(await restaurant.save());
-  },
-  getRestaurantProfile: async (req, resp) => {
-    resp.json(await Restaurant.findById(req.session.user.id));
   },
   createDish: async (req, resp) => {
     const restaurantId = req.session.user.id;
