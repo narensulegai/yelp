@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import RestaurantProfile from './RestaurantProfile';
 import Dishes from './Dishes';
 import RestaurantEvents from './RestaurantEvents';
 import Comment from './restaurant/Comment';
 import Orders from './restaurant/Orders';
 import CustomerView from './customer/View';
+import { currentUser } from '../util/fetch/api';
 
 class RestaurantHome extends Component {
+  async componentDidMount() {
+    const currUser = await currentUser();
+    this.props.setCurrentUser(currUser);
+  }
+
   render() {
     return (
       <>
@@ -45,4 +53,19 @@ class RestaurantHome extends Component {
   }
 }
 
-export default RestaurantHome;
+const mapDispatchToProps = {
+  // ... normally is an object full of action creators
+  setCurrentUser: (currentUser) => {
+    return {
+      type: 'SET_CURRENT_USER',
+      payload: {
+        currentUser,
+      },
+    };
+  },
+};
+
+RestaurantHome.propTypes = {
+  setCurrentUser: PropTypes.func,
+};
+export default connect(null, mapDispatchToProps)(RestaurantHome);

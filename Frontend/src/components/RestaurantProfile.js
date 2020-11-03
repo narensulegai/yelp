@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import ImageInput from './ImageInput';
 import TextInput from './TextInput';
 import {
+  currentUser,
   getRestaurantProfile, updateRestaurantProfile,
 } from '../util/fetch/api';
 
 const RestaurantProfile = () => {
+  const dispatch = useDispatch();
   const description = useRef();
   const contactInformation = useRef();
   const timings = useRef();
@@ -25,6 +28,8 @@ const RestaurantProfile = () => {
   const update = (p) => {
     return updateRestaurantProfile(p)
       .then(async () => {
+        // Update current user on profile change
+        dispatch({ type: 'SET_CURRENT_USER', currentUser: await currentUser() });
         setProfile(await getRestaurantProfile());
       });
   };
