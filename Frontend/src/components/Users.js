@@ -4,10 +4,13 @@ import React, {
 import {
   getCustomers, getFollowing,
 } from '../util/fetch/api';
+import Paginate from './Paginate';
+import { slicePage } from '../util';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [followingOnly, setFollowingOnly] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
   const searchBox = useRef();
 
   useEffect(() => {
@@ -37,30 +40,24 @@ const Users = () => {
   return (
     <div className="row">
       <div className="col-12">
-        <div>
-          <span className="mr-2">Search</span><input type="text" ref={searchBox} />
-          <button className="btn-primary" onClick={handleSearchUser}>Search</button>
-        </div>
-        <div>
-          <input type="checkbox" onChange={handleOnCheckboxChange} value={followingOnly} className="mr-1" />
-          <span>Show following only</span>
-        </div>
+        <span className="mr-2">Search</span>
+        <input type="text" ref={searchBox} />
+        <button className="btn-primary" onClick={handleSearchUser}>Search</button>
+        <input type="checkbox" onChange={handleOnCheckboxChange} value={followingOnly} className="mr-1 ml-2" />
+        <span>Show following only</span>
       </div>
       <div className="col-6 mt-2">
         {users.length === 0 && <div>No user to show.</div>}
-        {users.map((u) => {
+        {slicePage(users, currentPage).map((u) => {
           return (
             <div key={u.id} className="card mb-2">
               <div className="card-body d-flex justify-content-between">
-                <div>
-                  <div>
-                    <a href={`#/customer/user/${u.id}`}>{u.name}</a>
-                  </div>
-                </div>
+                <a href={`#/customer/user/${u.id}`}>{u.name}</a>
               </div>
             </div>
           );
         })}
+        <Paginate currentPage={currentPage} onPageChange={setCurrentPage} numItems={users.length} />
       </div>
     </div>
   );
