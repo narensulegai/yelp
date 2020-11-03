@@ -20,13 +20,13 @@ function App() {
         <Route path="/restaurant">
           <RestaurantHome />
         </Route>
-        <Route path="/customerSignup">
+        <Route path="/customerSignup" exact>
           <Signup type="customer" />
         </Route>
-        <Route path="/restaurantSignup">
+        <Route path="/restaurantSignup" exact>
           <Signup type="restaurant" />
         </Route>
-        <Route path="/logout">
+        <Route path="/logout" exact>
           <Logout />
         </Route>
       </Switch>
