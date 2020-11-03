@@ -1,11 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import {
   myOrders, updateMyOrder,
 } from '../../util/fetch/api';
-import { formatDate } from '../../util';
+import { formatDate, slicePage } from '../../util';
+import Paginate from '../Paginate';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [orderFilter, setOrderFilter] = useState('new');
   const status = useRef({});
 
@@ -26,6 +30,22 @@ const Orders = () => {
     setOrderFilter(e.target.value);
   };
 
+  const applyOrderFilter = (orders, orderFilter) => {
+    return orders
+      .filter((o) => {
+        if (orderFilter === 'cancelled') {
+          return o.isCanceled;
+        }
+        if (orderFilter === 'delivered') {
+          return ['picked-up', 'delivered'].includes(o.status);
+        }
+        if (orderFilter === 'ready') {
+          return ['on-way', 'pickup-ready'].includes(o.status);
+        }
+        return orderFilter === o.status;
+      });
+  };
+
   return (
     <div className="row">
       <div className="col-6">
@@ -38,25 +58,12 @@ const Orders = () => {
           <option value="delivered">Delivered</option>
           <option value="cancelled">Cancelled Order</option>
         </select>
-        {orders
-          .filter((o) => {
-            if (orderFilter === 'cancelled') {
-              return o.isCanceled;
-            }
-            if (orderFilter === 'delivered') {
-              return ['picked-up', 'delivered'].includes(o.status);
-            }
-            if (orderFilter === 'ready') {
-              return ['on-way', 'pickup-ready'].includes(o.status);
-            }
-            return orderFilter === o.status;
-          })
-          .map((o) => {
+        {slicePage(applyOrderFilter(orders, orderFilter), currentPage)
+          .map((o, i) => {
             return (
               <div key={o.id} className="card mb-3">
                 <div className="card-header">
-                  <h4>#{o.id}&nbsp;<b>{o.dish.name}</b></h4>
-                  <div className="small">{formatDate(o.createdAt)}</div>
+                  <h4>#{i + 1}&nbsp;<b>{o.dish.name}</b></h4>
                   <div>
                     <b>{o.isPickup ? 'Pickup' : 'Yelp delivery'}</b>
                     &nbsp;for <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>
@@ -85,10 +92,13 @@ const Orders = () => {
                     </select>
                     <button className="btn-primary" onClick={() => handleOnSave(o.id)}>Update</button>
                   </div>
+                  <div className="small">{formatDate(o.createdAt)}</div>
                 </div>
               </div>
             );
           })}
+        <Paginate currentPage={currentPage} onPageChange={setCurrentPage}
+          numItems={applyOrderFilter(orders, orderFilter).length} />
       </div>
     </div>
   );
