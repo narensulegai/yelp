@@ -17,7 +17,7 @@ const Paginate = ({ numItems, onPageChange, currentPage }) => {
   useEffect(() => {
     // Reset to page 0 if number of items change
     onPageChange(0);
-  }, [numItems]);
+  }, [numItems, onPageChange]);
 
   return (numItems > 0) && (
     <div className="d-flex justify-content-center mt-2">
