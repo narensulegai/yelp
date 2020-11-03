@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import {
   getCustomers, getFollowing,
 } from '../util/fetch/api';
@@ -14,17 +16,19 @@ const Users = () => {
     })();
   }, []);
 
-  const handleSearchUser = async () => {
-    const text = searchBox.current.value;
-    const users = followingOnly ? await getFollowing(text) : await getCustomers(text);
-    setUsers(users);
-  };
+  const handleSearchUser = useCallback(() => {
+    (async () => {
+      const text = searchBox.current.value;
+      const users = followingOnly ? await getFollowing(text) : await getCustomers(text);
+      setUsers(users);
+    })();
+  }, [followingOnly]);
 
   useEffect(() => {
     (async () => {
       await handleSearchUser();
     })();
-  }, [followingOnly]);
+  }, [followingOnly, handleSearchUser]);
 
   const handleOnCheckboxChange = () => {
     setFollowingOnly(!followingOnly);
