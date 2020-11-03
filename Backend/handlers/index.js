@@ -334,24 +334,5 @@ module.exports = {
         ? { customerId: userId, id }
         : { restaurantId: userId, id },
     }));
-  },
-  searchEvent: async (req, resp) => {
-    const { text } = req.params;
-    const events = await Event.findAll({
-      where: {
-        name: { [Op.like]: `%${text}%` },
-      },
-      include: [
-        { model: Restaurant },
-        {
-          model: CustomerEvent,
-          where: {
-            customerId: req.session.user.id,
-          },
-          required: false, // Force left join
-        },
-      ],
-    });
-    resp.json(events.filter((r) => r.customerEvents.length === 0));
-  },
+  }
 };

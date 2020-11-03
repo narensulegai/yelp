@@ -251,11 +251,6 @@ module.exports = {
     await restaurant.save();
     resp.json(deletedEvent);
   },
-  getUnregisteredEvents: async (req, resp) => {
-    const customerId = req.session.user.id;
-    const events = await Event.find({ 'Registration.customer': { $ne: mongoose.Types.ObjectId(customerId) } });
-    resp.json(events);
-  },
   registerEvent: async (req, resp) => {
     const eventId = req.params.id;
     const customerId = req.session.user.id;
@@ -263,9 +258,22 @@ module.exports = {
     event.Registration.push({ customer: customerId });
     resp.json(await event.save());
   },
-  getCustomerEvents: async (req, resp) => {
+  getUnregisteredEvents: async (req, resp) => {
+    const { search } = req.query;
     const customerId = req.session.user.id;
-    const events = await Event.find({ 'Registration.customer': { $eq: mongoose.Types.ObjectId(customerId) } });
+    const events = await Event.find({
+      'Registration.customer': { $ne: mongoose.Types.ObjectId(customerId) },
+      name: { $regex: search, $options: 'i' },
+    });
+    resp.json(events);
+  },
+  getCustomerEvents: async (req, resp) => {
+    const { search } = req.query;
+    const customerId = req.session.user.id;
+    const events = await Event.find({
+      'Registration.customer': { $eq: mongoose.Types.ObjectId(customerId) },
+      name: { $regex: search, $options: 'i' },
+    });
     resp.json(events);
   },
   // TODO make 2 apis

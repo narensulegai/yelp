@@ -94,7 +94,6 @@ app.use(cors({
   ['get', '/api/customer/:id', handler.getCustomer, null],
   ['get', '/apiV1/customer/:id', mongoHandler.getCustomer, null],
   ['get', '/api/searchEvent/:text', handler.searchEvent, null],
-  ['get', '/apiV1/searchEvent/:text', handler.searchEvent, null],
   ['post', '/apiV1/message/:id', mongoHandler.sendMessageTo, 'any'],
   ['get', '/apiV1/messages/:id', mongoHandler.getMessagesFrom, 'any'],
   ['put', '/apiV1/follow/:id', mongoHandler.follow, 'customer'],

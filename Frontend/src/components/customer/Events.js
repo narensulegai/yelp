@@ -1,40 +1,39 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   getCustomerEvents, getEvents, registerEvent, searchEvents,
 } from '../../util/fetch/api';
 import Event from './Event';
-import { formatDate, to12Hr } from '../../util';
+import {formatDate, to12Hr} from '../../util';
 
 const ts = (d) => new Date(`${d.date} ${d.time}`).getTime();
 
 class Events extends Component {
+
   constructor(props) {
     super(props);
-    this.state = { allEvents: [], customerEvents: [] };
-    this.search = React.createRef();
-    this.handleOnRegister = this.handleOnRegister.bind(this);
-    this.handleOnSearch = this.handleOnSearch.bind(this);
+    this.state = {allEvents: [], customerEvents: []};
+    this.searchTextBox = React.createRef();
+    this.orderSelectBox = React.createRef();
   }
 
   async componentDidMount() {
-    const allEvents = await getEvents();
-    const customerEvents = await getCustomerEvents();
-    this.setState({ allEvents, customerEvents });
+    await this.loadEvents();
   }
 
-  async handleOnRegister(id) {
+  handleOnRegister = async (id) => {
     await registerEvent(id);
-    const allEvents = await getEvents();
-    const customerEvents = await getCustomerEvents();
-    this.setState({ allEvents, customerEvents });
+    await this.loadEvents();
   }
 
-  async handleOnSearch() {
-    if (this.search.current.value === '') {
-      this.setState({ allEvents: await getEvents() });
-    } else {
-      this.setState({ allEvents: await searchEvents(this.search.current.value) });
-    }
+  loadEvents = async () => {
+    const search = this.searchTextBox.current.value;
+    const allEvents = await getEvents(search);
+    const customerEvents = await getCustomerEvents(search);
+    this.setState({allEvents, customerEvents});
+  }
+
+  handleOnSearch = async () => {
+    await this.loadEvents();
   }
 
   render() {
@@ -43,13 +42,18 @@ class Events extends Component {
         <div className="col-6">
           <h4>All events</h4>
           <div className="d-flex">
-            <input type="text" className="flex-grow-1" ref={this.search} placeholder="Search for an event" />
+            <input type="text" className="flex-grow-1" ref={this.searchTextBox} placeholder="Search for an event"/>
+            <select defaultValue='asce' ref={this.orderSelectBox}>
+              <option value="asce">Most recent first</option>
+              <option value="dese">Most recent last</option>
+            </select>
             <button className="btn-primary" onClick={this.handleOnSearch}>Search</button>
           </div>
           {this.state.allEvents.length === 0 && <div>There are no events to show</div>}
           {this.state.allEvents
             .sort((a, b) => {
-              return ts(a) - ts(b);
+              const order = this.orderSelectBox.current.value;
+              return order === 'asce' ? ts(a) - ts(b) : ts(b) - ts(a)
             })
             .map((event) => {
               return (
@@ -57,7 +61,7 @@ class Events extends Component {
                   ? (
                     <Event event={event} key={event.id} onRegister={() => {
                       this.handleOnRegister(event.id);
-                    }} />
+                    }}/>
                   )
                   : null
               );
