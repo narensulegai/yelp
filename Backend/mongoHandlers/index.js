@@ -116,7 +116,7 @@ module.exports = {
     const dishId = req.params.id;
     const comment = await Comment.find({ dish: dishId })
       .populate('customer');
-      // .populate('dish');
+    // .populate('dish');
     resp.json(comment);
   },
   getRestaurantComments: async (req, resp) => {
@@ -187,10 +187,19 @@ module.exports = {
   },
   getRestaurants: async (req, resp) => {
     // TODO
-    // const { search } = req.query;
-    const restaurant = await Restaurant.find()
-      // .populate('events')
-      .populate('dishes');
+    const { search } = req.query;
+    // const restaurant = await Restaurant.find({ name: { $regex: search, $options: 'i' } })
+    // resp.json(restaurant);
+
+    const restaurant = await Restaurant.aggregate([
+      { $lookup: { from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes' } },
+      { $match: { $or: [
+        { location: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+        { 'dishes.name': { $regex: search, $options: 'i' } },
+      ] } },
+    ]);
+
     resp.json(restaurant);
   },
   updateRestaurantProfile: async (req, resp) => {
