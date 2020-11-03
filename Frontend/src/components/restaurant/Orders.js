@@ -11,6 +11,7 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [orderFilter, setOrderFilter] = useState('new');
+  const [orderOrder, setOrderOrder] = useState('asce');
   const status = useRef({});
 
   useEffect(() => {
@@ -30,8 +31,12 @@ const Orders = () => {
     setOrderFilter(e.target.value);
   };
 
-  const applyOrderFilter = (orders, orderFilter) => {
-    return orders
+  const handleOnOrderChange = (e) => {
+    setOrderOrder(e.target.value);
+  };
+
+  const applyOrderFilter = useCallback(() => {
+    return [...orders
       .filter((o) => {
         if (orderFilter === 'cancelled') {
           return o.isCanceled;
@@ -43,8 +48,13 @@ const Orders = () => {
           return ['on-way', 'pickup-ready'].includes(o.status);
         }
         return orderFilter === o.status;
-      });
-  };
+      })
+      .sort((a, b) => {
+        const aT = new Date(a.createdAt).getTime();
+        const bT = new Date(b.createdAt).getTime();
+        return orderOrder === 'asce' ? aT - bT : bT - aT;
+      })];
+  }, [orders, orderFilter, orderOrder]);
 
   return (
     <div className="row">
@@ -58,7 +68,11 @@ const Orders = () => {
           <option value="delivered">Delivered</option>
           <option value="cancelled">Cancelled Order</option>
         </select>
-        {slicePage(applyOrderFilter(orders, orderFilter), currentPage)
+        <select onChange={handleOnOrderChange} className="ml-2">
+          <option value="aesc">Recent orders last</option>
+          <option value="desc">Recent orders first</option>
+        </select>
+        {slicePage(applyOrderFilter(), currentPage)
           .map((o, i) => {
             return (
               <div key={o.id} className="card mb-3">
@@ -97,8 +111,10 @@ const Orders = () => {
               </div>
             );
           })}
+        {applyOrderFilter().length === 0
+        && <div>No orders to show</div>}
         <Paginate currentPage={currentPage} onPageChange={setCurrentPage}
-          numItems={applyOrderFilter(orders, orderFilter).length} />
+          numItems={applyOrderFilter().length} />
       </div>
     </div>
   );

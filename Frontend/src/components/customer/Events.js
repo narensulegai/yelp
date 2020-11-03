@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  getCustomerEvents, getEvents, registerEvent, searchEvents,
+  getCustomerEvents, getEvents, registerEvent,
 } from '../../util/fetch/api';
 import Event from './Event';
 import {formatDate, to12Hr} from '../../util';

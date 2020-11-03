@@ -14,7 +14,7 @@ const Messages = () => {
 
   useEffect(() => {
     if (conversations) setCurrentConversation(conversations[0]);
-  }, []);
+  }, [conversations]);
 
   const handleOnConversationChange = (e) => {
     const restaurantId = e.target.value;
