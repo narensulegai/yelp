@@ -193,14 +193,21 @@ module.exports = {
 
     const restaurant = await Restaurant.aggregate([
       { $lookup: { from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes' } },
-      { $match: { $or: [
-        { location: { $regex: search, $options: 'i' } },
-        { name: { $regex: search, $options: 'i' } },
-        { 'dishes.name': { $regex: search, $options: 'i' } },
-      ] } },
+      {
+        $match: {
+          $or: [
+            { location: { $regex: search, $options: 'i' } },
+            { name: { $regex: search, $options: 'i' } },
+            { 'dishes.name': { $regex: search, $options: 'i' } },
+          ],
+        },
+      },
     ]);
-
-    resp.json(restaurant);
+    const rest = restaurant.map((r) => {
+      delete r.password;
+      return r;
+    });
+    resp.json(rest);
   },
   updateRestaurantProfile: async (req, resp) => {
     const restaurant = await Restaurant.findById(req.session.user.id);
