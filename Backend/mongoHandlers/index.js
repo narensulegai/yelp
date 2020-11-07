@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
 const {
   Customer, Restaurant, Dish, Comment, Event, Order, Message,
 } = require('../mongodb');
@@ -16,6 +18,16 @@ const signPayload = (payload) => {
 };
 
 module.exports = {
+  uploadFile: async (req, res) => {
+    const upload = multer({ dest: 'uploads/' }).array('files', 5);
+    upload(req, res, (e) => {
+      if (e) {
+        res.status(400).json(err('Error while uploading file'));
+      } else {
+        res.json({ files: req.files.map((f) => f.filename) });
+      }
+    });
+  },
   current: async (req, resp) => {
     if (req.session && req.session.scope) {
       let user = {};
@@ -192,7 +204,9 @@ module.exports = {
     // resp.json(restaurant);
 
     const restaurant = await Restaurant.aggregate([
-      { $lookup: { from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes' } },
+      { $lookup: {
+        from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes',
+      } },
       {
         $match: {
           $or: [
@@ -202,12 +216,10 @@ module.exports = {
           ],
         },
       },
+      { $addFields: { id: '$_id' } },
+      { $project: { password: 0, _id: 0 } },
     ]);
-    const rest = restaurant.map((r) => {
-      delete r.password;
-      return r;
-    });
-    resp.json(rest);
+    resp.json(restaurant);
   },
   updateRestaurantProfile: async (req, resp) => {
     const restaurant = await Restaurant.findById(req.session.user.id);

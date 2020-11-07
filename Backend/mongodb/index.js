@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-// mongoose.connect('mongodb+srv://yelp:yelp2020@cluster0.g7lcr.mongodb.net/test', {
-mongoose.connect('mongodb://localhost/yelp1', { autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_CONNECTION, { autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', () => {
   console.log('Mongo error');
 });
