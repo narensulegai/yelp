@@ -35,10 +35,10 @@ class CustomerDashboard extends Component {
           {this.state.restaurants.length === 0 && <div>No restaurants to show</div>}
           {this.state.restaurants.map((r) => {
             return (
-              <div key={r._id} className="card mb-3">
+              <div key={r.id} className="card mb-3">
                 <div className="card-header">
                   <h4>
-                    <a href={`#/customer/restaurant/${r._id}`}>{r.name}</a>
+                    <a href={`#/customer/restaurant/${r.id}`}>{r.name}</a>
                   </h4>
                   <div className="small">{r.description}</div>
                   <div className="mt-2">
