@@ -5,7 +5,7 @@ Install Kafka client https://github.com/edenhill/kafkacat
 ### Run Kafka server
 
 ```
-cd backend && KAFKA_BROKERS=localhost:9092 node kafkaServer.js
+cd backend && KAFKA_BROKERS=localhost:9092 npm run kafka
 ```
 
 ### Run node server
