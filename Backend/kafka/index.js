@@ -1,26 +1,36 @@
 const { Kafka, logLevel } = require('kafkajs');
 const crypto = require('crypto');
 
+const kafkaUser = process.env.KAFKA_USER;
+
 const allTopics = {
-  API_CALL: 'api-call',
-  API_RESP: 'api-resp',
+  API_CALL: `${kafkaUser}-api-call`,
+  API_RESP: `${kafkaUser}-api-resp`,
 };
 
-// Example usage
-// (async () => {
-// const k = await kafka();
-// k.subscribe(allTopics.TOPIC1, console.log);
-// k.send(allTopics.TOPIC1, 'm1');
-// const s = await k.callAndWait('sum', [1, 2]);
-// })();
+const clientId = 'yelp';
 
 async function kafka() {
-  const k = new Kafka({
+  let config = {
+    clientId,
     logLevel: logLevel.NOTHING,
-    clientId: 'yelp',
-    brokers: ['localhost:9092'],
-  });
-
+    brokers: process.env.KAFKA_BROKERS.split(','),
+  };
+  if (process.env.KAFKA_REMOTE === 'true') {
+    config = {
+      clientId,
+      brokers: process.env.KAFKA_BROKERS.split(','),
+      authenticationTimeout: 1000,
+      reauthenticationThreshold: 10000,
+      ssl: true,
+      sasl: {
+        mechanism: 'scram-sha-256', // plain, scram-sha-256 or scram-sha-512
+        username: kafkaUser,
+        password: process.env.KAFKA_PASSWORD,
+      },
+    };
+  }
+  const k = new Kafka(config);
   const producer = k.producer();
   const groupId = process.env.GROUP;
   // App wide consumer group
@@ -71,4 +81,11 @@ async function kafka() {
   };
 }
 
+// Example usage
+// (async () => {
+//   const k = await kafka();
+// k.subscribe(allTopics.API_CALL, console.log);
+// k.send(allTopics.API_CALL, 'm1');
+// const s = await k.callAndWait('sum', [1, 2]);
+// })();
 module.exports = { kafka, topics: allTopics };
