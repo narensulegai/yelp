@@ -8,7 +8,7 @@ import { setMessagesFrom } from '../actions';
 
 const Messenger = ({ toUser, customerView = false }) => {
   const textarea = createRef();
-  const messages = useSelector((state) => state.messages[toUser.id] || []);
+  const messages = useSelector((state) => state.messages[toUser.id] || null);
   const dispatch = useDispatch();
 
   const reloadMessages = async () => {
@@ -17,7 +17,8 @@ const Messenger = ({ toUser, customerView = false }) => {
 
   useEffect(() => {
     (async () => {
-      await reloadMessages();
+      // Load messages if only if it is not in redux store
+      if (messages === null) await reloadMessages();
     })();
   }, [toUser]);
 
@@ -30,6 +31,7 @@ const Messenger = ({ toUser, customerView = false }) => {
   return (
     <div>
       <button className="btn-primary" onClick={reloadMessages}>Refresh</button>
+      {messages && (
       <div className="messages">
         <div>{messages.length === 0 ? 'No messages to show ' : null}</div>
         {messages.reverse().map((m) => {
@@ -53,6 +55,7 @@ const Messenger = ({ toUser, customerView = false }) => {
           );
         })}
       </div>
+      )}
       <div className="mt-2">
         <textarea ref={textarea} rows="3" placeholder="Send a message" className="p-2 w-100" />
       </div>
