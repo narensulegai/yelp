@@ -68,14 +68,14 @@ app.use(cors({
   ['get', '/apiV1/following', mongoHandler.following, 'customer'],
 ].forEach((r) => {
   app[r[0]](r[1], (req, resp, next) => {
-    console.log(req.url, r[2].name);
+    // console.log(req.url, r[2].name);
     const token = req.header('authorization');
     req.session = {};
     if (token) {
       try {
         jwt.verify(token, process.env.JWT_SECRET);
       } catch (e) {
-        resp.status(401).json(err('You need to login, your session has expired'));
+        return resp.status(401).json(err('You need to login, your session has expired'));
       }
       req.session = jwt.decode(token);
     }
@@ -83,24 +83,23 @@ app.use(cors({
     if (r[3] === 'company' || r[3] === 'employee') {
       const { scope } = req.session;
       if (scope !== r[3]) {
-        resp.status(401).json(err('You are not authorized for this action.'));
+        return resp.status(401).json(err('You are not authorized for this action.'));
       }
     }
     if (r[3] === 'any') {
       const { scope } = req.session;
       if (!scope) {
-        resp.status(401).json(err('You need to login.'));
+        return resp.status(401).json(err('You need to login.'));
       }
     }
     if (r[4]) {
       const { error } = validate(req.body, r[4]);
       if (error) {
         const messages = error.details.map((d) => d.message);
-        resp.status(400).json(err(messages[0]));
-      } else {
-        req.requestKafka = callAndWait;
-        next();
+        return resp.status(400).json(err(messages[0]));
       }
+      req.requestKafka = callAndWait;
+      next();
     } else {
       req.requestKafka = callAndWait;
       next();
