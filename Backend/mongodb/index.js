@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_CONNECTION, { autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_CONNECTION, {
+  autoIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  poolSize: 5,
+});
 mongoose.connection.on('error', () => {
   console.log('Mongo error');
 });
