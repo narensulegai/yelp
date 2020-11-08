@@ -10,13 +10,13 @@ import CustomerView from './customer/View';
 import MyOrders from './customer/MyOrders';
 import Messages from './customer/Messages';
 import Users from './Users';
-import { currentUser } from '../util/fetch/api';
-import { setCurrentUser } from '../actions';
+import { currentUser, myOrders } from '../util/fetch/api';
+import { setCurrentUser, setMyOrders } from '../actions';
 
 class CustomerHome extends Component {
   async componentDidMount() {
-    const currUser = await currentUser();
-    this.props.setCurrentUser(currUser);
+    this.props.setCurrentUser(await currentUser());
+    this.props.setMyOrders(await myOrders());
   }
 
   render() {
@@ -65,10 +65,12 @@ class CustomerHome extends Component {
 
 const mapDispatchToProps = {
   setCurrentUser,
+  setMyOrders,
 };
 
 CustomerHome.propTypes = {
   setCurrentUser: PropTypes.func,
+  setMyOrders: PropTypes.func,
 };
 
 export default connect(null, mapDispatchToProps)(CustomerHome);

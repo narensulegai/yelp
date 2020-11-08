@@ -13,7 +13,9 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    if (conversations) setCurrentConversation(conversations[0]);
+    if (conversations.length) {
+      setCurrentConversation(conversations[0]);
+    }
   }, [conversations]);
 
   const handleOnConversationChange = (e) => {

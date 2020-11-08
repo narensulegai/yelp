@@ -8,13 +8,13 @@ import RestaurantEvents from './RestaurantEvents';
 import Comment from './restaurant/Comment';
 import Orders from './restaurant/Orders';
 import CustomerView from './customer/View';
-import { currentUser } from '../util/fetch/api';
-import { setCurrentUser } from '../actions';
+import { currentUser, myOrders } from '../util/fetch/api';
+import { setCurrentUser, setMyOrders } from '../actions';
 
 class RestaurantHome extends Component {
   async componentDidMount() {
-    const currUser = await currentUser();
-    this.props.setCurrentUser(currUser);
+    this.props.setCurrentUser(await currentUser());
+    this.props.setMyOrders(await myOrders());
   }
 
   render() {
@@ -56,10 +56,12 @@ class RestaurantHome extends Component {
 
 const mapDispatchToProps = {
   setCurrentUser,
+  setMyOrders,
 };
 
 RestaurantHome.propTypes = {
   setCurrentUser: PropTypes.func,
+  setMyOrders: PropTypes.func,
 };
 
 export default connect(null, mapDispatchToProps)(RestaurantHome);

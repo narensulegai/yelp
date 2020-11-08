@@ -1,34 +1,35 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { sendMessageTo, getMessagesFrom } from '../util/fetch/api';
 import { formatDate, formatTime } from '../util';
+import { setMessagesFrom } from '../actions';
 
-const Messenger = ({ toUser, scope, customerView = false }) => {
+const Messenger = ({ toUser, customerView = false }) => {
   const textarea = createRef();
-  const [messages, setMessages] = useState([]);
+  const messages = useSelector((state) => state.messages[toUser.id] || []);
+  const dispatch = useDispatch();
+
+  const reloadMessages = async () => {
+    dispatch(setMessagesFrom(toUser.id, await getMessagesFrom(toUser.id)));
+  };
 
   useEffect(() => {
     (async () => {
-      setMessages(await getMessagesFrom(toUser.id));
+      await reloadMessages();
     })();
-  }, [toUser, scope]);
+  }, [toUser]);
 
   const sendMessage = async () => {
     const txt = textarea.current.value;
     await sendMessageTo(txt, toUser.id);
-    setMessages(await getMessagesFrom(toUser.id));
-  };
-
-  const handleOnRefresh = async () => {
-    setMessages(await getMessagesFrom(toUser.id));
+    await reloadMessages();
   };
 
   return (
     <div>
-      <div>
-        <button className="btn-primary" onClick={handleOnRefresh}>Refresh</button>
-      </div>
+      <button className="btn-primary" onClick={reloadMessages}>Refresh</button>
       <div className="messages">
         <div>{messages.length === 0 ? 'No messages to show ' : null}</div>
         {messages.reverse().map((m) => {
@@ -65,7 +66,6 @@ const Messenger = ({ toUser, scope, customerView = false }) => {
 Messenger.propTypes = {
   customerView: PropTypes.bool,
   toUser: PropTypes.object,
-  scope: PropTypes.string,
 };
 
 export default Messenger;

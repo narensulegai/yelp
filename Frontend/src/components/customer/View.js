@@ -40,14 +40,14 @@ class View extends Component {
               <button className="btn-primary" onClick={this.handleOnFollow}>
                 {(this.state.current.user.following &&
                   this.state.current.user.following.includes(this.state.customerId))
-                  ?  'Following'
+                  ? 'Following'
                   : 'Follow'}
               </button>
             </div>}
           </div>
           <div className="col-6">
             {this.state.current.scope === 'restaurant' &&
-            <Messenger toUser={this.state.customer} scope="customer"/>}
+            <Messenger toUser={this.state.customer}/>}
           </div>
         </div>
       )
