@@ -3,7 +3,7 @@ Install kafka on Mac https://medium.com/@Ankitthakur/apache-kafka-installation-o
 
 Install Kafka client https://github.com/edenhill/kafkacat
 
-All config variables are availabe at `Backend/.env` and `Frontend/.env`
+All config environment variables are defined at `Backend/.env` and `Frontend/.env`
 ### Run Kafka server
 
 ```
