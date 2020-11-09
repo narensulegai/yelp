@@ -20,16 +20,21 @@ const Paginate = ({ numItems, onPageChange, currentPage }) => {
   }, [numItems, onPageChange]);
 
   return (numItems > 0) && (
-    <div className="d-flex justify-content-center mt-2">
-      {pages(numItems).map((p, i) => {
-        return (
-          <div className={`pageNum mr-1 pointer ${currentPage === i ? 'active' : ''}`}
-            key={p} onClick={() => onPageChange(i)}>
-            {p + 1}
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className="d-flex justify-content-center align-items-center mt-2">
+        {pages(numItems).map((p, i) => {
+          return (
+            <div className={`pageNum mr-1 pointer ${currentPage === i ? 'active' : ''}`}
+              key={p} onClick={() => onPageChange(i)}>
+              {p + 1}
+            </div>
+          );
+        })}
+      </div>
+      <div className="d-flex justify-content-center align-items-center mt-2">
+        <div className="small mr-3">Showing <b>{pageSize}</b> items per page of {numItems} items</div>
+      </div>
+    </>
   );
 };
 
