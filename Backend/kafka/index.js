@@ -13,12 +13,13 @@ const clientId = 'yelp';
 async function kafka() {
   let config = {
     clientId,
-    logLevel: logLevel.NOTHING,
+    logLevel: logLevel.ERROR,
     brokers: process.env.KAFKA_BROKERS.split(','),
   };
   if (process.env.KAFKA_REMOTE === 'true') {
     config = {
       clientId,
+      logLevel: logLevel.ERROR,
       brokers: process.env.KAFKA_BROKERS.split(','),
       authenticationTimeout: 1000,
       reauthenticationThreshold: 10000,
@@ -66,8 +67,10 @@ async function kafka() {
   console.log(`Connected to kafka, joining consumer group ${groupId}`);
 
   subscribe(allTopics.API_RESP, ({ token, resp, success }) => {
-    awaitCallbacks[token][success ? 0 : 1](resp);
-    delete awaitCallbacks[token];
+    if (awaitCallbacks[token]) {
+      awaitCallbacks[token][success ? 0 : 1](resp);
+      delete awaitCallbacks[token];
+    }
   });
 
   return {
