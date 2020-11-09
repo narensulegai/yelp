@@ -5,6 +5,7 @@ mongoose.connect(process.env.MONGODB_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   poolSize: 5,
+  useCreateIndex: true,
 });
 mongoose.connection.on('error', () => {
   console.log('Mongo error');
