@@ -3,6 +3,10 @@ Install kafka on Mac https://medium.com/@Ankitthakur/apache-kafka-installation-o
 
 Install Kafka client https://github.com/edenhill/kafkacat
 
+Use free hosted kafka server at https://customer.cloudkarafka.com/instance/create?plan=ducky
+
+Use free hosted mongodb server https://www.mongodb.com/cloud/atlas/register
+
 All config environment variables are defined at `Backend/.env` and `Frontend/.env`
 ### Run Kafka server
 
