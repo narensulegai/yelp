@@ -7,7 +7,7 @@ All config variables are availabe at `Backend/.env` and `Frontend/.env`
 ### Run Kafka server
 
 ```
-cd backend && KAFKA_BROKERS=localhost:9092 npm run kafka
+cd backend && KAFKA_BROKERS=localhost:9092 MONGODB_CONNECTION=mongodb://localhost/yelp npm run kafka
 ```
 
 ### Run node server
