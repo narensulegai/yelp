@@ -24,6 +24,7 @@ const Messenger = ({ toUser, customerView = false }) => {
 
   const sendMessage = async () => {
     const txt = textarea.current.value;
+    textarea.current.value = '';
     await sendMessageTo(txt, toUser.id);
     await reloadMessages();
   };
