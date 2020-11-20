@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {withRouter, NavLink} from 'react-router-dom';
 import LoginPage from './LoginPage';
-import {currentUser} from "../util/fetch/api";
+import {qlCurrentUser} from "../util/fetch/ql";
 
 export class Landing extends PureComponent {
   constructor(props) {
@@ -10,9 +10,8 @@ export class Landing extends PureComponent {
   }
 
   async componentDidMount() {
-    const currUser = await currentUser();
-    //Redirect logged in users automatically
-    if (currUser.scope !== null) {
+    const currUser = await qlCurrentUser();
+    if (currUser.isLoggedIn) {
       this.props.history.push(currUser.scope === 'customer' ? '/customer/dashboard' : '/restaurant/profile');
     }
   }

@@ -1,11 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import ImageInput from './ImageInput';
+import React, { useEffect, useRef, useState } from 'react';
 import TextInput from './TextInput';
 import {
-  currentUser, updateCustomerProfile,
+  updateCustomerProfile,
 } from '../util/fetch/api';
-import { setCurrentUser } from '../actions';
+import * as ql from '../util/fetch/ql';
 
 const CustomerProfile = () => {
   const about = useRef();
@@ -13,16 +11,21 @@ const CustomerProfile = () => {
   const thingsILove = useRef();
   const website = useRef();
   const [edit, setEdit] = useState(false);
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.currentUser.user);
+  const [profile, setProfile] = useState({});
 
   const toggleEdit = () => {
     setEdit(!edit);
   };
 
+  useEffect(() => {
+    (async () => {
+      setProfile(await ql.getCurrentCustomer());
+    })();
+  }, []);
+
   const update = async (p) => {
     await updateCustomerProfile(p);
-    dispatch(setCurrentUser(await currentUser()));
+    setProfile(await ql.getCurrentCustomer());
   };
 
   const handleOnProfileSave = async () => {
@@ -36,21 +39,11 @@ const CustomerProfile = () => {
     setEdit(!edit);
   };
 
-  const handleOnProfileImageAdd = async (fileIds) => {
-    update({ fileId: fileIds.files[0] });
-  };
-
-  const handleOnProfileImageDelete = async () => {
-    update({ fileId: '' });
-  };
-
   return (
     <div className="row">
       <div className="col-6">
         {profile && (
         <>
-          <ImageInput singleFile images={profile.fileId ? [profile.fileId] : []}
-            onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
           <div>
             <TextInput label="Name" edit={false} value={profile.name} />
             <TextInput label="Email" edit={false} value={profile.email} />
