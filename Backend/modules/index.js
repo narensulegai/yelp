@@ -71,9 +71,18 @@ module.exports = {
       });
     });
   },
+  currentRestaurant: async (id) => {
+    return Restaurant.findById(id);
+  },
   sendMessageTo: async (msg) => {
     const message = new Message(msg);
     return message.save();
+  },
+  updateRestaurantProfile: async (id, profile) => {
+    const restaurant = await Restaurant.findById(id);
+    Object.assign(restaurant, profile);
+    await restaurant.save();
+    return true;
   },
   getMessagesFrom: async (customer, restaurant) => Message.find({ customer, restaurant }).sort({ createdAt: 'desc' }),
 };

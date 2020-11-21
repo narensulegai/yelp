@@ -1,27 +1,27 @@
-import React, { useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import ImageInput from './ImageInput';
+import React, { useEffect, useRef, useState } from 'react';
 import TextInput from './TextInput';
-import {
-  currentUser, updateRestaurantProfile,
-} from '../util/fetch/api';
-import { setCurrentUser } from '../actions';
+import * as ql from '../util/fetch/ql';
 
 const RestaurantProfile = () => {
-  const dispatch = useDispatch();
   const description = useRef();
   const contactInformation = useRef();
   const timings = useRef();
   const [edit, setEdit] = useState(false);
-  const profile = useSelector((state) => state.currentUser.user);
+  const [profile, setProfile] = useState();
+
+  useEffect(() => {
+    (async () => {
+      setProfile(await ql.getCurrentRestaurant());
+    })();
+  }, []);
 
   const toggleEdit = () => {
     setEdit(!edit);
   };
 
-  const update = async (p) => {
-    await updateRestaurantProfile(p);
-    dispatch(setCurrentUser(await currentUser()));
+  const update = async (restaurantProfile) => {
+    await ql.updateRestaurantProfile(restaurantProfile);
+    setProfile(await ql.getCurrentRestaurant());
   };
 
   const handleOnProfileSave = async () => {
@@ -34,22 +34,12 @@ const RestaurantProfile = () => {
     setEdit(!edit);
   };
 
-  const handleOnProfileImageAdd = async (fileIds) => {
-    await update({ fileIds: fileIds.files });
-  };
-
-  const handleOnProfileImageDelete = async (id) => {
-    await update({ fileIds: profile.fileIds.filter((f) => f !== id) });
-  };
-
   return (
     <div className="row">
       <div className="col-6">
         {profile && (
         <>
           <h4>Restaurant profile</h4>
-          <ImageInput images={profile.fileIds}
-            onAdd={handleOnProfileImageAdd} onDelete={handleOnProfileImageDelete} />
           <TextInput label="Name" edit={false} value={profile.name} />
           <TextInput label="Location" edit={false} value={profile.location} />
           <TextInput label="Description" edit={edit} value={profile.description} ref={description} />

@@ -21,6 +21,11 @@ const typeDefs = gql`
     website: String
     yelpingSince: String
   }
+  input RestaurantProfileInput {
+    description: String
+    contactInformation: String
+    timings: String
+  }
   type CurrentUser {
     isLoggedIn: Boolean
     scope: String
@@ -28,20 +33,39 @@ const typeDefs = gql`
   type Customer {
     id: ID
     name: String
-    about: String
     email: String
+    about: String
     thingsILove: String
     website: String
     yelpingSince: String
   }
+  type Event {
+    id: ID
+  }
+  type Dish {
+    id: ID
+  }
+  type Restaurant {
+    id: ID
+    name: String
+    timings: String
+    contactInformation: String
+    description: String
+    email: String
+    location: String
+    dishes: [Dish]
+    events: [Event]
+  }
   type Query {
     currentUser: CurrentUser
     currentCustomer: Customer
+    currentRestaurant: Restaurant
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
     updateCustomerProfile(customerProfile: CustomerProfileInput): Boolean
-    createRestaurant(restaurant: RestaurantInput): String 
+    createRestaurant(restaurant: RestaurantInput): String
+    updateRestaurantProfile(restaurantProfile: RestaurantProfileInput): Boolean 
   }
 `;
 
@@ -56,6 +80,9 @@ const resolvers = {
     currentCustomer: async (parent, variables, context) => {
       return modules.currentCustomer(context.session.user.id);
     },
+    currentRestaurant: async (parent, variables, context) => {
+      return modules.currentRestaurant(context.session.user.id);
+    },
   },
   Mutation: {
     createCustomer: async (parent, { customer }) => {
@@ -66,6 +93,9 @@ const resolvers = {
     },
     createRestaurant: async (parent, { restaurant }) => {
       return modules.createRestaurant(restaurant);
+    },
+    updateRestaurantProfile: async (parent, { restaurantProfile }, context) => {
+      return modules.updateRestaurantProfile(context.session.user.id, restaurantProfile);
     },
   },
 };

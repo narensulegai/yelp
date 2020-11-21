@@ -84,3 +84,37 @@ export const signUpRestaurant = async (rest) => {
   window.localStorage.setItem('token', createRestaurant);
   return createRestaurant;
 };
+
+export const getCurrentRestaurant = async () => {
+  const q = `
+    {
+      currentRestaurant {
+        id
+        name
+        timings
+        contactInformation
+        description
+        email
+        location
+        dishes {
+          id
+        }
+        events {
+          id
+        }
+      }
+    }
+  `;
+  const { currentRestaurant } = await query(q);
+  return currentRestaurant;
+};
+
+export const updateRestaurantProfile = async (restaurantProfile) => {
+  const q = `
+    mutation _ ($restaurantProfile: RestaurantProfileInput) {
+      updateRestaurantProfile (restaurantProfile: $restaurantProfile)
+    }
+  `;
+  const { updateRestaurantProfile } = await query(q, { restaurantProfile });
+  return updateRestaurantProfile;
+};
