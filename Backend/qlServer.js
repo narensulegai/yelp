@@ -73,6 +73,7 @@ const typeDefs = gql`
     currentUser: CurrentUser
     currentCustomer: Customer
     currentRestaurant: Restaurant
+    getRestaurants(text: String): [Restaurant]
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
@@ -97,6 +98,9 @@ const resolvers = {
     },
     currentRestaurant: async (parent, variables, context) => {
       return modules.currentRestaurant(context.session.user.id);
+    },
+    getRestaurants: async (parent, { text }) => {
+      return modules.getRestaurants(text);
     },
   },
   Mutation: {

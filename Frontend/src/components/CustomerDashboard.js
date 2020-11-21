@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {getRestaurants} from '../util/fetch/api';
+import * as ql from '../util/fetch/ql';
 import Map from './Map';
-import Carousal from "./Carousal";
 
 class CustomerDashboard extends Component {
   constructor(props) {
@@ -11,12 +10,12 @@ class CustomerDashboard extends Component {
   }
 
   async componentDidMount() {
-    const restaurants = await getRestaurants();
+    const restaurants = await ql.getRestaurants();
     this.setState({restaurants});
   }
 
   handleOnSearch = async () => {
-    const restaurants = await getRestaurants(this.searchBox.current.value);
+    const restaurants = await ql.getRestaurants(this.searchBox.current.value);
     this.setState({restaurants});
   }
 
@@ -41,10 +40,6 @@ class CustomerDashboard extends Component {
                     <a href={`#/customer/restaurant/${r.id}`}>{r.name}</a>
                   </h4>
                   <div className="small">{r.description}</div>
-                  <div className="mt-2">
-                    {/*TODO*/}
-                    <Carousal images={r.fileIds}/>
-                  </div>
                   <div className="small mt-2">
                     <div>Open {r.timings || '-'}</div>
                     <div>Located at {r.location || '-'}</div>
@@ -52,8 +47,8 @@ class CustomerDashboard extends Component {
                   <div className="mt-3">
                     <h6>Menu</h6>
                     {r.dishes.length === 0 ? <div className="small">Not serving any thing yet</div> : null}
-                    {r.dishes.map(d => {
-                      return <div className="small" key={d._id}><b>{d.name}</b>&nbsp;(${d.price})</div>
+                    {r.dishes.map((d, i) => {
+                      return <div className="small" key={i}><b>{d.name}</b>&nbsp;(${d.price})</div>
                     })}
                   </div>
                 </div>

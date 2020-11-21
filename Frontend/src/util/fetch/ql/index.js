@@ -105,9 +105,6 @@ export const getCurrentRestaurant = async () => {
           name
           price
         }
-        events {
-          id
-        }
       }
     }
   `;
@@ -161,4 +158,29 @@ export const updateDish = async (dishId, dish) => {
   `;
   const { updateDish } = await query(q, { dishId, dish });
   return updateDish;
+};
+
+export const getRestaurants = async (text = '') => {
+  const q = `
+    query _ ($text: String) {
+      getRestaurants (text: $text) {
+        id
+        name
+        timings
+        contactInformation
+        description
+        email
+        location
+        dishes {
+          description
+          dishCategory
+          ingredients
+          name
+          price
+        }
+      }
+    }
+  `;
+  const { getRestaurants } = await query(q, { text });
+  return getRestaurants;
 };

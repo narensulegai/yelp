@@ -95,4 +95,26 @@ module.exports = {
     await dish.save();
     return true;
   },
+  getRestaurants: async (search) => {
+    // TODO
+    // const restaurant = await Restaurant.find({ name: { $regex: search, $options: 'i' } })
+    // resp.json(restaurant);
+
+    return Restaurant.aggregate([
+      { $lookup: {
+        from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes',
+      } },
+      {
+        $match: {
+          $or: [
+            { location: { $regex: search, $options: 'i' } },
+            { name: { $regex: search, $options: 'i' } },
+            { 'dishes.name': { $regex: search, $options: 'i' } },
+          ],
+        },
+      },
+      { $addFields: { id: '$_id' } },
+      { $project: { password: 0, _id: 0 } },
+    ]);
+  },
 };

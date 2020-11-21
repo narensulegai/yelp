@@ -24,7 +24,6 @@ class RestaurantHome extends Component {
           <div className="navbar-brand text-light">Yelp!</div>
           <a className="nav-link text-light" href="#/restaurant/profile">Profile</a>
           <a className="nav-link text-light" href="#/restaurant/dishes">Dishes</a>
-          <a className="nav-link text-light" href="#/restaurant/events">Event</a>
           <a className="nav-link text-light" href="#/restaurant/comments">Reviews</a>
           <a className="nav-link text-light" href="#/restaurant/orders">Orders</a>
           <a className="nav-link" href="#/logout">Logout</a>
@@ -35,9 +34,6 @@ class RestaurantHome extends Component {
           </Route>
           <Route path="/restaurant/dishes" exact>
             <Dishes />
-          </Route>
-          <Route path="/restaurant/events" exact>
-            <RestaurantEvents />
           </Route>
           <Route path="/restaurant/comments" exact>
             <Comment />
