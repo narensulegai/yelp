@@ -63,3 +63,24 @@ export const getCurrentCustomer = async () => {
   const { currentCustomer } = await query(q);
   return currentCustomer;
 };
+
+export const updateCustomerProfile = async (customerProfile) => {
+  const q = `
+    mutation _ ($customerProfile: CustomerProfileInput) {
+      updateCustomerProfile (customerProfile: $customerProfile)
+    }
+  `;
+  const { updateCustomerProfile } = await query(q, { customerProfile });
+  return updateCustomerProfile;
+};
+
+export const signUpRestaurant = async (rest) => {
+  const q = `
+    mutation _ ($restaurant: RestaurantInput) {
+      createRestaurant (restaurant: $restaurant)
+    }
+  `;
+  const { createRestaurant } = await query(q, { restaurant: rest });
+  window.localStorage.setItem('token', createRestaurant);
+  return createRestaurant;
+};

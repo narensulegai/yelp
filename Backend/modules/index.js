@@ -46,7 +46,31 @@ module.exports = {
       });
     });
   },
-
+  updateCustomerProfile: async (id, profile) => {
+    const customer = await Customer.findById(id);
+    Object.assign(customer, profile);
+    await customer.save();
+    return true;
+  },
+  createRestaurant: async (restaurant) => {
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(restaurant.password, saltRounds, async (e, password) => {
+        const rest = new Restaurant({ ...restaurant, password });
+        try {
+          const user = await rest.save();
+          const payload = { user, scope: 'restaurant' };
+          const token = signPayload(payload);
+          resolve(token);
+        } catch (e) {
+          if (e.code === 11000) {
+            reject('Email id is already taken');
+          } else {
+            throw (e);
+          }
+        }
+      });
+    });
+  },
   sendMessageTo: async (msg) => {
     const message = new Message(msg);
     return message.save();

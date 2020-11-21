@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TextInput from './TextInput';
-import {
-  updateCustomerProfile,
-} from '../util/fetch/api';
 import * as ql from '../util/fetch/ql';
 
 const CustomerProfile = () => {
@@ -24,7 +21,7 @@ const CustomerProfile = () => {
   }, []);
 
   const update = async (p) => {
-    await updateCustomerProfile(p);
+    await ql.updateCustomerProfile(p);
     setProfile(await ql.getCurrentCustomer());
   };
 

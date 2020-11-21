@@ -9,6 +9,18 @@ const typeDefs = gql`
     email: String
     password: String
   }
+  input RestaurantInput {
+    name: String
+    email: String
+    password: String
+    location: String  
+  }
+  input CustomerProfileInput {
+    about: String
+    thingsILove: String
+    website: String
+    yelpingSince: String
+  }
   type CurrentUser {
     isLoggedIn: Boolean
     scope: String
@@ -23,22 +35,23 @@ const typeDefs = gql`
     yelpingSince: String
   }
   type Query {
-    "A simple type for getting started!"
-    hello: String
     currentUser: CurrentUser
     currentCustomer: Customer
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
+    updateCustomerProfile(customerProfile: CustomerProfileInput): Boolean
+    createRestaurant(restaurant: RestaurantInput): String 
   }
 `;
 
 // A map of functions which return data for the schema.
 const resolvers = {
   Query: {
-    hello: () => 'world',
-    currentUser: () => {
-      return { isLoggedIn: false, scope: null };
+    currentUser: (parent, variables, context) => {
+      const isLoggedIn = !!context.session;
+      const scope = context.session ? context.session.scope : null;
+      return { isLoggedIn, scope };
     },
     currentCustomer: async (parent, variables, context) => {
       return modules.currentCustomer(context.session.user.id);
@@ -47,6 +60,12 @@ const resolvers = {
   Mutation: {
     createCustomer: async (parent, { customer }) => {
       return modules.createCustomer(customer);
+    },
+    updateCustomerProfile: async (parent, { customerProfile }, context) => {
+      return modules.updateCustomerProfile(context.session.user.id, customerProfile);
+    },
+    createRestaurant: async (parent, { restaurant }) => {
+      return modules.createRestaurant(restaurant);
     },
   },
 };

@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { post } from '../util/fetch';
-import { signUpCustomer } from '../util/fetch/ql';
+import * as ql from '../util/fetch/ql';
 
 const Signup = ({ type, history }) => {
   const name = useRef();
@@ -17,14 +16,11 @@ const Signup = ({ type, history }) => {
       password: password.current.value,
     };
     if (type === 'customer') {
-      await signUpCustomer(d);
+      await ql.signUpCustomer(d);
       history.push('/customer/dashboard');
     } else {
-      post('signup/restaurant', { ...d, location: location.current.value })
-        .then(({ token }) => {
-          window.localStorage.setItem('token', token);
-          history.push('/restaurant/profile');
-        });
+      await ql.signUpRestaurant({ ...d, location: location.current.value });
+      history.push('/restaurant/profile');
     }
   };
   return (
