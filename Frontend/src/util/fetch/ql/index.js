@@ -98,6 +98,12 @@ export const getCurrentRestaurant = async () => {
         location
         dishes {
           id
+          restaurant
+          description
+          dishCategory
+          ingredients
+          name
+          price
         }
         events {
           id
@@ -117,4 +123,42 @@ export const updateRestaurantProfile = async (restaurantProfile) => {
   `;
   const { updateRestaurantProfile } = await query(q, { restaurantProfile });
   return updateRestaurantProfile;
+};
+
+export const getDishes = async () => {
+  const q = `
+    {
+      getDishes {
+        id
+        restaurant
+        name
+        description
+        dishCategory
+        ingredients
+        price
+      }
+    }
+  `;
+  const { getDishes } = await query(q);
+  return getDishes;
+};
+
+export const createDish = async (dish) => {
+  const q = `
+    mutation _ ($dish: DishInput) {
+      createDish (dish: $dish)
+    }
+  `;
+  const { createDish } = await query(q, { dish });
+  return createDish;
+};
+
+export const updateDish = async (dishId, dish) => {
+  const q = `
+    mutation _ ($dishId: String, $dish: DishInput) {
+      updateDish (dishId: $dishId, dish: $dish)
+    }
+  `;
+  const { updateDish } = await query(q, { dishId, dish });
+  return updateDish;
 };

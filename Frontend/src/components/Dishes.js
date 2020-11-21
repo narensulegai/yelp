@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { pick } from 'lodash';
 import Dish from './Dish';
-import {
-  createDish, deleteDish, getDishes, updateDish,
-} from '../util/fetch/api';
+import * as ql from '../util/fetch/ql';
 import Paginate from './Paginate';
 import { slicePage } from '../util';
 
@@ -11,25 +8,18 @@ const Dishes = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [dishes, setDishes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+
   useEffect(() => {
     (async () => {
-      setDishes(await getDishes());
+      const r = await ql.getCurrentRestaurant();
+      setDishes(r.dishes);
     })();
   }, []);
 
-  const update = (id, dish) => {
-    return updateDish(id, pick(dish, ['fileIds', 'name', 'ingredients', 'price', 'description', 'dishCategory']))
-      .then(async () => {
-        setDishes(await getDishes());
-      });
-  };
-  const handleOnDishImageAdd = async (fileIds, dish) => {
-    // Needs refactor, use dish id only
-    return update(dish.id, { ...dish, fileIds: dish.fileIds.concat(fileIds.files) });
-  };
-
-  const handleOnDishImageDelete = async (fileId, dish) => {
-    return update(dish.id, { ...dish, fileIds: dish.fileIds.filter((f) => f !== fileId) });
+  const update = async (id, dish) => {
+    await ql.updateDish(id, dish);
+    const r = await ql.getCurrentRestaurant();
+    setDishes(r.dishes);
   };
 
   const handleOnDishUpdate = (id, dish) => {
@@ -37,16 +27,10 @@ const Dishes = () => {
   };
 
   const handleOnDishAdd = async (dish) => {
-    return createDish(dish)
-      .then(async () => {
-        setDishes(await getDishes());
-        setShowAdd(false);
-      });
-  };
-
-  const handleOnDishDelete = async (id) => {
-    await deleteDish(id);
-    setDishes(await getDishes());
+    await ql.createDish(dish);
+    const r = await ql.getCurrentRestaurant();
+    setDishes(r.dishes);
+    setShowAdd(false);
   };
 
   return (
@@ -56,8 +40,7 @@ const Dishes = () => {
         {showAdd
           ? (
             <>
-              <Dish editMode={false} addMode dish={{}} images={[]} onChange={handleOnDishAdd}
-                onImageAdd={() => {}} onImageDelete={() => {}} />
+              <Dish editMode={false} addMode dish={{}} onChange={handleOnDishAdd} />
               <button onClick={() => { setShowAdd(false); }} className="btn-primary mt-3">
                 Cancel
               </button>
@@ -75,13 +58,8 @@ const Dishes = () => {
         {slicePage(dishes, currentPage).map((dish) => {
           return (
             <div key={dish.id} className="mt-3">
-              <Dish editMode addMode={false} dish={dish}
-                images={dish.fileIds}
-                onChange={(d) => handleOnDishUpdate(dish.id, d)}
-                onDelete={() => handleOnDishDelete(dish.id)}
-                onImageAdd={(fileIds) => handleOnDishImageAdd(fileIds, dish)}
-                onImageDelete={(fileId) => handleOnDishImageDelete(fileId, dish)}
-                  />
+              <Dish editMode dish={dish}
+                onChange={(d) => handleOnDishUpdate(dish.id, d)} />
             </div>
           );
         })}

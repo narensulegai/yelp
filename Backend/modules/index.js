@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const {
-  Customer, Restaurant, Dish, Comment, Event, Order, Message,
+  Customer, Restaurant, Dish, Comment, Order,
 } = require('../mongodb');
 
 const saltRounds = 10;
@@ -72,11 +72,8 @@ module.exports = {
     });
   },
   currentRestaurant: async (id) => {
-    return Restaurant.findById(id);
-  },
-  sendMessageTo: async (msg) => {
-    const message = new Message(msg);
-    return message.save();
+    return Restaurant.findById(id)
+      .populate('dishes');
   },
   updateRestaurantProfile: async (id, profile) => {
     const restaurant = await Restaurant.findById(id);
@@ -84,5 +81,18 @@ module.exports = {
     await restaurant.save();
     return true;
   },
-  getMessagesFrom: async (customer, restaurant) => Message.find({ customer, restaurant }).sort({ createdAt: 'desc' }),
+  createDish: async (restaurantId, newDish) => {
+    const dish = new Dish({ restaurant: restaurantId, ...newDish });
+    const d = await dish.save();
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.dishes.push(d.id);
+    await restaurant.save();
+    return true;
+  },
+  updateDish: async (restaurantId, dishId, updateDish) => {
+    const dish = await Dish.findOne({ restaurant: restaurantId, _id: dishId });
+    Object.assign(dish, updateDish);
+    await dish.save();
+    return true;
+  },
 };

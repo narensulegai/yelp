@@ -7,7 +7,6 @@ const {
 module.exports = {
   Customer: {
     model: {
-      fileId: { type: String },
       name: { type: String, required: true },
       email: { type: String, required: true, index: { unique: true } },
       password: { type: String, required: true },
@@ -15,8 +14,6 @@ module.exports = {
       thingsILove: { type: String, default: '' },
       website: { type: String, default: '' },
       about: { type: String, default: '' },
-      conversations: [{ type: Types.ObjectId, ref: 'Restaurant', required: true }],
-      following: [{ type: Types.ObjectId, ref: 'Customer', required: true }],
     },
     transform: (doc, ret) => {
       delete ret.password;
@@ -24,7 +21,6 @@ module.exports = {
   },
   Restaurant: {
     model: {
-      fileIds: [{ type: String }],
       name: { type: String, required: true },
       email: { type: String, required: true, index: { unique: true } },
       password: { type: String, required: true },
@@ -33,27 +29,10 @@ module.exports = {
       contactInformation: { type: String, default: '' },
       timings: { type: String, default: '' },
       dishes: [{ type: Types.ObjectId, ref: 'Dish', required: true }],
-      events: [{ type: Types.ObjectId, ref: 'Event', required: true }],
-      conversations: [{ type: Types.ObjectId, ref: 'Restaurant', required: true }],
+      orders: [{ type: Types.ObjectId, ref: 'Order', required: true }],
     },
     transform: (doc, ret) => {
       delete ret.password;
-    },
-  },
-  Event: {
-    model: {
-      name: { type: String, required: true },
-      description: { type: String, default: '' },
-      location: { type: String, default: '' },
-      hashTags: { type: String, default: '' },
-      date: { type: String, default: '' },
-      time: { type: String, default: '' },
-      restaurant: { type: Types.ObjectId, ref: 'Restaurant', required: true },
-      Registration: {
-        model: {
-          customer: { type: Types.ObjectId, ref: 'Customer', required: true },
-        },
-      },
     },
   },
   Dish: {
@@ -83,14 +62,6 @@ module.exports = {
       customer: { type: Types.ObjectId, ref: 'Customer', required: true },
       text: { type: String, required: true },
       rating: { type: Number, required: true },
-    },
-  },
-  Message: {
-    model: {
-      customer: { type: Types.ObjectId, ref: 'Customer', required: true },
-      restaurant: { type: Types.ObjectId, ref: 'Restaurant', required: true },
-      text: { type: String, required: true },
-      fromRestaurant: { type: Boolean, default: true },
     },
   },
 };

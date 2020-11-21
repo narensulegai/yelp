@@ -15,6 +15,13 @@ const typeDefs = gql`
     password: String
     location: String  
   }
+  input DishInput {
+    description: String
+    dishCategory: Int
+    ingredients: String
+    name: String
+    price: String
+  }
   input CustomerProfileInput {
     about: String
     thingsILove: String
@@ -44,6 +51,12 @@ const typeDefs = gql`
   }
   type Dish {
     id: ID
+    restaurant: ID
+    description: String
+    dishCategory: Int
+    ingredients: String
+    name: String
+    price: String
   }
   type Restaurant {
     id: ID
@@ -66,6 +79,8 @@ const typeDefs = gql`
     updateCustomerProfile(customerProfile: CustomerProfileInput): Boolean
     createRestaurant(restaurant: RestaurantInput): String
     updateRestaurantProfile(restaurantProfile: RestaurantProfileInput): Boolean 
+    createDish(dish: DishInput): Boolean 
+    updateDish(dishId: String, dish: DishInput): Boolean 
   }
 `;
 
@@ -96,6 +111,12 @@ const resolvers = {
     },
     updateRestaurantProfile: async (parent, { restaurantProfile }, context) => {
       return modules.updateRestaurantProfile(context.session.user.id, restaurantProfile);
+    },
+    createDish: async (parent, { dish }, context) => {
+      return modules.createDish(context.session.user.id, dish);
+    },
+    updateDish: async (parent, { dishId, dish }, context) => {
+      return modules.updateDish(context.session.user.id, dishId, dish);
     },
   },
 };
