@@ -97,6 +97,8 @@ const typeDefs = gql`
     getRestaurant(id: String): Restaurant
     myOrders: [Order]
     getComments(dishId: String): [Comment]
+    getRestaurantComments: [Comment]
+    getCustomer(id: String): Customer
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
@@ -135,9 +137,13 @@ const resolvers = {
       return modules.myOrders(context.session.user.id);
     },
     getComments: async (parent, { dishId }) => {
-      const c = await modules.getComments(dishId);
-      console.log(c);
-      return c;
+      return modules.getComments(dishId);
+    },
+    getRestaurantComments: async (parent, variables, context) => {
+      return modules.getRestaurantComments(context.session.user.id);
+    },
+    getCustomer: async (parent, { id }) => {
+      return modules.getCustomer(id);
     },
   },
   Mutation: {

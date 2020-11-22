@@ -193,4 +193,7 @@ module.exports = {
       .populate('customer')
       .populate('dish');
   },
+  getCustomer: async (customerId) => {
+    return Customer.findById(customerId);
+  },
 };

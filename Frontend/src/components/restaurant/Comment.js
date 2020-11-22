@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { getRestaurantComments } from '../../util/fetch/api';
+import * as ql from '../../util/fetch/ql';
+
 import Review from '../Review';
 
 class Comment extends Component {
@@ -9,7 +10,7 @@ class Comment extends Component {
   }
 
   async componentDidMount() {
-    const comments = await getRestaurantComments();
+    const comments = await ql.getRestaurantComments();
     this.setState({ comments });
   }
 

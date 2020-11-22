@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
 import RestaurantView from './restaurant/View';
 import MyOrders from './customer/MyOrders';
-import { currentUser, myOrders } from '../util/fetch/api';
-import { setCurrentUser, setMyOrders } from '../actions';
 
 class CustomerHome extends Component {
   async componentDidMount() {
-    this.props.setCurrentUser(await currentUser());
-    this.props.setMyOrders(await myOrders());
   }
 
   render() {
@@ -45,13 +40,9 @@ class CustomerHome extends Component {
 }
 
 const mapDispatchToProps = {
-  setCurrentUser,
-  setMyOrders,
 };
 
 CustomerHome.propTypes = {
-  setCurrentUser: PropTypes.func,
-  setMyOrders: PropTypes.func,
 };
 
 export default connect(null, mapDispatchToProps)(CustomerHome);

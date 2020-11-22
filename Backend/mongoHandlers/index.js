@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
 const {
-  Customer, Restaurant, Dish, Comment, Event, Order, Message,
+  Customer, Restaurant, Dish, Comment, Event, Order,
 } = require('../mongodb');
 
 const saltRounds = 10;

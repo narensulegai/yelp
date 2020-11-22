@@ -59,7 +59,6 @@ export const getCurrentCustomer = async () => {
         yelpingSince
         orders {
           id
-          customer
           status
           isPickup
           dish {
@@ -161,24 +160,6 @@ export const updateRestaurantProfile = async (restaurantProfile) => {
   return updateRestaurantProfile;
 };
 
-export const getDishes = async () => {
-  const q = `
-    {
-      getDishes {
-        id
-        restaurant
-        name
-        description
-        dishCategory
-        ingredients
-        price
-      }
-    }
-  `;
-  const { getDishes } = await query(q);
-  return getDishes;
-};
-
 export const createDish = async (dish) => {
   const q = `
     mutation _ ($dish: DishInput) {
@@ -250,6 +231,24 @@ export const getRestaurant = async (id) => {
   return getRestaurant;
 };
 
+export const getCustomer = async (id) => {
+  const q = `
+    query _ ($id: String) {
+      getCustomer (id: $id) {
+        id
+        name
+        email
+        about
+        thingsILove
+        website
+        yelpingSince
+      }
+    }
+  `;
+  const { getCustomer } = await query(q, { id });
+  return getCustomer;
+};
+
 export const placeOrder = async (dishId, isPickup) => {
   const q = `
     mutation _ ($dishId: String, $isPickup: Boolean) {
@@ -297,4 +296,25 @@ export const addComment = async (dishId, text, rating) => {
   `;
   const { addComment } = await query(q, { dishId, text, rating });
   return addComment;
+};
+
+export const getRestaurantComments = async () => {
+  const q = `
+    {
+      getRestaurantComments {
+        id
+        text
+        rating
+        createdAt
+        dish {
+          name
+        }
+        customer {
+          name
+        }
+      }
+    }
+  `;
+  const { getRestaurantComments } = await query(q);
+  return getRestaurantComments;
 };
