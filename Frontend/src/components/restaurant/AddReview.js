@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { addComment, getComments } from '../../util/fetch/api';
+import * as ql from '../../util/fetch/ql';
 import Review from '../Review';
 
 const AddReview = ({ dish }) => {
@@ -19,7 +19,7 @@ const AddReview = ({ dish }) => {
   };
   useEffect(() => {
     (async () => {
-      const revs = await getComments(dish.id);
+      const revs = await ql.getComments(dish.id);
       if (revs.length) {
         setAverage(calcAvg(revs));
       }
@@ -27,19 +27,17 @@ const AddReview = ({ dish }) => {
     })();
   }, [dish]);
 
-  const handleOnReview = () => {
+  const handleOnReview = async () => {
     const c = {
       text: review.current.value,
       rating: parseInt(rating.current.value),
     };
-    addComment(dish.id, c)
-      .then(async () => {
-        const revs = await getComments(dish.id);
-        setReviews(revs);
-        setAverage(calcAvg(revs));
-        review.current.value = '';
-        window.alert('Thank you for your review!');
-      });
+    await ql.addComment(dish.id, c.text, c.rating);
+    const revs = await ql.getComments(dish.id);
+    setReviews(revs);
+    setAverage(calcAvg(revs));
+    review.current.value = '';
+    window.alert('Thank you for your review!');
   };
 
   return (

@@ -33,6 +33,10 @@ const typeDefs = gql`
     contactInformation: String
     timings: String
   }
+  input CommentInput {
+    comment: String
+    rating: Int
+  }
   type CurrentUser {
     isLoggedIn: Boolean
     scope: String
@@ -77,6 +81,14 @@ const typeDefs = gql`
     dishes: [Dish]
     orders: [Order]
   }
+  type Comment {
+    id: ID
+    text: String
+    rating: Int
+    createdAt: String
+    customer: Customer
+    dish: Dish
+  }
   type Query {
     currentUser: CurrentUser
     currentCustomer: Customer
@@ -84,6 +96,7 @@ const typeDefs = gql`
     getRestaurants(text: String): [Restaurant]
     getRestaurant(id: String): Restaurant
     myOrders: [Order]
+    getComments(dishId: String): [Comment]
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
@@ -94,6 +107,7 @@ const typeDefs = gql`
     updateDish(dishId: String, dish: DishInput): Boolean 
     placeOrder(dishId: String, isPickup: Boolean): Boolean 
     updateOrder(orderId: String, status: String): Boolean 
+    addComment(dishId: String, text: String, rating: Int): Boolean 
   }
 `;
 
@@ -120,6 +134,11 @@ const resolvers = {
     myOrders: async (parent, variables, context) => {
       return modules.myOrders(context.session.user.id);
     },
+    getComments: async (parent, { dishId }) => {
+      const c = await modules.getComments(dishId);
+      console.log(c);
+      return c;
+    },
   },
   Mutation: {
     createCustomer: async (parent, { customer }) => {
@@ -144,8 +163,10 @@ const resolvers = {
       return modules.placeOrder(context.session.user.id, dishId, isPickup);
     },
     updateOrder: async (parent, { orderId, status }, context) => {
-      console.log('updateOrder');
       return modules.updateOrder(context.session.user.id, orderId, status);
+    },
+    addComment: async (parent, { dishId, text, rating }, context) => {
+      return modules.addComment(context.session.user.id, dishId, text, rating);
     },
   },
 };

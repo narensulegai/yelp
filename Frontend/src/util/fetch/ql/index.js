@@ -269,3 +269,32 @@ export const updateOrder = async (orderId, status) => {
   const { updateOrder } = await query(q, { orderId, status });
   return updateOrder;
 };
+
+export const getComments = async (dishId) => {
+  const q = `
+    query _ ($dishId: String) {
+      getComments (dishId: $dishId) {
+        id
+        text
+        rating
+        createdAt
+        customer {
+            id
+            name
+        }
+      }
+    }
+  `;
+  const { getComments } = await query(q, { dishId });
+  return getComments;
+};
+
+export const addComment = async (dishId, text, rating) => {
+  const q = `
+    mutation _ ($dishId: String, $text: String, $rating: Int) {
+      addComment (dishId: $dishId, text: $text, rating: $rating)
+    }
+  `;
+  const { addComment } = await query(q, { dishId, text, rating });
+  return addComment;
+};

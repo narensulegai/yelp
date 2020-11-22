@@ -80,11 +80,10 @@ module.exports = {
   currentRestaurant: async (id) => {
     return Restaurant.findById(id)
       .populate('dishes')
-      .populate({ path: 'orders',
-        populate: [
-          { path: 'dish' },
-          { path: 'customer' },
-        ] });
+      .populate({
+        path: 'orders',
+        populate: ['dish', 'customer'],
+      });
   },
   updateRestaurantProfile: async (id, profile) => {
     const restaurant = await Restaurant.findById(id);
@@ -171,5 +170,27 @@ module.exports = {
       return true;
     }
     throw ('Order not found');
+  },
+  addComment: async (customerId, dishId, text, rating) => {
+    const dish = await Dish.findById(dishId);
+    const com = new Comment({
+      restaurant: dish.restaurant,
+      customer: customerId,
+      dish: dishId,
+      text,
+      rating,
+    });
+    await com.save();
+    return true;
+  },
+  getComments: async (dishId) => {
+    return Comment.find({ dish: dishId })
+      .populate('customer');
+    // .populate('dish');
+  },
+  getRestaurantComments: async (restaurantId) => {
+    return Comment.find({ restaurant: restaurantId })
+      .populate('customer')
+      .populate('dish');
   },
 };
