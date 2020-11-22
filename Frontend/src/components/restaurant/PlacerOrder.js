@@ -1,28 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { getRestaurantDishes, myOrders, placeOrder } from '../../util/fetch/api';
-import Carousal from '../Carousal';
+import * as ql from '../../util/fetch/ql';
 import AddReview from './AddReview';
 import Paginate from '../Paginate';
 import { slicePage } from '../../util';
-import { setMyOrders } from '../../actions';
 
 const PlaceOrder = ({ restaurantId }) => {
   const [dishes, setDishes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const deliveryMode = useRef({});
-  const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
-      setDishes(await getRestaurantDishes(restaurantId));
+      const restaurant = await ql.getRestaurant(restaurantId);
+      setDishes(restaurant.dishes);
     })();
   }, [restaurantId]);
 
   const handlePlaceOrder = async (dishId) => {
-    // TODO
-    await placeOrder(dishId, { isPickup: deliveryMode.current[dishId].value === 'pickup' });
-    dispatch(setMyOrders(await myOrders()));
+    await ql.placeOrder(dishId, deliveryMode.current[dishId].value === 'pickup');
     window.alert('Your order has been placed!');
   };
 
@@ -39,10 +35,6 @@ const PlaceOrder = ({ restaurantId }) => {
                 <div><b>{d.name}</b></div>
                 <div className="small">{d.description}</div>
                 <div className="small">Made with {d.ingredients}</div>
-
-                <div className="mt-2">
-                  <Carousal images={d.fileIds} />
-                </div>
 
                 <div className="mt-2">Order one for <b>${d.price}</b></div>
 

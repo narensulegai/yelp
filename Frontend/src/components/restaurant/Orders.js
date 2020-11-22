@@ -1,13 +1,9 @@
 import React, {
-  useCallback, useRef, useState,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  myOrders, updateMyOrder,
-} from '../../util/fetch/api';
+import * as ql from '../../util/fetch/ql';
 import { formatDate, slicePage } from '../../util';
 import Paginate from '../Paginate';
-import { setMyOrders } from '../../actions';
 
 const Orders = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -15,14 +11,19 @@ const Orders = () => {
   const [orderOrder, setOrderOrder] = useState('asce');
   const status = useRef({});
 
-  const dispatch = useDispatch();
-  const orders = useSelector((state) => state.myOrders);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const r = await ql.getCurrentRestaurant();
+      setOrders(r.orders);
+    })();
+  }, []);
 
   const handleOnSave = async (orderId) => {
-    await updateMyOrder(orderId, {
-      status: status.current[orderId].value,
-    });
-    dispatch(setMyOrders(await myOrders()));
+    await ql.updateOrder(orderId, status.current[orderId].value);
+    const r = await ql.getCurrentRestaurant();
+    setOrders(r.orders);
   };
 
   const handleOrderFilterChange = (e) => {
@@ -72,11 +73,11 @@ const Orders = () => {
             <option value="desc">Recent orders first</option>
           </select>
           {slicePage(applyOrderFilter(), currentPage)
-            .map((o, i) => {
+            .map((o) => {
               return (
                 <div key={o.id} className="card mb-3">
                   <div className="card-header">
-                    <h4>#{i + 1}&nbsp;<b>{o.dish.name}</b></h4>
+                    <h4><b>{o.dish.name}</b></h4>
                     <div>
                       <b>{o.isPickup ? 'Pickup' : 'Yelp delivery'}</b>
                       &nbsp;for <a href={`#/restaurant/customer/${o.customer.id}`}>{o.customer.name}</a>

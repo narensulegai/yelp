@@ -14,6 +14,7 @@ module.exports = {
       thingsILove: { type: String, default: '' },
       website: { type: String, default: '' },
       about: { type: String, default: '' },
+      orders: [{ type: Types.ObjectId, ref: 'Order', required: true }],
     },
     transform: (doc, ret) => {
       delete ret.password;
@@ -37,7 +38,6 @@ module.exports = {
   },
   Dish: {
     model: {
-      fileIds: [{ type: String }],
       restaurant: { type: Types.ObjectId, ref: 'Restaurant', required: true },
       name: { type: String, required: true },
       ingredients: { type: String, default: '' },

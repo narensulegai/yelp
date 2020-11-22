@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getRestaurants } from '../../util/fetch/api';
+import * as ql from '../../util/fetch/ql';
 import PlaceOrder from './PlacerOrder';
 
 class View extends Component {
@@ -12,7 +12,7 @@ class View extends Component {
   }
 
   async componentDidMount() {
-    const restaurants = await getRestaurants();
+    const restaurants = await ql.getRestaurants();
     const restaurant = restaurants.filter((r) => {
       return r.id === this.state.restaurantId;
     })[0];

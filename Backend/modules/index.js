@@ -25,7 +25,13 @@ module.exports = {
     return jwt.decode(token);
   },
   currentCustomer: async (id) => {
-    return Customer.findById(id);
+    return Customer.findById(id)
+      .populate(
+        { path: 'orders',
+          populate: {
+            path: 'dish',
+          } },
+      );
   },
   createCustomer: async (customer) => {
     return new Promise((resolve, reject) => {
@@ -73,7 +79,12 @@ module.exports = {
   },
   currentRestaurant: async (id) => {
     return Restaurant.findById(id)
-      .populate('dishes');
+      .populate('dishes')
+      .populate({ path: 'orders',
+        populate: [
+          { path: 'dish' },
+          { path: 'customer' },
+        ] });
   },
   updateRestaurantProfile: async (id, profile) => {
     const restaurant = await Restaurant.findById(id);
@@ -116,5 +127,49 @@ module.exports = {
       { $addFields: { id: '$_id' } },
       { $project: { password: 0, _id: 0 } },
     ]);
+  },
+  getRestaurant: async (id) => {
+    return Restaurant.findById(id)
+      .populate('dishes');
+  },
+  placeOrder: async (customerId, dishId, isPickup) => {
+    const order = new Order({
+      isPickup,
+      status: 'new',
+      dish: dishId,
+      customer: customerId,
+    });
+
+    const o = await order.save();
+    const customer = await Customer.findById(customerId);
+    const dish = await Dish.findById(dishId);
+    // TODO parallelize
+    const restaurant = await Restaurant.findById(dish.restaurant);
+    restaurant.orders.push(o.id);
+    restaurant.save();
+    customer.orders.push(o.id);
+    customer.save();
+    return true;
+  },
+  myOrders: async (restaurantId) => {
+    const dish = await Dish.find({ restaurant: restaurantId });
+    return Order.find({
+      dish: {
+        $in: dish.map((d) => mongoose.Types.ObjectId(d._id)),
+      },
+    })
+      .populate('dish')
+      .populate('customer');
+  },
+  updateOrder: async (restaurantId, orderId, status) => {
+    const order = await Order.findOne({ _id: orderId })
+      .populate('dish');
+    // Check if order belongs to restaurant
+    if (order.dish.restaurant.toString() === restaurantId) {
+      order.status = status;
+      await order.save();
+      return true;
+    }
+    throw ('Order not found');
   },
 };

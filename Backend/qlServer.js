@@ -45,35 +45,45 @@ const typeDefs = gql`
     thingsILove: String
     website: String
     yelpingSince: String
-  }
-  type Event {
-    id: ID
+    orders: [Order]
   }
   type Dish {
     id: ID
     restaurant: ID
+    customer: Customer
     description: String
     dishCategory: Int
     ingredients: String
     name: String
     price: String
+    createdAt: String
+  }
+  type Order {
+    id: ID
+    customer: Customer
+    status: String
+    isPickup: Boolean
+    createdAt: String
+    dish: Dish
   }
   type Restaurant {
     id: ID
-    name: String
-    timings: String
-    contactInformation: String
-    description: String
     email: String
+    name: String
     location: String
+    description: String
+    contactInformation: String
+    timings: String
     dishes: [Dish]
-    events: [Event]
+    orders: [Order]
   }
   type Query {
     currentUser: CurrentUser
     currentCustomer: Customer
     currentRestaurant: Restaurant
     getRestaurants(text: String): [Restaurant]
+    getRestaurant(id: String): Restaurant
+    myOrders: [Order]
   }
   type Mutation {
     createCustomer(customer: CustomerInput): String 
@@ -82,6 +92,8 @@ const typeDefs = gql`
     updateRestaurantProfile(restaurantProfile: RestaurantProfileInput): Boolean 
     createDish(dish: DishInput): Boolean 
     updateDish(dishId: String, dish: DishInput): Boolean 
+    placeOrder(dishId: String, isPickup: Boolean): Boolean 
+    updateOrder(orderId: String, status: String): Boolean 
   }
 `;
 
@@ -102,6 +114,12 @@ const resolvers = {
     getRestaurants: async (parent, { text }) => {
       return modules.getRestaurants(text);
     },
+    getRestaurant: async (parent, { id }) => {
+      return modules.getRestaurant(id);
+    },
+    myOrders: async (parent, variables, context) => {
+      return modules.myOrders(context.session.user.id);
+    },
   },
   Mutation: {
     createCustomer: async (parent, { customer }) => {
@@ -121,6 +139,13 @@ const resolvers = {
     },
     updateDish: async (parent, { dishId, dish }, context) => {
       return modules.updateDish(context.session.user.id, dishId, dish);
+    },
+    placeOrder: async (parent, { dishId, isPickup }, context) => {
+      return modules.placeOrder(context.session.user.id, dishId, isPickup);
+    },
+    updateOrder: async (parent, { orderId, status }, context) => {
+      console.log('updateOrder');
+      return modules.updateOrder(context.session.user.id, orderId, status);
     },
   },
 };

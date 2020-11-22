@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { formatDate } from '../../util';
-import { myOrders, updateMyOrder } from '../../util/fetch/api';
-import { setMyOrders } from '../../actions';
+import * as ql from '../../util/fetch/ql';
 
 const MyOrders = () => {
   const [orderFilter, setOrderFilter] = useState('new');
+  const [orders, setOrders] = useState([]);
 
-  const dispatch = useDispatch();
-  const orders = useSelector((state) => state.myOrders);
+  useEffect(() => {
+    (async () => {
+      const cust = await ql.getCurrentCustomer();
+      setOrders(cust.orders);
+    })();
+  }, []);
 
-  const handleCancelOrder = async (orderId) => {
-    if (window.confirm('Are you sure you want to cancel the order?')) {
-      await updateMyOrder(orderId, { isCanceled: true });
-      dispatch(setMyOrders(await myOrders()));
-    }
-  };
   const handleOrderFilterChange = (e) => {
     setOrderFilter(e.target.value);
   };
@@ -44,20 +41,12 @@ const MyOrders = () => {
                 <div key={o.id} className="card mb-3">
                   <div className="card-header">
                     <div>
-                      <div><b>{o.dish.name} </b> from <b>{o.name}</b></div>
+                      <div><b>{o.dish.name} </b></div>
                       <div>Order status <b>{o.status}</b></div>
                     </div>
                     <div>
                       <div className="small">Delivery method <b>{o.isPickup ? 'Pickup' : 'Yelp Delivery'}</b></div>
                       <div className="small">{formatDate(o.createdAt)}</div>
-                    </div>
-
-                    <div className="mt-2">
-                      <button className="btn-primary"
-                        onClick={() => handleCancelOrder(o.id)}
-                        disabled={o.isCanceled}>
-                        {o.isCanceled ? 'Order was canceled' : 'Cancel this order'}
-                      </button>
                     </div>
 
                   </div>

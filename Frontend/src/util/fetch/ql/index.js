@@ -57,6 +57,22 @@ export const getCurrentCustomer = async () => {
         thingsILove
         website
         yelpingSince
+        orders {
+          id
+          customer
+          status
+          isPickup
+          dish {
+            id
+            restaurant
+            description
+            dishCategory
+            ingredients
+            name
+            price
+          }
+          createdAt
+        }
       }
     }
   `;
@@ -104,6 +120,29 @@ export const getCurrentRestaurant = async () => {
           ingredients
           name
           price
+        }
+        orders {
+          id
+          customer {
+            id
+            name
+            email
+            about
+            thingsILove
+            website
+            yelpingSince
+          }
+          status
+          isPickup
+          createdAt
+          dish {
+            id
+            description
+            dishCategory
+            ingredients
+            name
+            price
+          }
         }
       }
     }
@@ -183,4 +222,50 @@ export const getRestaurants = async (text = '') => {
   `;
   const { getRestaurants } = await query(q, { text });
   return getRestaurants;
+};
+
+export const getRestaurant = async (id) => {
+  const q = `
+    query _ ($id: String) {
+      getRestaurant (id: $id) {
+        id
+        name
+        timings
+        contactInformation
+        description
+        email
+        location
+        dishes {
+          id
+          description
+          dishCategory
+          ingredients
+          name
+          price
+        }
+      }
+    }
+  `;
+  const { getRestaurant } = await query(q, { id });
+  return getRestaurant;
+};
+
+export const placeOrder = async (dishId, isPickup) => {
+  const q = `
+    mutation _ ($dishId: String, $isPickup: Boolean) {
+      placeOrder (dishId: $dishId, isPickup: $isPickup)
+    }
+  `;
+  const { placeOrder } = await query(q, { dishId, isPickup });
+  return placeOrder;
+};
+
+export const updateOrder = async (orderId, status) => {
+  const q = `
+    mutation _ ($orderId: String, $status: String) {
+      updateOrder (orderId: $orderId, status: $status)
+    }
+  `;
+  const { updateOrder } = await query(q, { orderId, status });
+  return updateOrder;
 };

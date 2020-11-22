@@ -4,12 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CustomerProfile from './CustomerProfile';
 import CustomerDashboard from './CustomerDashboard';
-import Events from './customer/Events';
 import RestaurantView from './restaurant/View';
-import CustomerView from './customer/View';
 import MyOrders from './customer/MyOrders';
-import Messages from './customer/Messages';
-import Users from './Users';
 import { currentUser, myOrders } from '../util/fetch/api';
 import { setCurrentUser, setMyOrders } from '../actions';
 
