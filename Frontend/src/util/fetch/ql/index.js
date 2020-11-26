@@ -22,6 +22,28 @@ const query = async (query, variables = {}) => {
   return d.data;
 };
 
+export const loginCustomer = async (email, password) => {
+  const q = `
+    mutation _ ($email: String, $password: String) {
+      loginCustomer (email: $email, password: $password)
+    }
+  `;
+  const { loginCustomer } = await query(q, { email, password });
+  window.localStorage.setItem('token', loginCustomer);
+  return loginCustomer;
+};
+
+export const loginRestaurant = async (email, password) => {
+  const q = `
+    mutation _ ($email: String, $password: String) {
+      loginRestaurant (email: $email, password: $password)
+    }
+  `;
+  const { loginRestaurant } = await query(q, { email, password });
+  window.localStorage.setItem('token', loginRestaurant);
+  return loginRestaurant;
+};
+
 export const qlCurrentUser = async () => {
   const q = `
     {

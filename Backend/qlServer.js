@@ -101,6 +101,8 @@ const typeDefs = gql`
     getCustomer(id: String): Customer
   }
   type Mutation {
+    loginCustomer(email: String, password: String): String
+    loginRestaurant(email: String, password: String): String
     createCustomer(customer: CustomerInput): String 
     updateCustomerProfile(customerProfile: CustomerProfileInput): Boolean
     createRestaurant(restaurant: RestaurantInput): String
@@ -147,6 +149,13 @@ const resolvers = {
     },
   },
   Mutation: {
+    loginCustomer: async (parent, { email, password }) => {
+      return modules.loginCustomer(email, password);
+    },
+    loginRestaurant: async (parent, { email, password }) => {
+      console.log(email, password);
+      return modules.loginRestaurant(email, password);
+    },
     createCustomer: async (parent, { customer }) => {
       return modules.createCustomer(customer);
     },

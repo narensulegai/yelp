@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { getCustomer } from '../../util/fetch/api';
 import * as ql from '../../util/fetch/ql';
 
 class View extends Component {
@@ -11,7 +10,6 @@ class View extends Component {
 
   async componentDidMount() {
     const customer = await ql.getCustomer(this.state.customerId);
-    // const customer = await getCustomer(this.state.customerId);
     this.setState({ customer });
   }
 

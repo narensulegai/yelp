@@ -1,20 +1,22 @@
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import { put } from '../util/fetch';
+import { loginCustomer, loginRestaurant } from '../util/fetch/ql';
 
 const LoginPage = ({ onLogin, type }) => {
   const email = createRef();
   const password = createRef();
 
-  const handleOnSignIn = () => {
-    put(`login/${type}`, {
-      email: email.current.value,
-      password: password.current.value,
-    })
-      .then(({ token, user }) => {
-        window.localStorage.setItem('token', token);
-        onLogin(user);
-      });
+  const handleOnSignIn = async () => {
+    const e = email.current.value;
+    const p = password.current.value;
+    if (type === 'customer') {
+      await loginCustomer(e, p);
+      onLogin();
+    }
+    if (type === 'restaurant') {
+      await loginRestaurant(e, p);
+      onLogin();
+    }
   };
 
   return (

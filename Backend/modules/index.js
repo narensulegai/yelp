@@ -16,6 +16,40 @@ const signPayload = (payload) => {
 };
 
 module.exports = {
+  loginCustomer: async (email, password) => {
+    const user = await Customer.findOne({ email });
+    return new Promise((resolve, reject) => {
+      if (user === null) {
+        reject('Email doesn\'t exist');
+      } else {
+        bcrypt.compare(password, user.password, (e, doseMatch) => {
+          if (doseMatch) {
+            delete user.password;
+            resolve(signPayload({ user, scope: 'customer' }));
+          } else {
+            reject('Email password doesn\'t match');
+          }
+        });
+      }
+    });
+  },
+  loginRestaurant: async (email, password) => {
+    const user = await Restaurant.findOne({ email });
+    return new Promise((resolve, reject) => {
+      if (user === null) {
+        reject('Email doesn\'t exist');
+      } else {
+        bcrypt.compare(password, user.password, (e, doseMatch) => {
+          if (doseMatch) {
+            delete user.password;
+            resolve(signPayload({ user, scope: 'restaurant' }));
+          } else {
+            reject('Email password doesn\'t match');
+          }
+        });
+      }
+    });
+  },
   getSession: (token) => {
     try {
       jwt.verify(token, process.env.JWT_SECRET);
@@ -27,10 +61,12 @@ module.exports = {
   currentCustomer: async (id) => {
     return Customer.findById(id)
       .populate(
-        { path: 'orders',
+        {
+          path: 'orders',
           populate: {
             path: 'dish',
-          } },
+          },
+        },
       );
   },
   createCustomer: async (customer) => {
@@ -111,9 +147,11 @@ module.exports = {
     // resp.json(restaurant);
 
     return Restaurant.aggregate([
-      { $lookup: {
-        from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes',
-      } },
+      {
+        $lookup: {
+          from: 'dishes', localField: 'dishes', foreignField: '_id', as: 'dishes',
+        },
+      },
       {
         $match: {
           $or: [
