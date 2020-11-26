@@ -7,7 +7,7 @@ const Review = ({ comment }) => {
     <div className="card mb-2">
       <div className="card-body">
         <div>
-          <a href={`#/restaurant/customer/${comment.customer.id}`}>{comment.customer.name}</a>
+          <b>{comment.customer.name}</b>
           &nbsp;rated&nbsp;
           <b>{comment.rating} of 5</b>
         </div>
