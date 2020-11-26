@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "PORT=5001 mocha  --exit",
-    "start": "nodemon --ignore uploads --ignore kafkaServer.js nodeServer.js -V",
-    "ql": "nodemon --ignore uploads qlServer.js -V",
-    "kafka": "GROUP=yelp-module nodemon --ignore uploads kafkaServer.js -V"
+    "start": "nodemon --ignore uploads qlServer.js -V"
   },
   "author": "",
   "license": "ISC",

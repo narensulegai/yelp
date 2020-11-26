@@ -153,7 +153,6 @@ const resolvers = {
       return modules.loginCustomer(email, password);
     },
     loginRestaurant: async (parent, { email, password }) => {
-      console.log(email, password);
       return modules.loginRestaurant(email, password);
     },
     createCustomer: async (parent, { customer }) => {
