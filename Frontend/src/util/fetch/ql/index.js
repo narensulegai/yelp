@@ -1,3 +1,5 @@
+import gqlPrettier from 'graphql-prettier';
+
 const query = async (query, variables = {}) => {
   window.error(null);
   window.message(null);
@@ -14,6 +16,13 @@ const query = async (query, variables = {}) => {
     }),
   });
   const d = await resp.json();
+  console.group('Query and Response');
+  console.log(gqlPrettier(query));
+  console.log('Variables');
+  console.log(JSON.stringify(variables, null, 2));
+  console.log('Response');
+  console.log(JSON.stringify(d, null, 2));
+  console.groupEnd('Query');
   if (d.errors) {
     const { message } = d.errors[0];
     window.error(message);
@@ -142,6 +151,40 @@ export const getCurrentRestaurant = async () => {
           name
           price
         }
+        orders {
+          id
+          customer {
+            id
+            name
+            email
+            about
+            thingsILove
+            website
+            yelpingSince
+          }
+          status
+          isPickup
+          createdAt
+          dish {
+            id
+            description
+            dishCategory
+            ingredients
+            name
+            price
+          }
+        }
+      }
+    }
+  `;
+  const { currentRestaurant } = await query(q);
+  return currentRestaurant;
+};
+
+export const getRestaurantOrders = async () => {
+  const q = `
+    {
+      currentRestaurant {
         orders {
           id
           customer {

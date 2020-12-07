@@ -15,15 +15,15 @@ const Orders = () => {
 
   useEffect(() => {
     (async () => {
-      const r = await ql.getCurrentRestaurant();
-      setOrders(r.orders);
+      const { orders } = await ql.getRestaurantOrders();
+      setOrders(orders);
     })();
   }, []);
 
   const handleOnSave = async (orderId) => {
     await ql.updateOrder(orderId, status.current[orderId].value);
-    const r = await ql.getCurrentRestaurant();
-    setOrders(r.orders);
+    const { orders } = await ql.getRestaurantOrders();
+    setOrders(orders);
   };
 
   const handleOrderFilterChange = (e) => {
