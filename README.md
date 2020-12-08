@@ -1,11 +1,11 @@
 ### Run node server
 ```
-cd backend && MONGODB_CONNECTION=mongodb://localhost/yelp npm start
+cd backend && npm install && MONGODB_CONNECTION=mongodb://localhost/yelp npm start
 ```
 
 ### Run frontend server
 ```
-cd frontend && npm start
+cd frontend && npm install && npm start
 ```
 
 ### Run mocka test
